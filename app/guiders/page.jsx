@@ -1,11 +1,13 @@
 import React from 'react';
+import Guiders from '../components/guiders/Guiders';
 
 const GuidersPage = () => {
     return (
-        <div>
-            <h1>Guiders Page</h1>
-        </div>
+       <>
+       <Guiders />
+       </>
     );
 };
 
 export default GuidersPage;
+
