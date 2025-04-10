@@ -18,6 +18,7 @@ export default function Navbar() {
         { name: 'About Us', href: '/about' },
         { name: 'Guiders', href: '/guiders' },
         { name: 'Contact Us', href: '/contact' },
+        { name: 'Exclusive', href: '/exclusive-offers' },
     ];
 
     const languages = [
