@@ -179,7 +179,7 @@ export default function ContactForm() {
             </div>
 
             {/* Map Section */}
-            <div className="bg-white rounded-xl shadow-md md:w-1/2 overflow-hidden">
+            <div className="bg-white rounded-xl md:w-1/2 overflow-hidden">
                 <div className="h-64 md:h-full w-full">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215573291865!2d-73.98784492416406!3d40.74844097138992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1623862347712!5m2!1sen!2sus"
