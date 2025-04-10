@@ -14,6 +14,7 @@ export default function Navbar() {
         { name: 'Hotel', href: '/hotel' },
         { name: 'Tour', href: '/tour' },
         { name: 'About Us', href: '/about' },
+        { name: 'Guiders', href: '/guiders' },
         { name: 'Contact Us', href: '/contact' },
     ];
 
