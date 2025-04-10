@@ -15,6 +15,7 @@ export default function Navbar() {
         { name: 'Tour', href: '/tour' },
         { name: 'About Us', href: '/about' },
         { name: 'Contact Us', href: '/contact' },
+        { name: 'Exclusive', href: '/exclusive-offers' },
     ];
 
     return (
