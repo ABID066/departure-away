@@ -14,13 +14,17 @@ const ExcluesiveOfferPage = () => {
         <FilterSideber/>
         <main className="col-span-9">
           <div className="flex justify-between mb-4">
-            <h1 className="text-2xl font-bold">Exclusive Offers</h1>
+             <div>
+             <h1 className="text-2xl font-bold">Exclusive Offers</h1>
+             <p className="text-sm text-gray-500">{offers.length} Results Found</p>
+             </div>
+           
             <select className="border rounded px-3 py-1 text-sm">
               <option>Price low to high</option>
               <option>Price high to low</option>
             </select>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-center">
         {offers.map(offer => (
           <OfferCard key={offer.id} offer={offer} />
         ))}
