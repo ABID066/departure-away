@@ -16,9 +16,9 @@ export default function TravelPackages() {
   const displayedPackages = showAll ? packages : packages.slice(0, 8);
 
   return (
-    <div>
-      <h2 className="text-4xl font-bold text-center my-4">Travel Package</h2>
-      <div className="flex justify-center mb-4 space-x-2">
+    <div className="mb-20">
+      <h2 className="text-5xl font-bold text-center mb-4">Travel Package</h2>
+      <div className="flex justify-center mb-8 space-x-2">
         <button className="btn btn-outline btn-secondary rounded-full px-4 py-2">
           For You
         </button>
