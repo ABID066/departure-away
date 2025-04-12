@@ -5,14 +5,17 @@ import vacation from "@/public/vacation.jpg";
 
 export default function TravelCard({ item }) {
   console.log(item);
-  const { title, price, location, rating, reviews ,duration} = item;
+  const { title, price, location, rating, reviews, duration } = item;
   return (
     <div className="card bg-base-100 shadow-sm">
-      <figure>
+      <figure className="relative">
         <Image src={vacation} alt="Shoes" width={300} height={200} />
       </figure>
+      <div className="absolute top-36 left-4">
+        <div className="badge badge-secondary">Popular</div>
+      </div>
       <div className="p-4 text-left">
-        <div className="flex items-center space-x-2 mb-2">
+        <div className="flex items-center space-x-2">
           <p>
             <span>
               <CiLocationOn />
@@ -26,10 +29,14 @@ export default function TravelCard({ item }) {
             <span className="text-yellow-500">★</span> {rating}
           </p>
           <p className="text-sm">{reviews} Reviews</p>
-          <span className="text-xl"><CiCalendarDate /></span>
-            <p className="text-sm">{duration}</p>
+          <span className="text-xl">
+            <CiCalendarDate />
+          </span>
+          <p className="text-sm">{duration}</p>
         </div>
-        <p>From <span className="text-red-500 font-semibold">${price}</span> </p>
+        <p>
+          From <span className="text-red-500 font-semibold">${price}</span>{" "}
+        </p>
       </div>
     </div>
   );
