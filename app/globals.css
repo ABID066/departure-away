@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@plugin "daisyui";
+
 
 :root {
   --background: #ffffff;
@@ -27,5 +29,8 @@
 
 .my-contact-box {
   color: black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+.my-testimonial-box {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
