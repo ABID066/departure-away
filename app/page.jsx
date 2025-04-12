@@ -37,11 +37,15 @@ export default function Home() {
             {guides.map((guide, index) => (
               <GuiderCard key={index} guide={guide} />
             ))}
-            <button className="bg-pink-700 text-white rounded-lg hover:bg-pink-900 transition-colors duration-300">
-              View All Guider
+      
+          </div>
+          <div className="flex justify-center mt-8">
+            <button className="bg-pink-700 px-4 py-2 rounded-lg text-white hover:bg-pink-900 transition-colors duration-300">
+               View All Guider
             </button>
           </div>
         </div>
+        
       </section>
 
       {/* Newsletter Section */}
