@@ -7,9 +7,8 @@ import logo from '@/public/images/Logo.png';
 
 const Footer = () => {
     return (
-        <footer className="bg-[#F9F9FC] text-gray-700 px-6 md:px-16 lg:px-32 py-12 pt-25">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 text-sm">
-
+        <footer className="w-full bg-[#F9F9FC] text-gray-700 px-6 md:px-16 mt-10">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 text-sm max-w-5xl mx-auto py-10">
                 {/* Logo & Description */}
                 <div>
                     <div className="relative w-64 h-16 mb-4">

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { FaApple, FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -107,3 +108,4 @@ export default function page() {
     </div>
   );
 }
+

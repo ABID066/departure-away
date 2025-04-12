@@ -1,30 +1,36 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import TravelCard from "./TravelCard";
 
 export default function TravelPackages() {
+  const [packages, setPackages] = useState([]);
+  useEffect(() => {
+    fetch("packages.json")
+      .then((res) => res.json())
+      .then((data) => setPackages(data))
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div>
-      <h1>Travel Packages</h1>
-      <div className="card bg-base-100 w-96 shadow-sm">
-        <figure>
-          <img
-            src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-            alt="Shoes"
-          />
-        </figure>
-        <div className="card-body">
-          <h2 className="card-title">
-            Card Title
-            <div className="badge badge-secondary">NEW</div>
-          </h2>
-          <p>
-            A card component has a figure, a body part, and inside body there
-            are title and actions parts
-          </p>
-          <div className="card-actions justify-end">
-            <div className="badge badge-outline">Fashion</div>
-            <div className="badge badge-outline">Products</div>
-          </div>
-        </div>
+      <h2 className="text-4xl font-bold text-center my-4">Travel Package</h2>
+      <div className="flex justify-center mb-4 space-x-2">
+        <button className="btn btn-outline btn-secondary rounded-full px-4 py-2">
+          For You
+        </button>
+        <button className="btn btn-outline btn-secondary rounded-full px-4 py-2">
+          Haji
+        </button>
+        <button className="btn btn-outline btn-secondary rounded-full px-4 py-2">
+          Alpine
+        </button>
+        <button className="btn btn-outline btn-secondary rounded-full px-4 m-0">
+          Wonders
+        </button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {packages.map((item) => (
+          <TravelCard key={item.id} item={item} />
+        ))}
       </div>
     </div>
   );

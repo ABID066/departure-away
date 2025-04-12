@@ -9,16 +9,16 @@ import TravelPackages from "./components/home/TravelPackages";
 export default function Home() {
   return (
     <div>
-      <div className="bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen"></div>
-      <div className="max-w-5xl mx-auto bg-gray-100 text-center">
+      <div className="absolute bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen"></div>
+      <div className="max-w-5xl mx-auto bg-gray-50 text-center">
         <Banner />
         <Packages />
         <TopCategories />
         <ExclusiveOffers />
         <PopularExperience />
         <TravelPackages />
-        <TopGuider />
       </div>
+      <TopGuider />
     </div>
   );
 }

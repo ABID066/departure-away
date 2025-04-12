@@ -1,3 +1,4 @@
+
 import React from "react";
 import login from "@/public/login.jpg";
 import Image from "next/image";
@@ -71,3 +72,4 @@ export default function SignIn() {
     </div>
   );
 }
+
