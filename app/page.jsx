@@ -4,7 +4,7 @@ import Packages from "./components/home/Packages";
 import PopularExperience from "./components/home/PopularExperience";
 import TopCategories from "./components/home/TopCategories";
 import TopGuider from "./components/home/TopGuider";
-import TravelPackages from "./components/home/TravelPackages";
+import TravelPackages from "./components/home/travel/TravelPackages";
 
 export default function Home() {
   return (
