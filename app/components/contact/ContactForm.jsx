@@ -166,16 +166,7 @@ export default function ContactForm() {
                         {isSubmitting ? 'Sending...' : 'Submit Your Query'}
                     </button>
                 </form>
-                {submitStatus === 'success' && (
-                    <div className="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                        Message sent successfully!
-                    </div>
-                )}
-                {submitStatus === 'error' && (
-                    <div className="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                        Failed to send message. Please try again.
-                    </div>
-                )}
+
             </div>
 
             {/* Map Section */}
