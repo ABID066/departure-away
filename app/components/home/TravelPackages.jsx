@@ -4,12 +4,17 @@ import TravelCard from "./TravelCard";
 
 export default function TravelPackages() {
   const [packages, setPackages] = useState([]);
+  const [showAll, setShowAll] = useState(false);
+
   useEffect(() => {
     fetch("packages.json")
       .then((res) => res.json())
       .then((data) => setPackages(data))
       .catch((err) => console.log(err));
   }, []);
+
+  const displayedPackages = showAll ? packages : packages.slice(0, 8);
+
   return (
     <div>
       <h2 className="text-4xl font-bold text-center my-4">Travel Package</h2>
@@ -28,9 +33,17 @@ export default function TravelPackages() {
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {packages.map((item) => (
+        {displayedPackages.map((item) => (
           <TravelCard key={item.id} item={item} />
         ))}
+      </div>
+      <div className="flex justify-center mt-8">
+        <button
+          className="bg-pink-700 px-4 py-2 text-white rounded-lg hover:bg-pink-900 transition-colors duration-300"
+          onClick={() => setShowAll(!showAll)}
+        >
+          {showAll ? "Show Less" : "View All Packages"}
+        </button>
       </div>
     </div>
   );

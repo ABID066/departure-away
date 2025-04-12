@@ -5,15 +5,17 @@ import vacation from "@/public/vacation.jpg";
 
 export default function TravelCard({ item }) {
   console.log(item);
-  const { title, price, location, rating, reviews, duration } = item;
+  const { title, price, location, rating, reviews, duration, popular } = item;
   return (
     <div className="card bg-base-100 shadow-sm">
       <figure className="relative">
         <Image src={vacation} alt="Shoes" width={300} height={200} />
       </figure>
-      <div className="absolute top-36 left-4">
-        <div className="badge badge-secondary">Popular</div>
-      </div>
+      {popular && (
+        <div className="absolute top-36 left-4">
+          <div className="badge badge-secondary">Popular</div>
+        </div>
+      )}
       <div className="p-4 text-left">
         <div className="flex items-center space-x-2">
           <p>
