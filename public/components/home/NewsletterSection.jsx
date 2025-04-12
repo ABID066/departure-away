@@ -28,7 +28,7 @@ const NewsletterSection = () => {
           </div>
         </div>
         <div className="relative w-full lg:w-1/2 h-[300px] flex items-center justify-center">
-          <div className="absolute -top-8 right-120 w-40 h-40">
+          <div className="absolute -top-8 right-100 w-40 h-40">
             <Image src={cloud1} alt="Cloud 1" layout="fill" className="object-contain" />
           </div>
           <div className="relative ">

@@ -1,7 +1,7 @@
 import { CiCalendarDate, CiLocationOn } from "react-icons/ci";
 import React from "react";
 import Image from "next/image";
-import vacation from "@/public/vacation.jpg";
+import vacation from "@/public/images/vacation.jpg";
 
 export default function TravelCard({ item }) {
   console.log(item);

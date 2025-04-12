@@ -1,9 +1,9 @@
 import { Filter } from 'lucide-react'
 import React from 'react'
-import FilterSideber from '../components/travel/FilterSideber'
-import { OfferCard } from '../components/travel/OfferCard'
-import Pagination from '../components/travel/Pagination'
-import offers from '../components/exclusive/DataOffer'
+import FilterSideber from '../../public/components/travel/FilterSideber'
+import { OfferCard } from '../../public/components/travel/OfferCard'
+import Pagination from '../../public/components/travel/Pagination'
+import offers from '../../public/components/exclusive/DataOffer'
 
 const TravelPackagePage = () => {
   return (

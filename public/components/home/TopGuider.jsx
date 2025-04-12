@@ -1,5 +1,5 @@
 "use client"
-import GuiderCard from "../guiders/GuiderCard";
+import GuiderCard from "../guider/GuiderCard";
 import NewsletterSection from "./NewsletterSection";
 import { useState } from "react";
 
