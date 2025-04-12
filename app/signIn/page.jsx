@@ -1,4 +1,3 @@
-
 import React from "react";
 import login from "@/public/login.jpg";
 import Image from "next/image";
@@ -7,7 +6,7 @@ import { FaApple, FaFacebook } from "react-icons/fa";
 
 export default function SignIn() {
   return (
-    <div className="hero bg-base-100 min-h-screen flex flex-col justify-center items-center">
+    <div className="hero bg-base-100 min-h-screen flex flex-col justify-center items-center pt-16">
       {/* Content (Animation + Form) */}
       <div className="hero-content flex-col lg:flex-row-reverse w-full max-w-4xl">
         {/* Animation Section */}
