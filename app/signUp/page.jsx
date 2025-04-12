@@ -3,7 +3,7 @@ import React from "react";
 import { FaApple, FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { BiLogoMicrosoft } from "react-icons/bi";
-import signUp from "@/public/signup.jpg";
+import signUp from "../../public/images/signup.jpg";
 import Image from "next/image";
 
 export default function page() {
