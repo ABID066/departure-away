@@ -35,7 +35,7 @@ export default function Experience() {
 
   return (
     <div className="mb-20">
-      <h2 className="text-4xl font-bold text-center my-8">Book Our Popular Experience</h2>
+      <h2 className="text-5xl font-bold text-center my-8">Book Our Popular Experience</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {experiences.map((experience) => (
           <ExperienceCard key={experience.title} experience={experience}></ExperienceCard>

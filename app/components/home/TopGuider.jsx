@@ -26,7 +26,7 @@ export default function Home() {
       {/* Top Rated Guides Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-8">Top Rated Guider</h2>
+          <h2 className="text-5xl font-bold text-center mb-8">Top Rated Guider</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {displayedGuides.map((guide, index) => (
               <GuiderCard key={index} guide={guide} className="w-72" />

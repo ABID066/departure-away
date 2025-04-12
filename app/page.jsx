@@ -1,6 +1,6 @@
 import Banner from "./components/home/Banner";
-import ExclusiveOffers from "./components/home/ExclusiveOffers";
 import Experience from "./components/home/experience/Experience";
+import ExclusiveOffer from "./components/home/offer/ExclusiveOffer";
 import Packages from "./components/home/Packages";
 import TopCategories from "./components/home/TopCategories";
 import TopGuider from "./components/home/TopGuider";
@@ -14,7 +14,7 @@ export default function Home() {
         <Banner />
         <Packages />
         <TopCategories />
-        <ExclusiveOffers />
+        <ExclusiveOffer />
         <Experience />
         <TravelPackages />
       </div>
