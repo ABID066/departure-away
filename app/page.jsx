@@ -1,6 +1,8 @@
 
+
 import GuiderCard from './components/guiders/GuiderCard';
 import NewsletterSection from './components/home/NewsletterSection';
+
 
 export default function Home() {
 
@@ -17,6 +19,7 @@ export default function Home() {
   ];
 
   return (
+
     <main className="min-h-screen">
 
 
