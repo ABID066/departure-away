@@ -13,13 +13,11 @@ export default function Navbar() {
 
     const navigation = [
         { name: 'Home', href: '/' },
-        { name: 'Hotel', href: '/hotel' },
-        { name: 'Tour', href: '/tour' },
         { name: 'Guiders', href: '/guiders' },
-        { name: 'About Us', href: '/about' },
-        { name: 'Contact Us', href: '/contact' },
         { name: 'Exclusive', href: '/exclusive-offers' },
         { name: 'Travel', href: '/travel-packages' },
+        { name: 'About', href: '/about' },
+        { name: 'Contact', href: '/contact' },
     ];
 
     const languages = [
