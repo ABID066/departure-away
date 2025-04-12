@@ -1,55 +1,24 @@
-
-
-import GuiderCard from './components/guiders/GuiderCard';
-import NewsletterSection from './components/home/NewsletterSection';
-
+import Banner from "./components/home/Banner";
+import ExclusiveOffers from "./components/home/ExclusiveOffers";
+import Experience from "./components/home/experience/Experience";
+import Packages from "./components/home/Packages";
+import TopCategories from "./components/home/TopCategories";
+import TopGuider from "./components/home/TopGuider";
+import TravelPackages from "./components/home/travel/TravelPackages";
 
 export default function Home() {
-
-
-  const guides = [
-    { name: 'John Smith', rating: '4.9', reviews: 120 },
-    { name: 'Sarah Johnson', rating: '4.8', reviews: 98 },
-    { name: 'Michael Brown', rating: '4.7', reviews: 85 },
-    { name: 'Emily Davis', rating: '4.9', reviews: 110 },
-    { name: 'John Smith', rating: '4.9', reviews: 120 },
-    { name: 'Sarah Johnson', rating: '4.8', reviews: 98 },
-    { name: 'Michael Brown', rating: '4.7', reviews: 85 },
-    { name: 'Emily Davis', rating: '4.9', reviews: 110 }
-  ];
-
   return (
-
-    <main className="min-h-screen" data-theme="light">
-
-
-
-
-
-
-
-
-      {/* Top Rated Guides Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-8">Top Rated Guider</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {guides.map((guide, index) => (
-              <GuiderCard key={index} guide={guide} />
-            ))}
-      
-          </div>
-          <div className="flex justify-center mt-8">
-            <button className="bg-pink-700 px-4 py-2 rounded-lg text-white hover:bg-pink-900 transition-colors duration-300">
-               View All Guider
-            </button>
-          </div>
-        </div>
-        
-      </section>
-
-      {/* Newsletter Section */}
-      <NewsletterSection />
-    </main>
+    <div>
+      <div className="absolute bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen"></div>
+      <div className="max-w-5xl mx-auto bg-gray-50 text-center space-y-8">
+        <Banner />
+        <Packages />
+        <TopCategories />
+        <ExclusiveOffers />
+        <Experience />
+        <TravelPackages />
+      </div>
+      <TopGuider />
+    </div>
   );
 }

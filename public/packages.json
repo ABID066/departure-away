@@ -1,0 +1,113 @@
+[
+    {
+      "id": 1,
+      "title": "Thimble Rock Point",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 899,
+      "popular": false,
+      "image": "https://ibb.co.com/Zp9zsWbN"
+    },
+    {
+      "id": 2,
+      "title": "Rare Lakefront Shipping",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 599,
+      "popular": true,
+      "image": "https://ibb.co.com/dwS5CzHN"
+    },
+    {
+      "id": 3,
+      "title": "New Gudauri Loft",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 599,
+      "popular": false,
+      "image": "https://ibb.co.com/s9zyF1mt"
+    },
+    {
+      "id": 4,
+      "title": "Disney Springs",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 899,
+      "popular": true,
+      "image": "https://ibb.co.com/Zp9zsWbN"
+    },
+    {
+      "id": 5,
+      "title": "Zen Retreat Valley",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 599,
+      "popular": false,
+      "image": "https://ibb.co.com/s9zyF1mt"
+    },
+    {
+      "id": 6,
+      "title": "Royal Pagoda Escape",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 599,
+      "popular": true,
+      "image": "https://ibb.co.com/s90R2gGS"
+    },
+    {
+      "id": 7,
+      "title": "Tropical Pearl Beach",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 599,
+      "popular": false,
+      "image": "https://ibb.co.com/s9zyF1mt"
+    },
+    {
+      "id": 8,
+      "title": "Island Serenity",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 899,
+      "popular": true,
+      "image": "https://ibb.co.com/s90R2gGS"
+    },
+    {
+      "id": 9,
+      "title": "Sky High Balloon",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 599,
+      "popular": false,
+      "image": "https://ibb.co.com/Zp9zsWbN"
+    },
+    {
+      "id": 10,
+      "title": "Winter Chill Resort",
+      "location": "Ingis, Manitoba, Canada",
+      "rating": 4.7,
+      "reviews": 2300,
+      "duration": "5 Days",
+      "price": 599,
+      "popular": true,
+      "image": "https://ibb.co.com/s9zyF1mt"
+    }
+  ]
+  

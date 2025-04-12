@@ -6,8 +6,8 @@ import image from "@/public/images/cropped-ico-site 1.png"
 
 const NewsletterSection = () => {
   return (
-    <section className="bg-[#1E0E62] py-46 relative">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
+    <section className="bg-[#1E0E62] py-20 relative min-h-96">
+      <div className="max-w-5xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
         <div className="text-white mb-8 lg:mb-0 lg:w-1/2">
           <h1 className="text-4xl lg:text-4xl font-bold mb-4 ">
             <span className="block mb-3">Get Special Offers and</span>
