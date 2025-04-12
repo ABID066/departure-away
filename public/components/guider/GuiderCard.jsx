@@ -1,5 +1,5 @@
 
-import guideImg from '../../../public/images/guide-3.png';
+import guideImg from '../../images/guide-3.png';
 import Image from 'next/image';
 
 const PhotoPlaceholder = ({ id }) => {

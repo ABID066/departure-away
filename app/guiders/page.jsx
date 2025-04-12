@@ -1,5 +1,5 @@
 import React from 'react';
-import Guiders from '../components/guiders/Guiders';
+import Guiders from '../../public/components/guider/Guiders';
 
 const GuidersPage = () => {
     return (
