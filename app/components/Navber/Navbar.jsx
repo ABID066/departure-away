@@ -77,8 +77,11 @@ export default function Navbar() {
                                 </div>
                             )}
                         </div>
-                        <button className="text-black border border-black px-6 py-2 rounded-full hover:bg-pink-700 hover:border-transparent hover:text-amber-50 transition-colors">
+                        <button onClick={() => {
+                                window.location.href = '/signUp';
+                            }} className="text-black border border-black px-6 py-2 rounded-full hover:bg-pink-700 hover:border-transparent hover:text-amber-50 transition-colors">
                             Get Started
+                            
                         </button>
                     </div>
 
@@ -128,7 +131,10 @@ export default function Navbar() {
                         </div>
                         <button
                             className="text-black border border-black px-20 py-2 rounded-full hover:bg-pink-700 hover:border-transparent hover:text-amber-50 transition-colors"
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => {
+                                setIsOpen(false);
+                                window.location.href = '/signUp';
+                            }}
                         >
                             Get Started
                         </button>
