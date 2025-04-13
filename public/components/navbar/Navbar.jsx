@@ -27,7 +27,9 @@ export default function Navbar() {
     ];
 
     return (
-        <nav className="fixed w-full z-50 bg-transparent backdrop-blur-sm">
+
+        <nav className="w-full z-50 bg-transparent backdrop-blur-sm">
+
             <div className="container mx-auto px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
                     <div className="flex-shrink-0">
