@@ -1,38 +1,31 @@
-import React from "react";
-import Image from "next/image"; // Import the Image component from next/image
-import image from "@/public/images/home/house.jpg";
-import Link from "next/link";
+// import React from 'react';
 
-export default function ExperienceCard({ experience }) {
-  const { title, tours, price, alt } = experience;
+// export default function ExperienceCard({ image, title, tours, price }) {
+//   return (
+//     <div className="flex flex-col items-center w-full max-w-xs px-4">
+//       <h3 className="text-lg font-semibold mb-3 text-gray-800">{title}</h3>
+//       <div className="rounded-full overflow-hidden w-64 h-64 mb-4">
+//         <img
+//           src={image}
+//           alt={title}
+//           className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+//         />
+//       </div>
+//       <div className="bg-white rounded-xl p-4 shadow-sm w-full text-center">
+//         <p className="text-sm text-gray-600">
+//           {tours} Tours - From ${price}
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
 
+import React from 'react'
+
+const ExperienceCard = () => {
   return (
-    <div>
-      <Link href="#">
-        <div className="flex flex-col items-center">
-          {/* Rounded Image */}
-          <div className="w-75 h-75 md:w-60 md:h-60 rounded-full overflow-hidden shadow-lg">
-            <Image
-              src={image}
-              alt={alt}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          {/* Small Card */}
-          <div className="bg-white shadow-lg rounded-lg mt-[-60px] w-44 text-center p-4">
-            <h3 className="text-lg font-semibold">{title}</h3>
-            <div className="flex justify-center items-center text-stone-400">
-              <p className="text-gray-600">{tours}</p>
-              <span> - </span>
-              <div className="flex items-center">
-                <span>From</span>
-                <p>{price}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Link>
-    </div>
-  );
+    <div>ExperienceCard</div>
+  )
 }
+
+export default ExperienceCard
