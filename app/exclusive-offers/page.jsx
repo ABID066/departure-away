@@ -9,7 +9,7 @@ import offers from '../../public/components/exclusive/DataOffer'
 
 const ExcluesiveOfferPage = () => {
   return (
-    <div className="min-h-screen bg-gray-50 pt-32">
+    <div className="min-h-screen bg-white pt-32">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-12 gap-6">
           <FilterSideber />
