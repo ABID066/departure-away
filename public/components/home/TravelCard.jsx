@@ -14,7 +14,7 @@ export default function TravelCard({ item }) {
           <Image src={vacation} alt="Shoes" className="rounded-t-lg" />
         </figure>
         {popular && (
-          <div className=" absolute bottom-45 left-4 badge badge-secondary">
+          <div className="absolute bottom-45 left-4 badge badge-secondary">
             Popular
           </div>
         )}
