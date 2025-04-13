@@ -1,9 +1,11 @@
-import { Filter } from "lucide-react";
-import React from "react";
-import FilterSideber from "../../public/components/exclusive/FilterSideber";
-import { OfferCard } from "../../public/components/exclusive/OfferCard";
-import Pagination from "../../public/components/exclusive/Pagination";
-import offers from "../../public/components/exclusive/DataOffer";
+
+import { Filter } from 'lucide-react'
+import React from 'react'
+import FilterSideber from '../../public/components/exclusive/FilterSideber'
+import { OfferCard } from '../../public/components/exclusive/OfferCard'
+import Pagination from '../../public/components/exclusive/Pagination'
+import offers from '../../public/components/exclusive/DataOffer'
+
 
 const ExcluesiveOfferPage = () => {
   return (

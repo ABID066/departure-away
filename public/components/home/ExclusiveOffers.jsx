@@ -1,3 +1,4 @@
+
 "use client"
 import React, { useState } from "react";
 import ExclusiveOfferCard from "./ExclusiveOfferCard";
@@ -130,3 +131,4 @@ export default function ExclusiveOffer() {
     </div>
   );
 }
+
