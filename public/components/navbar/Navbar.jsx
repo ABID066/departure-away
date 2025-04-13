@@ -20,7 +20,7 @@ export default function Navbar() {
     useEffect(() => {
         const handleScroll = () => {
             // Check if page has been scrolled more than 75% (3/4) of the viewport height
-            const isScrolled = window.scrollY > window.innerHeight * 0.75;
+            const isScrolled = window.scrollY > window.innerHeight * 0.60;
             if (isScrolled !== scrolled) {
                 setScrolled(isScrolled);
             }
@@ -58,7 +58,7 @@ export default function Navbar() {
 
     return (
         <nav className={`w-full z-50 fixed top-0 transition-colors duration-300 ${
-            scrolled || !isHomePage ? 'bg-white' : 'bg-transparent'
+            scrolled ? 'bg-white' : 'bg-transparent'
         } ${isOpen ? 'bg-white' : ''} backdrop-blur-sm`}>
             <div className="container mx-auto px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
