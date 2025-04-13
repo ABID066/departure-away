@@ -16,11 +16,19 @@ export default function Navbar() {
     
     // Check if current path is home page
     const isHomePage = pathname === '/' || pathname === '';
+    
+    // Check if we should hide the navbar
+    const hideNavbar = pathname === '/signUp' || pathname === '/signIn';
+    
+    // If hideNavbar is true, don't render the navbar at all
+    if (hideNavbar) {
+        return null;
+    }
 
     useEffect(() => {
         const handleScroll = () => {
-            // Check if page has been scrolled more than 75% (3/4) of the viewport height
-            const isScrolled = window.scrollY > window.innerHeight * 0.60;
+            // Check if page has been scrolled more than 20% of the viewport height
+            const isScrolled = window.scrollY > window.innerHeight * 0.20;
             if (isScrolled !== scrolled) {
                 setScrolled(isScrolled);
             }
@@ -57,9 +65,9 @@ export default function Navbar() {
     const buttonHoverClass = 'hover:bg-pink-700 hover:border-transparent hover:text-amber-50';
 
     return (
-        <nav className={`w-full z-50 fixed top-0 transition-colors duration-300 ${
-            scrolled ? 'bg-white' : 'bg-transparent'
-        } ${isOpen ? 'bg-white' : ''} backdrop-blur-sm`}>
+        <nav className={`w-full z-50 fixed top-0 transition-colors  duration-300 ${
+            scrolled ? 'bg-white shadow-md' : 'bg-transparent'
+        } ${isOpen ? 'bg-white' : ''} `}>
             <div className="container mx-auto px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
                     <div className="flex-shrink-0">

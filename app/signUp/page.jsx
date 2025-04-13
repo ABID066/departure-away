@@ -84,7 +84,7 @@ export default function page() {
             </button>
             <p className="text-center">
               Already have an account?{" "}
-              <a className="text-red-500" href="">
+              <a className="text-red-500" href="/signIn">
                 Sign In
               </a>
             </p>
