@@ -20,7 +20,7 @@ export default function Home() {
                 <Experience />
                 <TravelPackages />
             </div>
-            <TopGuider />
+           <TopGuider />
         </div>
     );
 }
