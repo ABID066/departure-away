@@ -43,7 +43,7 @@ export default function Experience() {
       </div> */}
 
       <ExperienceCarousel />
-      hello
+    
     </div>
   );
 }

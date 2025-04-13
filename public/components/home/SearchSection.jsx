@@ -11,13 +11,36 @@ export default function SearchSection() {
     setActiveTab(tabName);
   };
 
+  // Function to handle select change on mobile
+  const handleSelectChange = (e) => {
+    setActiveTab(e.target.value);
+  };
+
   return (
-    <div className="container mx-auto px-4 md:px-16 relative -mt-25">
+    <div className="container mx-auto px-4 md:px-16 relative -mt-16 md:-mt-25">
       <div className="max-w-3xl text-left mx-auto">
         <div className="flex flex-col">
-          {/* Tab Options - with reduced width */}
-          <div className="bg-white rounded-t-xl overflow-hidden shadow-lg w-4/5">
-            <div className="flex justify-around py-3 px-2">
+          {/* Tab Options */}
+          <div className="bg-white rounded-t-xl overflow-hidden shadow-lg w-full md:w-4/5">
+            {/* Mobile Select Dropdown */}
+            <div className="md:hidden p-3">
+              <select 
+                value={activeTab}
+                onChange={handleSelectChange}
+                className="block w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+              >
+                <option value="flight">Flight</option>
+                <option value="hotel">Hotel</option>
+                <option value="tour">Tour</option>
+                <option value="car">Car</option>
+                <option value="visa">Visa</option>
+                <option value="guider">Guider</option>
+                <option value="lostbag">Lost bag</option>
+              </select>
+            </div>
+            
+            {/* Desktop Tabs */}
+            <div className="hidden md:flex justify-around py-3 px-2">
               <button 
                 className={`flex items-center space-x-1 font-medium cursor-pointer transition-colors duration-200 ${activeTab === "flight" ? "text-rose-500" : "text-gray-500 hover:text-rose-400"}`}
                 onClick={() => handleTabClick("flight")}
@@ -87,21 +110,21 @@ export default function SearchSection() {
             </div>
           </div>
           
-          {/* Search Inputs Section - Full width */}
+          {/* Search Inputs Section */}
           <div className="bg-white rounded-xl rounded-tl-none shadow-lg overflow-hidden w-full">
-            <div className="flex items-center justify-between p-4 py-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between p-4 py-6 md:py-8 space-y-4 md:space-y-0">
               {/* Location Input */}
-              <div className="flex items-center mr- cursor-pointer">
-                <div className="bg-rose-100 p-2 rounded-full mr-3">
+              <div className="flex items-center cursor-pointer">
+                <div className="bg-rose-100 p-2 rounded-full mr-3 flex-shrink-0">
                   <svg className="w-5 h-5 text-rose-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <label className="block text-gray-700 text-sm font-medium">Location</label>
                   <div className="flex items-center">
-                    <span className="text-gray-500 text-sm">Where are you going</span>
-                    <svg className="w-4 h-4 ml-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span className="text-gray-500 text-sm truncate">Where are you going</span>
+                    <svg className="w-4 h-4 ml-1 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -109,17 +132,17 @@ export default function SearchSection() {
               </div>
 
               {/* Date Input */}
-              <div className="flex items-center mr-4 cursor-pointer">
-                <div className="bg-indigo-100 p-2 rounded-full mr-3">
+              <div className="flex items-center cursor-pointer">
+                <div className="bg-indigo-100 p-2 rounded-full mr-3 flex-shrink-0">
                   <svg className="w-5 h-5 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <label className="block text-gray-700 text-sm font-medium">Date</label>
                   <div className="flex items-center">
-                    <span className="text-gray-500 text-sm">Choose Date</span>
-                    <svg className="w-4 h-4 ml-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span className="text-gray-500 text-sm truncate">Choose Date</span>
+                    <svg className="w-4 h-4 ml-1 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -127,7 +150,7 @@ export default function SearchSection() {
               </div>
 
               {/* Explore Now Button */}
-              <button className="bg-white hover:bg-gray-50 text-gray-800 px-8 py-2 rounded-full border border-gray-300 text-sm font-medium cursor-pointer transition-colors duration-200 hover:border-rose-300">
+              <button className="bg-white hover:bg-gray-50 text-gray-800 w-full md:w-auto px-6 py-3 md:px-8 md:py-2 rounded-full border border-gray-300 text-sm font-medium cursor-pointer transition-colors duration-200 hover:border-rose-300 flex-shrink-0">
                 Explore Now
               </button>
             </div>
