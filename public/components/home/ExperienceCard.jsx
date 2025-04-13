@@ -8,7 +8,7 @@ export default function ExperienceCard({ experience }) {
   return (
     <div className="flex flex-col items-center">
       {/* Rounded Image */}
-      <div className="w-75 h-75 rounded-full overflow-hidden shadow-lg">
+      <div className="w-75 h-75 md:w-60 md:h-60 rounded-full overflow-hidden shadow-lg">
         <Image
           src={image}
           alt={alt}
