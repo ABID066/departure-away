@@ -1,5 +1,5 @@
 import React from "react";
-import login from "@/public/login.jpg";
+import login from "@/public/images/login.jpg";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaFacebook } from "react-icons/fa";
@@ -50,7 +50,7 @@ export default function SignIn() {
             </button>
             <p className="text-center">
               Don't have an account?{" "}
-              <a className="text-red-500" href="">
+              <a className="text-red-500" href="/signUp">
                 Sign Up
               </a>
             </p>
