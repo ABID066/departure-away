@@ -4,12 +4,12 @@ import Image from "next/image";
 export default function TopCategoryCard({category}) {
     const { name } = category;
   return (
-    <div key={category.id} className="card shadow-sm text-center">
+    <div className="card shadow-sm text-center mx-auto">
       <figure className="relative">
         <Image
           src={travel}
           alt={name}
-          className="w-full h-48 object-cover rounded-lg"
+          className="w-full object-cover rounded-lg"
         />
       </figure>
       <div className="absolute bottom-4 text-center w-full">

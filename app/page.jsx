@@ -9,7 +9,6 @@ import TravelPackages from "../public/components/home/TravelPackages";
 export default function Home() {
   return (
     <div>
-      <div className="absolute bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen"></div>
       <div className="text-center space-y-8">
         <Banner />
         <Packages />
