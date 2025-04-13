@@ -8,6 +8,8 @@ import offers from '../../public/components/exclusive/DataOffer'
 
 
 const ExcluesiveOfferPage = () => {
+
+   
   return (
     <div className="min-h-screen bg-white pt-32">
       <div className="max-w-6xl mx-auto">
@@ -22,7 +24,7 @@ const ExcluesiveOfferPage = () => {
                 </p>
               </div>
 
-              <select className="border rounded px-3 py-1 text-sm">
+              <select className="border-[1px] border-[#1E1E1E1A] rounded-lg px-6 h-10 text-sm text-[#8D8D8D]">
                 <option>Price low to high</option>
                 <option>Price high to low</option>
               </select>

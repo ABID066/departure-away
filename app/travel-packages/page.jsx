@@ -1,12 +1,15 @@
+
 import { Filter } from 'lucide-react'
-import React from 'react'
+
 import FilterSideber from '../../public/components/travel/FilterSideber'
 import { OfferCard } from '../../public/components/travel/OfferCard'
 import Pagination from '../../public/components/travel/Pagination'
 import offers from '../../public/components/exclusive/DataOffer'
 
 const TravelPackagePage = () => {
+  
   return (
+    
    
     <div className="min-h-screen bg-white pt-32">
    <div className='max-w-6xl mx-auto'>
@@ -19,7 +22,7 @@ const TravelPackagePage = () => {
              <p className="text-sm text-gray-500">{offers.length} Results Found</p>
              </div>
            
-            <select className="border rounded px-3 py-1 text-sm">
+            <select className="border-[1px] border-[#1E1E1E1A] rounded-lg px-6 h-10 text-sm text-[#8D8D8D]">
               <option>Price low to high</option>
               <option>Price high to low</option>
             </select>
