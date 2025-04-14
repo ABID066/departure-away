@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarDays, ChevronDown, Filter } from "lucide-react";
+import { CalendarDays, ChevronDown,Funnel, X } from "lucide-react";
 
 export default function FilterSidebar() {
   const [openSections, setOpenSections] = useState({});
@@ -26,9 +26,12 @@ export default function FilterSidebar() {
       onClick={() => toggleSection(section)}
       className="flex justify-between w-full text-sm font-semibold mb-2 cursor-pointer"
     >
-      {label} <ChevronDown  className={`w-4 h-4 transform transition-transform duration-300 cursor-pointer ${
-        openSections[section] ? "rotate-180" : ""
-      }`} />
+      {label}{" "}
+      <ChevronDown
+        className={`w-4 h-4 transform transition-transform duration-300 cursor-pointer ${
+          openSections[section] ? "rotate-180" : ""
+        }`}
+      />
     </button>
   );
 
@@ -63,14 +66,10 @@ export default function FilterSidebar() {
   return (
     <>
       {/* Toggle Button on Mobile */}
-      <div className="md:hidden flex justify-end mb-4">
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-pink-500 text-white rounded"
-        >
-          <Filter className="w-4 h-4" />
-          Filters
-        </button>
+      <div className="md:hidden flex ">
+        
+          <Funnel onClick={() => setMobileOpen(!mobileOpen)} size={60} className=" w-20 h-18  left-0 cursor-pointer "></Funnel>
+      
       </div>
 
       {/* Sidebar */}
@@ -79,57 +78,63 @@ export default function FilterSidebar() {
           mobileOpen ? "block" : "hidden"
         } md:block bg-white shadow-md md:shadow-none md:col-span-3 rounded-xl md:rounded-none md:p-0 ${
           mobileOpen
-            ? "fixed top-0 left-0 h-full w-full overflow-y-auto z-50 bg-white"
+            ? "fixed top-20 left-0 h-full w-[50%] overflow-y-scroll z-50 bg-white"
             : ""
         }`}
       >
-        <div className="md:hidden flex justify-end mb-4">
-          <button
-            onClick={() => setMobileOpen(false)}
-            className="text-sm text-gray-500"
-          >
-            Close ✕
-          </button>
-        </div>
+       
 
         <div className="space-y-6 p-4 md:sticky md:top-20">
           {/* Filter Tags */}
-          {Object.entries(selectedFilters).some(([_, values]) => values?.length) && (
+          {Object.entries(selectedFilters).some(
+            ([_, values]) => values?.length
+          ) && (
             <div className="mb-4 bg-gray-50 rounded-2xl p-2">
-              <h2 className="text-sm font-semibold mb-2">Filtered Data</h2>
+              <div className="flex justify-between">
+                <h2 className="text-sm font-semibold mb-2">Filtered Data</h2>
+                <div className="md:hidden  flex justify-end top-0">
+                  <button
+                    onClick={() => setMobileOpen(false)}
+                    className="text-sm font-bold cursor-pointer text-gray-500"
+                  >
+                    <X size={20}></X>
+                  </button>
+                </div>
+              </div>
+
               <div className="flex flex-wrap gap-2">
                 {Object.entries(selectedFilters).map(([category, values]) => {
                   if (!values || values.length === 0) return null;
 
-                  return Array.isArray(values)
-                    ? values.map((val) => (
-                        <span
-                          key={val}
-                          onClick={() =>
-                            setSelectedFilters((prev) => ({
-                              ...prev,
-                              [category]: prev[category].filter((v) => v !== val),
-                            }))
-                          }
-                          className="bg-pink-100 text-pink-600 text-xs px-2 py-1 rounded cursor-pointer"
-                        >
-                          {val} ✕
-                        </span>
-                      ))
-                    : (
-                        <span
-                          key={values}
-                          onClick={() =>
-                            setSelectedFilters((prev) => ({
-                              ...prev,
-                              [category]: "",
-                            }))
-                          }
-                          className="bg-pink-100 text-pink-600 text-xs px-2 py-1 rounded cursor-pointer"
-                        >
-                          {values} ✕
-                        </span>
-                      );
+                  return Array.isArray(values) ? (
+                    values.map((val) => (
+                      <span
+                        key={val}
+                        onClick={() =>
+                          setSelectedFilters((prev) => ({
+                            ...prev,
+                            [category]: prev[category].filter((v) => v !== val),
+                          }))
+                        }
+                        className="bg-pink-100 text-pink-600 text-xs px-2 py-1 rounded cursor-pointer"
+                      >
+                        {val} ✕
+                      </span>
+                    ))
+                  ) : (
+                    <span
+                      key={values}
+                      onClick={() =>
+                        setSelectedFilters((prev) => ({
+                          ...prev,
+                          [category]: "",
+                        }))
+                      }
+                      className="bg-pink-100 text-pink-600 text-xs px-2 py-1 rounded cursor-pointer"
+                    >
+                      {values} ✕
+                    </span>
+                  );
                 })}
               </div>
             </div>
@@ -233,61 +238,70 @@ export default function FilterSidebar() {
             )}
           </div>
 
-       {/* Price Range */}
-<div className="mb-4 bg-gray-50 rounded-2xl p-4">
-  <SectionToggle label="Price Range" section="priceRange" />
-  {openSections.priceRange && (
-    <div className="space-y-4">
-      {/* Range Slider */}
-      <div className="pt-2">
-        <div className="flex justify-between text-sm text-gray-500 mb-1">
-          <span>$0k</span>
-          <span>$70k</span>
-        </div>
-        <div className="relative w-full h-2 bg-gray-200 rounded-full">
-          {/* Track */}
-          <div className="absolute h-full bg-pink-500 rounded-full" 
-               style={{ 
-                 width: `${(parseInt(selectedFilters.price.replace('k', '')) / 70) * 100}%` 
-               }}>
-                
+          {/* Price Range */}
+          <div className="mb-4 bg-gray-50 rounded-2xl p-4">
+            <SectionToggle label="Price Range" section="priceRange" />
+            {openSections.priceRange && (
+              <div className="space-y-4">
+                {/* Range Slider */}
+                <div className="pt-2">
+                  <div className="flex justify-between text-sm text-gray-500 mb-1">
+                    <span>$0k</span>
+                    <span>$70k</span>
+                  </div>
+                  <div className="relative w-full h-2 bg-gray-200 rounded-full">
+                    {/* Track */}
+                    <div
+                      className="absolute h-full bg-pink-500 rounded-full"
+                      style={{
+                        width: `${
+                          (parseInt(selectedFilters.price.replace("k", "")) /
+                            70) *
+                          100
+                        }%`,
+                      }}
+                    ></div>
+                    {/* Thumb */}
+                    <div
+                      className="absolute w-4 h-4 bg-white border-2 border-pink-500 rounded-full -mt-1"
+                      style={{
+                        left: `calc(${
+                          (parseInt(selectedFilters.price.replace("k", "")) /
+                            70) *
+                          100
+                        }% - 8px)`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+
+                {/* Suggestion Buttons */}
+                <div>
+                  <p className="text-sm text-gray-500 mb-2">Suggestion Range</p>
+                  <div className="flex flex-wrap gap-2">
+                    {["10k", "20k", "30k", "40k"].map((p) => (
+                      <button
+                        key={p}
+                        onClick={() =>
+                          setSelectedFilters((prev) => ({
+                            ...prev,
+                            price: p,
+                          }))
+                        }
+                        className={`${
+                          selectedFilters.price === p
+                            ? "text-pink-600 border border-pink-600"
+                            : "bg-white text-gray-800 border border-gray-300"
+                        } rounded-md px-3 py-1 text-sm cursor-pointer hover:bg-gray-50`}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-          {/* Thumb */}
-          <div className="absolute w-4 h-4 bg-white border-2 border-pink-500 rounded-full -mt-1" 
-               style={{ 
-                 left: `calc(${(parseInt(selectedFilters.price.replace('k', '')) / 70) * 100}% - 8px)` 
-               }}>
-          </div>
-        </div>
-      </div>
-      
-      {/* Suggestion Buttons */}
-      <div>
-        <p className="text-sm text-gray-500 mb-2">Suggestion Range</p>
-        <div className="flex flex-wrap gap-2">
-          {["10k", "20k", "30k", "40k"].map((p) => (
-            <button
-              key={p}
-              onClick={() =>
-                setSelectedFilters((prev) => ({
-                  ...prev,
-                  price: p,
-                }))
-              }
-              className={`${
-                selectedFilters.price === p
-                  ? "text-pink-600 border border-pink-600"
-                  : "bg-white text-gray-800 border border-gray-300"
-              } rounded-md px-3 py-1 text-sm cursor-pointer hover:bg-gray-50`}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  )}
-</div>
 
           {/* Tour Group */}
           <div className="mb-4 bg-gray-50 rounded-2xl p-4">
