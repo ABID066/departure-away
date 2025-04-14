@@ -1,6 +1,6 @@
+'use client'
 
-import { Filter } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import FilterSideber from '../../public/components/exclusive/FilterSideber'
 import { OfferCard } from '../../public/components/exclusive/OfferCard'
 import Pagination from '../../public/components/exclusive/Pagination'
@@ -8,17 +8,20 @@ import offers from '../../public/components/exclusive/DataOffer'
 
 
 const ExcluesiveOfferPage = () => {
-
+   const [mobileOpen, setMobileOpen] = useState(false);
    
   return (
     <div className="min-h-screen bg-white pt-32">
+      
+      
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-12 gap-6">
-          <FilterSideber />
-          <main className="col-span-9">
+        <div className="grid grid-cols-12 sm:gap-2 md:gap-6">
+          <FilterSideber mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+          <main className={`md:col-span-9 col-span-12 transition-all duration-300 ${mobileOpen ? "hidden md:block" : "block px-4"}`}>
             <div className="flex justify-between mb-4">
               <div>
-                <h1 className="text-2xl font-bold">Exclusive Offers</h1>
+                
+                <h1 className="sm:text-sm md:text-xl lg:text-2xl font-bold">Exclusive Offers</h1>
                 <p className="text-sm text-gray-500">
                   {offers.length} Results Found
                 </p>
