@@ -8,7 +8,7 @@ import card3 from "@/public/images/home/ExclusiveDeals.png";
 
 export default function ThreeCards() {
   return (
-    <div className="container mx-auto px-4 py-10">
+    <div className="container max-w-6xl mx-auto px-4 py-10">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Weekly Flash Deals Card */}
         <div className="bg-blue-100 rounded-3xl p-6 flex items-center justify-between overflow-hidden relative h-64">

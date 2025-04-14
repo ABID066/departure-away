@@ -65,7 +65,7 @@ export default function TopCategories() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto mb-20 px-4">
+    <div className="max-w-6xl mx-auto mb-20 px-4">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">Top Categories</h2>
         <div className="flex space-x-2">

@@ -34,7 +34,7 @@ export default function Experience() {
   // ];
 
   return (
-    <div className="max-w-7xl mx-auto mb-20 px-4">
+    <div className="max-w-6xl mx-auto mb-20 px-4">
       <h2 className="text-4xl font-bold text-center my-8">Book Our Popular Experience</h2>
       {/* <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {experiences.map((experience) => (
