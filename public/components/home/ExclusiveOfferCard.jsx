@@ -37,7 +37,7 @@ export default function ExclusiveOfferCard({ offer }) {
               <p className="text-sm">{duration}</p>
             </div>
             <p>
-              From <span className="text-red-500 font-semibold">${price}</span>{" "}
+              From <span className="text-red-500 font-semibold">{price}</span>{" "}
             </p>
           </div>
         </div>

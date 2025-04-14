@@ -37,7 +37,7 @@ export default function Packages() {
     },
   ];
   return (
-    <div className="max-w-7xl mx-auto mb-20 px-4">
+    <div className="max-w-6xl mx-auto mb-20 px-4">
       <div className="relative -top-20 bg-white p-6 rounded-lg shadow-lg w-3/5 mx-auto">
         <div
           id="container"
