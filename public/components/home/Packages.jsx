@@ -13,6 +13,7 @@ import { IoBagRemove, IoCalendarNumberSharp } from "react-icons/io5";
 import { CiLocationOn } from "react-icons/ci";
 
 export default function Packages() {
+  // Array of package data
   const packages = [
     {
       id: 1,
@@ -36,9 +37,12 @@ export default function Packages() {
       discount: "10% Off",
     },
   ];
+
   return (
     <div className="max-w-6xl mx-auto mb-20 px-4">
+      {/* Search and Filter Section */}
       <div className="relative -top-20 bg-white p-6 rounded-lg shadow-lg w-3/5 mx-auto">
+        {/* Icons Section */}
         <div
           id="container"
           className="hidden lg:flex flex-col md:flex-row justify-between items-center mb-4"
@@ -86,9 +90,10 @@ export default function Packages() {
             Lost Bag
           </p>
         </div>
-        <div
-          className="flex flex-col md:flex-row items-center justify-center"
-        >
+
+        {/* Location and Date Section */}
+        <div className="flex flex-col md:flex-row items-center justify-center">
+          {/* Location Input */}
           <div className="flex items-center mb-4">
             <div className="text-xl rounded-full bg-red-50 p-4 mr-4">
               <CiLocationOn />
@@ -103,7 +108,11 @@ export default function Packages() {
               <p className="text-sm">Where are you going?</p>
             </div>
           </div>
+
+          {/* Divider */}
           <div className="divider md:divider-horizontal py-2"></div>
+
+          {/* Date Input */}
           <div className="flex items-center mb-4">
             <div className="text-xl rounded-full bg-red-50 p-4 mr-4">
               <IoCalendarNumberSharp />
@@ -120,6 +129,8 @@ export default function Packages() {
           </div>
         </div>
       </div>
+
+      {/* Packages Grid Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mt-8">
         {packages.map((item) => (
           <PackagesCard key={item.id} item={item} />
