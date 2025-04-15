@@ -4,6 +4,8 @@ import React, { useState, useRef } from "react";
 import TopCategoryCard from "./TopCategoryCard";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import img from "@/public/images/home/ExclusiveDeals.png";
+import Image from "next/image";
+import whiteBag from "@/public/images/packages/whiteBag.png";
 
 export default function TopCategories() {
   const categories = [
@@ -96,6 +98,29 @@ export default function TopCategories() {
             <TopCategoryCard category={category} />
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+export function PackagesCard({ item }) {
+  const { title, details, discount } = item;
+
+  return (
+    <div className="card bg-gray-200 shadow-sm rounded-lg p-4 mx-auto text-center">
+      {/* Card Content Section */}
+      <div className="flex justify-center items-center space-x-4">
+        {/* Text Section */}
+        <div className="flex-1 text-left space-y-1">
+          <h2 className="card-title text-xl">{title}</h2>
+          <p className="text-shadow-amber-50">Up to {discount}</p>
+          <button className="text-sm">{details}</button>
+        </div>
+
+        {/* Image Section */}
+        <div className="flex-1">
+          <Image src={whiteBag} alt="Album" className="h-48 object-cover" />
+        </div>
       </div>
     </div>
   );

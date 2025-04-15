@@ -8,12 +8,16 @@ export default function TopCategoryCard({ category }) {
 
   return (
     <div className="card relative rounded-lg shadow-sm">
+      {/* Link Section */}
       <Link href="#">
+        {/* Image Section */}
         <div className="relative overflow-hidden rounded-lg">
           <Image src={img} alt={name} className="w-full h-64 object-cover" />
         </div>
+
+        {/* Text Section */}
         <div className="relative -top-15 text-white">
-          <h2 className="font-semibold  text-xl md:text-2xl">{name}</h2>
+          <h2 className="font-semibold text-xl md:text-2xl">{name}</h2>
         </div>
       </Link>
     </div>
