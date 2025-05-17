@@ -4,8 +4,17 @@ import Link from 'next/link';
 import { FaTwitter, FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
 import logo from '@/public/images/Logo.png';
+import { usePathname } from 'next/navigation';
+
 
 const Footer = () => {
+
+    const pathname = usePathname();
+    const hideNavbar = pathname === '/signUp'||pathname === '/signIn'|| pathname === '/dashboard';
+
+    if (hideNavbar) {
+        return null;
+    }
     return (
         <footer className="w-full bg-[#F9F9FC] text-gray-700 px-6 md:px-16 mt-10">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-10 text-sm max-w-7xl mx-auto py-10">

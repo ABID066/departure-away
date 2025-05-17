@@ -18,7 +18,7 @@ export default function Navbar() {
     const isHomePage = pathname === '/' || pathname === '';
     
     // Check if we should hide the navbar
-    const hideNavbar = pathname === '/signUp' || pathname === '/signIn';
+    const hideNavbar = pathname === '/signUp'||pathname === '/signIn'|| pathname === '/dashboard';
     
     // If hideNavbar is true, don't render the navbar at all
     if (hideNavbar) {
