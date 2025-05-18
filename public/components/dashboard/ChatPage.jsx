@@ -392,10 +392,9 @@ export default function ChatPage() {
                 {/* Chat list (left side) */}
                 <div
                     className={`
-                        ${isMobile ? 'absolute z-10 h-full' : 'w-1/3 lg:w-1/4'} 
+                        ${isMobile ? 'absolute z-10 h-full w-full' : 'w-2/5 lg:w-1/3'} 
                         bg-white border-r border-gray-200 flex flex-col
                         ${isMobile && !showChatList ? 'hidden' : 'block'}
-                        ${isMobile ? 'w-full' : ''}
                     `}
                 >
                     {/* Logo at the top */}
@@ -461,7 +460,7 @@ export default function ChatPage() {
                 </div>
 
                 {/* Chat content (right side) */}
-                <div className={`w-full md:w-2/3 lg:w-3/4 flex flex-col bg-gray-50 relative ${isMobile && !selectedChat && showChatList ? 'hidden' : 'block'}`}>
+                <div className={`w-full md:w-3/5 lg:w-2/3 flex flex-col bg-gray-50 relative ${isMobile && !selectedChat && showChatList ? 'hidden' : 'block'}`}>
                     {selectedChat ? (
                         <>
                             {/* Chat header */}
