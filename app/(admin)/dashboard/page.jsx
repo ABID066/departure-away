@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import DashboardContent from "@/public/components/dashboard/deshboardContent";
 import ServicesContent from "@/public/components/dashboard/ServicesContent";
@@ -13,25 +13,77 @@ import Header from "@/public/components/dashboard/Header";
 export default function App() {
     const [currentPage, setCurrentPage] = useState('dashboard');
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Check if the screen is mobile size on initial load and when window resizes
+    useEffect(() => {
+        const checkIfMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+
+            // Auto-collapse sidebar on mobile
+            if (window.innerWidth < 768) {
+                setIsSidebarCollapsed(true);
+                setIsSidebarOpen(false);
+            } else {
+                setIsSidebarCollapsed(false);
+                setIsSidebarOpen(true);
+            }
+        };
+
+        // Call on initial load
+        checkIfMobile();
+
+        // Set up event listener for window resize
+        window.addEventListener('resize', checkIfMobile);
+
+        // Clean up event listener
+        return () => window.removeEventListener('resize', checkIfMobile);
+    }, []);
 
     const toggleSidebar = () => {
-        setIsSidebarCollapsed(!isSidebarCollapsed);
+        if (isMobile) {
+            setIsSidebarOpen(!isSidebarOpen);
+        } else {
+            setIsSidebarCollapsed(!isSidebarCollapsed);
+        }
     };
 
     return (
-        <div className="flex h-screen bg-gray-100">
-            <Sidebar
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                isCollapsed={isSidebarCollapsed}
-                toggleSidebar={toggleSidebar}
-            />
-            <div className="flex-1 overflow-auto">
-                <Header />
-                {currentPage === 'dashboard' && <DashboardContent />}
-                {currentPage === 'Services' && <ServicesContent />}
-                {currentPage === 'Create Service' && <CreateServiceForm />}
+        <div className="flex flex-col md:flex-row h-screen bg-gray-100 overflow-hidden">
+            {/* Sidebar - conditionally shown based on mobile state */}
+            {(isSidebarOpen || !isMobile) && (
+                <div className={`${isMobile ? 'fixed inset-0 z-40' : ''}`}>
+                    {/* Overlay for mobile sidebar */}
+                    {isMobile && (
+                        <div
+                            className="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity z-40"
+                            onClick={toggleSidebar}
+                        ></div>
+                    )}
 
+                    <div className={`${isMobile ? 'fixed inset-y-0 left-0 z-50 w-64' : ''} h-full`}>
+                        <Sidebar
+                            currentPage={currentPage}
+                            setCurrentPage={(page) => {
+                                setCurrentPage(page);
+                                if (isMobile) setIsSidebarOpen(false);
+                            }}
+                            isCollapsed={isSidebarCollapsed}
+                            toggleSidebar={toggleSidebar}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Main content area */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+                <Header toggleSidebar={toggleSidebar} />
+                <div className="flex-1 overflow-auto">
+                    {currentPage === 'dashboard' && <DashboardContent />}
+                    {currentPage === 'Services' && <ServicesContent setCurrentPage={setCurrentPage} />}
+                    {currentPage === 'Create Service' && <CreateServiceForm />}
+                </div>
             </div>
         </div>
     );

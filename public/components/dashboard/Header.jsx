@@ -1,25 +1,38 @@
 "use client"
 
 import { Bell, HelpCircle, Plus, MessageCircle, Menu } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-export default function Header() {
+export default function Header({ toggleSidebar }) {
+    const router = useRouter();
+
+    const handleMessageClick = () => {
+        router.push('/dashboard/chat');
+    };
+
     return (
-        <div className="flex items-center justify-between p-6 bg-white border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 md:p-6 bg-white border-b border-gray-200">
             <div className="flex items-center">
-
-                <h1 className="text-2xl font-bold">Dashboard</h1>
+                {/* Mobile menu button */}
+                <button
+                    onClick={toggleSidebar}
+                    className="mr-2 md:hidden p-2 text-gray-500 rounded-full hover:bg-gray-100"
+                >
+                    <Menu size={20} />
+                </button>
+                <h1 className="text-xl md:text-2xl font-bold">Dashboard</h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 md:space-x-4">
                 <button className="p-2 text-gray-500 rounded-full hover:bg-gray-100">
                     <Bell size={20} />
                 </button>
-                <button className="p-2 text-gray-500 rounded-full hover:bg-gray-100">
-                    <HelpCircle size={20} />
-                </button>
-                <button className="p-2 text-gray-500 rounded-full hover:bg-gray-100">
+                <button
+                    className="p-2 text-gray-500 rounded-full hover:bg-gray-100"
+                    onClick={handleMessageClick}
+                >
                     <MessageCircle size={20} />
                 </button>
-                <button className="flex items-center px-4 py-2 bg-white text-gray-700 border border-gray-200 rounded-lg">
+                <button className="hidden md:flex items-center px-4 py-2 bg-white text-gray-700 border border-gray-200 rounded-lg">
                     <Plus size={16} className="mr-2" />
                     <span>View Shop</span>
                 </button>

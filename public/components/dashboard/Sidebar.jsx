@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from 'react';
-import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/images/Logo.png";
@@ -11,15 +11,36 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
         'Services': false
     });
 
-    // Modified menuItems to keep only Services
+    // Updated menuItems to include Dashboard
     const menuItems = [
+        {
+            name: 'dashboard',
+            icon: 'dashboard',
+            hasDropdown: false,
+            displayName: 'Dashboard'
+        },
         {
             name: 'Services',
             icon: 'services',
             hasDropdown: true,
+            displayName: 'Services',
             dropdownItems: ['All Services', 'Create Service']
         },
     ];
+
+    // Check if we're on mobile to determine sidebar behavior
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkIfMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkIfMobile();
+        window.addEventListener('resize', checkIfMobile);
+
+        return () => window.removeEventListener('resize', checkIfMobile);
+    }, []);
 
     const toggleExpand = (item) => {
         setExpandedItems({
@@ -30,6 +51,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
 
     const renderIcon = (iconName) => {
         switch (iconName) {
+            case 'dashboard':
+                return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Home size={18} /></div>;
             case 'services':
                 return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Settings size={18} /></div>;
             default:
@@ -41,7 +64,7 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
         if (item.hasDropdown) {
             toggleExpand(item.name);
         } else {
-            setCurrentPage(item);
+            setCurrentPage(item.name);
         }
     };
 
@@ -53,10 +76,10 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
         }
     };
 
-    // If sidebar is collapsed, return a minimal sidebar with just icons
-    if (isCollapsed) {
+    // If sidebar is collapsed and not on mobile, return a minimal sidebar with just icons
+    if (isCollapsed && !isMobile) {
         return (
-            <div className="w-16 bg-white border-r border-gray-200 flex flex-col">
+            <div className="w-16 bg-white border-r border-gray-200 flex flex-col h-full">
                 <div className="p-4 flex justify-center">
                     <button
                         onClick={toggleSidebar}
@@ -70,8 +93,10 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                         {menuItems.map((item) => (
                             <div
                                 key={item.name}
-                                className="flex justify-center py-3 px-2 rounded-lg cursor-pointer mb-1 hover:bg-gray-50"
-                                onClick={() => setCurrentPage(item.hasDropdown ? 'Services' : item.name)}
+                                className={`flex justify-center py-3 px-2 rounded-lg cursor-pointer mb-1 hover:bg-gray-50 ${
+                                    currentPage === item.name ? 'bg-orange-50' : ''
+                                }`}
+                                onClick={() => item.hasDropdown ? setCurrentPage('Services') : setCurrentPage(item.name)}
                             >
                                 {renderIcon(item.icon)}
                             </div>
@@ -82,20 +107,20 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
         );
     }
 
-    // Regular expanded sidebar
+    // Full sidebar for desktop or mobile drawer
     return (
-        <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-            <div className="p-6 flex justify-between items-center">
+        <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full z-50">
+            <div className="p-4 md:p-6 flex justify-between items-center">
                 <div className="flex items-center">
                     <Link href="/dashboard" className="flex items-center">
-                        <Image src={logo} alt="DepartureAway" />
+                        <Image src={logo} alt="DepartureAway" className="max-w-[250px]" />
                     </Link>
                 </div>
                 <button
                     onClick={toggleSidebar}
                     className="p-2 rounded-lg hover:bg-gray-100 text-gray-500"
                 >
-                    <ChevronLeft size={20} />
+                    {isMobile ? <X size={20} /> : <ChevronLeft size={20} />}
                 </button>
             </div>
 
@@ -108,12 +133,12 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                                 className={`flex items-center justify-between py-3 px-2 rounded-lg cursor-pointer mb-1 ${
                                     currentPage === item.name ? 'bg-orange-50' : 'hover:bg-gray-50'
                                 }`}
-                                onClick={() => item.hasDropdown ? toggleExpand(item.name) : setCurrentPage(item.name)}
+                                onClick={() => item.hasDropdown ? toggleExpand(item.name) : handleMenuItemClick(item)}
                             >
                                 <div className="flex items-center">
                                     {renderIcon(item.icon)}
                                     <span className={`ml-3 text-sm ${currentPage === item.name ? 'font-medium' : ''}`}>
-                                        {item.name}
+                                        {item.displayName || item.name}
                                     </span>
                                 </div>
                                 <div className="flex items-center">
