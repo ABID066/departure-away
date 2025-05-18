@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useState } from 'react'
-import FilterSideber from '../../public/components/exclusive/FilterSideber'
-import { OfferCard } from '../../public/components/exclusive/OfferCard'
-import Pagination from '../../public/components/exclusive/Pagination'
-import offers from '../../public/components/exclusive/DataOffer'
+import FilterSideber from '../../components/exclusive/FilterSideber'
+import { OfferCard } from '../../components/exclusive/OfferCard'
+import Pagination from '../../components/exclusive/Pagination'
+import offers from '../../components/exclusive/DataOffer'
 
 
 const ExcluesiveOfferPage = () => {

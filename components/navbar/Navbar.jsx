@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
-import logo from '../../images/Logo.png';
+import logo from '../../public/images/Logo.png';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +72,7 @@ export default function Navbar() {
             <div className="container mx-auto px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
                     <div className="flex-shrink-0">
-                        <Link href="/" className="flex items-center">
+                        <Link href="/public" className="flex items-center">
                             <Image src={logo} alt="DepartureAway" height={50} width={280} />
                         </Link>
                     </div>

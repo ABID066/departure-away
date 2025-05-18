@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 
-import DashboardContent from "@/public/components/dashboard/deshboardContent";
-import ServicesContent from "@/public/components/dashboard/ServicesContent";
-import CreateServiceForm from "@/public/components/dashboard/CreateServiceForm";
+import DashboardContent from "@/components/dashboard/deshboardContent";
+import ServicesContent from "@/components/dashboard/ServicesContent";
+import CreateServiceForm from "@/components/dashboard/CreateServiceForm";
 
-import Sidebar from "@/public/components/dashboard/Sidebar";
-import Header from "@/public/components/dashboard/Header";
+import Sidebar from "@/components/dashboard/Sidebar";
+import Header from "@/components/dashboard/Header";
 
 
 export default function App() {

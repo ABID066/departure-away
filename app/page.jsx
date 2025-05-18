@@ -1,11 +1,11 @@
-import ThreeCards from "@/public/components/home/ThreeCards";
-import Banner from "../public/components/home/BannerSection";
-import ExclusiveOffers from "../public/components/home/ExclusiveOffers";
-import Experience from "../public/components/home/Experience";
-import TopCategories from "../public/components/home/TopCategories";
-import TopGuider from "../public/components/home/TopGuider";
-import TravelPackages from "../public/components/home/TravelPackages";
-import SearchSection from "@/public/components/home/SearchSection";
+import ThreeCards from "@/components/home/ThreeCards";
+import Banner from "../components/home/BannerSection";
+import ExclusiveOffers from "../components/home/ExclusiveOffers";
+import Experience from "../components/home/Experience";
+import TopCategories from "../components/home/TopCategories";
+import TopGuider from "../components/home/TopGuider";
+import TravelPackages from "../components/home/TravelPackages";
+import SearchSection from "@/components/home/SearchSection";
 
 export default function Home() {
     return (
