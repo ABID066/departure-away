@@ -16,7 +16,6 @@ export default function App() {
     const [isMobile, setIsMobile] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    // Check if the screen is mobile size on initial load and when window resizes
     useEffect(() => {
         const checkIfMobile = () => {
             setIsMobile(window.innerWidth < 768);
