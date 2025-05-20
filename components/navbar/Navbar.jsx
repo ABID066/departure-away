@@ -19,7 +19,7 @@ export default function Navbar() {
     
     // Check if we should hide the navbar
     const hideNavbar = pathname === '/signUp'||pathname === '/signIn'|| pathname === '/dashboard' ||
-    pathname=== "/dashboard/chat";
+    pathname=== "/dashboard/chat" || pathname=== "/signUp/verify";
     
     // If hideNavbar is true, don't render the navbar at all
     if (hideNavbar) {
