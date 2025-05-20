@@ -125,7 +125,7 @@ export default function Page() {
               alt="Sign up illustration"
               width={700}
               height={700}
-              className="max-w-auto"
+              className="max-w-xl object-contain"
           />
         </div>
 

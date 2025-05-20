@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Mail, CheckCircle, XCircle, ArrowLeft } from "lucide-react";
+import { useRouter} from "next/navigation";
+import { Mail, CheckCircle, XCircle} from "lucide-react";
 
 export default function VerifyPage() {
     const router = useRouter();
@@ -16,7 +15,6 @@ export default function VerifyPage() {
 
     // Get email from localStorage on component mount
     useEffect(() => {
-        // In a real app, you'd likely get this from a more secure source like session
         const savedEmail = localStorage.getItem("userEmail") || "user@example.com";
         setEmail(savedEmail);
     }, []);
@@ -65,7 +63,7 @@ export default function VerifyPage() {
             setIsVerified(true);
             setError("");
 
-            // In a real app, you would make an API call here to verify the OTP
+            // API call here to verify the OTP
             // If successful, redirect after showing success message
             setTimeout(() => {
                 router.push("/dashboard"); // Redirect to dashboard or home page
@@ -84,7 +82,7 @@ export default function VerifyPage() {
         // Focus on the first input
         inputRefs.current[0].focus();
 
-        // In real app: API call to resend verification code
+        // API call to resend verification code
         alert("New verification code sent to your email");
     };
 
@@ -98,7 +96,7 @@ export default function VerifyPage() {
                         alt="Sign up illustration"
                         width={700}
                         height={700}
-                        className="max-w-auto"
+                        className="max-w-xl object-contain"
                     />
                 </div>
             </div>
