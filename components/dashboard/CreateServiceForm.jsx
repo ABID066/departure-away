@@ -1,8 +1,16 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function CreateServiceForm() {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [userId, setUserId] = useState(null);
+    const [userRole, setUserRole] = useState(null);
+    const [unauthorized, setUnauthorized] = useState(false);
+
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -12,8 +20,39 @@ export default function CreateServiceForm() {
         price_premium: "",
         location: "",
         duration_days: "",
-        media_urls: ""
+        media_urls: "",
+        provider_id: ""
     });
+
+    // Get user ID from localStorage on component mount
+    useEffect(() => {
+        try {
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                const user = JSON.parse(userData);
+
+                // Check if user role is allowed to create services
+                if (user.role === "user") {
+                    setUnauthorized(true);
+                    setError("Only freelancers and agencies can create services.");
+                    return;
+                }
+
+                if (user.id) {
+                    setUserId(user.id);
+                    setUserRole(user.role);
+                    setFormData(prev => ({ ...prev, provider_id: user.id }));
+                }
+            } else {
+                setUnauthorized(true);
+                setError("User information not found. Please log in again.");
+            }
+        } catch (error) {
+            console.error("Error retrieving user data:", error);
+            setError("Unable to retrieve user data. Please log in again.");
+            setUnauthorized(true);
+        }
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,10 +62,67 @@ export default function CreateServiceForm() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission here
-        console.log("Form submitted:", formData);
+        setError("");
+
+        // Check if user is authorized
+        if (unauthorized) {
+            setError("You are not authorized to create services.");
+            return;
+        }
+
+        // Check if user ID is available
+        if (!userId) {
+            setError("User information not available. Please log in again.");
+            return;
+        }
+
+        // Prepare the data for API
+        const serviceData = {
+            ...formData,
+            provider_id: userId,
+            // Convert string numbers to actual numbers
+            price_basic: Number(formData.price_basic),
+            price_standard: Number(formData.price_standard),
+            price_premium: Number(formData.price_premium),
+            duration_days: formData.duration_days ? Number(formData.duration_days) : undefined,
+            // Keep media_urls as a string - don't convert to array
+            media_urls: formData.media_urls ? formData.media_urls.trim() : ""
+        };
+
+        setIsLoading(true);
+
+        try {
+            // Get token from localStorage
+            const accessToken = localStorage.getItem('accessToken');
+
+            const response = await fetch('http://localhost:5000/api/v1/service/create-service', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include authorization header if needed
+                    ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+                },
+                body: JSON.stringify(serviceData)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to create service');
+            }
+
+            console.log("Service created successfully:", result);
+            // Redirect to service listing or detail page
+            router.push('/services');
+
+        } catch (error) {
+            console.error("Error creating service:", error);
+            setError(error.message || "Failed to create service. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -34,161 +130,204 @@ export default function CreateServiceForm() {
             <div className="bg-white rounded-lg shadow p-4 md:p-6">
                 <h2 className="text-lg md:text-xl font-semibold mb-4 md:mb-6">Create New Service</h2>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                        <div className="col-span-1 md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                            <input
-                                type="text"
-                                name="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Enter service title"
-                                required
-                            />
+                {error && (
+                    <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-md">
+                        {error}
+                    </div>
+                )}
+
+                {unauthorized ? (
+                    <div className="text-center py-8">
+                        <div className="mb-4 text-red-500 font-medium">
+                            You don't have permission to create services.
                         </div>
-
-                        <div className="col-span-1 md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                            <textarea
-                                name="description"
-                                value={formData.description}
-                                onChange={handleChange}
-                                rows="4"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Enter service description"
-                                required
-                            ></textarea>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                            <select
-                                name="category"
-                                value={formData.category}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                required
-                            >
-                                <option value="">Select a category</option>
-                                <option value="flight">Flight</option>
-                                <option value="hotel">Hotel</option>
-                                <option value="tour">Tour</option>
-                                <option value="guide">Guide</option>
-                                <option value="visa">Visa</option>
-                                <option value="lost_bag">Lost Bag</option>
-                                <option value="car">Car</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                            <input
-                                type="text"
-                                name="location"
-                                value={formData.location}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Enter service location"
-                            />
-                        </div>
-
-                        {/* Pricing section - Responsive layout */}
-                        <div className="col-span-1 md:col-span-2">
-                            <h3 className="text-sm font-medium text-gray-700 mb-2 mt-2">Pricing</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Basic Price ($)</label>
-                                    <input
-                                        type="number"
-                                        name="price_basic"
-                                        value={formData.price_basic}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                        placeholder="Enter basic price"
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Standard Price ($)</label>
-                                    <input
-                                        type="number"
-                                        name="price_standard"
-                                        value={formData.price_standard}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                        placeholder="Enter standard price"
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Premium Price ($)</label>
-                                    <input
-                                        type="number"
-                                        name="price_premium"
-                                        value={formData.price_premium}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                        placeholder="Enter premium price"
-                                        required
-                                    />
-                                </div>
+                        <p className="mb-4 text-gray-600">
+                            Only freelancers and agencies can create services. If you believe this is an error, please contact support.
+                        </p>
+                        <button
+                            onClick={() => router.push('/')}
+                            className="px-4 py-2 bg-orange-500 text-white rounded-md text-sm font-medium hover:bg-orange-600"
+                        >
+                            Return to Home
+                        </button>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            {/* Form fields remain the same */}
+                            <div className="col-span-1 md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={formData.title}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="Enter service title"
+                                    required
+                                />
                             </div>
-                        </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Duration (Days)</label>
-                            <input
-                                type="number"
-                                name="duration_days"
-                                value={formData.duration_days}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Enter duration in days"
-                            />
-                        </div>
+                            <div className="col-span-1 md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <textarea
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                    rows="4"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="Enter service description"
+                                    required
+                                ></textarea>
+                            </div>
 
-                        <div className="col-span-1 md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Media URLs</label>
-                            <input
-                                type="text"
-                                name="media_urls"
-                                value={formData.media_urls}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Enter comma-separated media URLs"
-                            />
-                        </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                <select
+                                    name="category"
+                                    value={formData.category}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    required
+                                >
+                                    <option value="">Select a category</option>
+                                    <option value="flight">Flight</option>
+                                    <option value="hotel">Hotel</option>
+                                    <option value="tour">Tour</option>
+                                    <option value="guide">Guide</option>
+                                    <option value="visa">Visa</option>
+                                    <option value="lost_bag">Lost Bag</option>
+                                    <option value="car">Car</option>
+                                </select>
+                            </div>
 
-                        <div className="col-span-1 md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Upload Images</label>
-                            <div className="mt-1 flex justify-center px-4 py-4 md:px-6 md:pt-5 md:pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                <div className="space-y-1 text-center">
-                                    <div className="flex flex-col md:flex-row text-sm text-gray-600 items-center justify-center">
-                                        <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-orange-500 hover:text-orange-400 mb-2 md:mb-0">
-                                            <span>Upload files</span>
-                                            <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple />
-                                        </label>
-                                        <p className="md:pl-1">or drag and drop</p>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                                <input
+                                    type="text"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="Enter service location"
+                                />
+                            </div>
+
+                            {/* Pricing section */}
+                            <div className="col-span-1 md:col-span-2">
+                                <h3 className="text-sm font-medium text-gray-700 mb-2 mt-2">Pricing</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Basic Price ($)</label>
+                                        <input
+                                            type="number"
+                                            name="price_basic"
+                                            value={formData.price_basic}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                            placeholder="Enter basic price"
+                                            required
+                                        />
                                     </div>
-                                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Standard Price ($)</label>
+                                        <input
+                                            type="number"
+                                            name="price_standard"
+                                            value={formData.price_standard}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                            placeholder="Enter standard price"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Premium Price ($)</label>
+                                        <input
+                                            type="number"
+                                            name="price_premium"
+                                            value={formData.price_premium}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                            placeholder="Enter premium price"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Duration (Days)</label>
+                                <input
+                                    type="number"
+                                    name="duration_days"
+                                    value={formData.duration_days}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="Enter duration in days"
+                                />
+                            </div>
+
+                            <div className="col-span-1 md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Media URLs</label>
+                                <input
+                                    type="text"
+                                    name="media_urls"
+                                    value={formData.media_urls}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="Enter comma-separated media URLs"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Enter URLs separated by commas</p>
+                            </div>
+
+                            <div className="col-span-1 md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Upload Images</label>
+                                <div className="mt-1 flex justify-center px-4 py-4 md:px-6 md:pt-5 md:pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                    <div className="space-y-1 text-center">
+                                        <div className="flex flex-col md:flex-row text-sm text-gray-600 items-center justify-center">
+                                            <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-orange-500 hover:text-orange-400 mb-2 md:mb-0">
+                                                <span>Upload files</span>
+                                                <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple />
+                                            </label>
+                                            <p className="md:pl-1">or drag and drop</p>
+                                        </div>
+                                        <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="mt-6 md:mt-8 flex flex-col sm:flex-row sm:justify-end gap-3">
-                        <button type="button" className="w-full sm:w-auto order-2 sm:order-1 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                            Cancel
-                        </button>
-                        <button type="submit" className="w-full sm:w-auto order-1 sm:order-2 px-4 py-2 bg-orange-500 text-white rounded-md text-sm font-medium hover:bg-orange-600">
-                            Create Service
-                        </button>
-                    </div>
-                </form>
+                        <div className="mt-6 md:mt-8 flex flex-col sm:flex-row sm:justify-end gap-3">
+                            <button
+                                type="button"
+                                className="w-full sm:w-auto order-2 sm:order-1 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                onClick={() => router.back()}
+                                disabled={isLoading}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className={`w-full sm:w-auto order-1 sm:order-2 px-4 py-2 bg-orange-500 text-white rounded-md text-sm font-medium
+                                ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-orange-600'}`}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? (
+                                    <div className="flex items-center justify-center">
+                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Creating...
+                                    </div>
+                                ) : 'Create Service'}
+                            </button>
+                        </div>
+                    </form>
+                )}
             </div>
         </div>
     );
