@@ -27,7 +27,6 @@ export default function CreateServiceForm() {
         e.preventDefault();
         // Handle form submission here
         console.log("Form submitted:", formData);
-        // You might want to add API call for creating service
     };
 
     return (

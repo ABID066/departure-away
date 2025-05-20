@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react';
-import { Search, Send, MoreVertical, ArrowLeft, Check, CheckCheck, Paperclip, Smile, Menu } from 'lucide-react';
+import { Search, Send, MoreVertical, Check, CheckCheck, Paperclip, Smile, Menu } from 'lucide-react';
 import Link from 'next/link';
 import logo from "@/public/images/Logo.png";
 import Image from 'next/image';
