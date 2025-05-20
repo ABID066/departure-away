@@ -11,7 +11,7 @@ const Footer = () => {
 
     const pathname = usePathname();
     const hideNavbar = pathname === '/signUp'||pathname === '/signIn'
-        || pathname === '/dashboard' || pathname=== "/dashboard/chat";
+        || pathname === '/dashboard' || pathname=== "/dashboard/chat" || pathname==="/signUp/verify";
 
     if (hideNavbar) {
         return null;
