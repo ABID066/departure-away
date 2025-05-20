@@ -92,7 +92,7 @@ export default function VerifyPage() {
             <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-8">
                 <div className="max-w-md text-center">
                     <Image
-                        src="/images/signup.png"
+                        src="/images/signup.jpg"
                         alt="Sign up illustration"
                         width={700}
                         height={700}

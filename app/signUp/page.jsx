@@ -6,13 +6,12 @@ import Link from "next/link";
 import { Eye, EyeOff, Facebook } from "lucide-react";
 import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { BiLogoMicrosoft } from "react-icons/bi";
 import {useRouter} from "next/navigation";
 
 
 export default function Page() {
   const router = useRouter();
-  // State for form data
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,19 +20,17 @@ export default function Page() {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "user", // Default value
+    role: "user",
     acceptTerms: false
   });
 
-  // State for password visibility
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // State for password match validation
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [formIsValid, setFormIsValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle input changes
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prevState => ({
@@ -42,7 +39,6 @@ export default function Page() {
     }));
   };
 
-  // Check if passwords match and validate form
   useEffect(() => {
     // Check if passwords match when either password field changes
     if (formData.password === "" && formData.confirmPassword === "") {
@@ -76,8 +72,8 @@ export default function Page() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Form validation on submit
@@ -110,10 +106,40 @@ export default function Page() {
       role: formData.role
     };
 
-    // If validation passes, submit the form
-    console.log("Form Data for API:", apiData);
-    localStorage.setItem("userEmail", formData.email);
-    router.push('/signUp/verify');
+    // Set loading to true before API call
+    setIsLoading(true);
+
+    try {
+      // Make API call to create user
+      const response = await fetch('http://localhost:5000/api/v1/user/create-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(apiData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle API error response
+        console.error("Registration failed:", data);
+        alert(data.message || "Registration failed. Please try again.");
+        return;
+      }
+
+      // If successful, log the response, store email and redirect
+      console.log("User created successfully:", data);
+      localStorage.setItem("userEmail", formData.email);
+      router.push('/signUp/verify');
+    } catch (error) {
+      // Handle network or other errors
+      console.error("Error during registration:", error);
+      alert("An error occurred during registration. Please try again.");
+    } finally {
+      // Set loading to false after API call completes (success or error)
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -121,7 +147,7 @@ export default function Page() {
         {/* Left side - Image */}
         <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-8">
           <Image
-              src="/images/signup.png"
+              src="/images/signup.jpg"
               alt="Sign up illustration"
               width={700}
               height={700}
@@ -301,9 +327,22 @@ export default function Page() {
               {/* Sign Up Button */}
               <button
                   type="submit"
-                  className="w-full bg-red-500 text-white py-3 rounded-full font-medium hover:bg-red-600 transition duration-300 cursor-pointer"
+                  disabled={isLoading}
+                  className={`w-full bg-red-500 text-white py-3 rounded-full font-medium transition duration-300 ${
+                      isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-red-600 cursor-pointer'
+                  }`}
               >
-                Sign Up
+                {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Signing Up...
+                    </div>
+                ) : (
+                    'Sign Up'
+                )}
               </button>
 
               {/* Login Link */}
@@ -331,16 +370,13 @@ export default function Page() {
 
             {/* Social Icons */}
             <div className="flex justify-center space-x-6 mt-4">
-              <button className="text-gray-600 hover:text-gray-800">
+              <button className="text-gray-600 hover:text-gray-800 cursor-pointer">
                 <FaApple size={24} />
               </button>
-              <button className="text-gray-600 hover:text-gray-800">
+              <button className="text-gray-600 hover:text-gray-800 cursor-pointer">
                 <FcGoogle size={24} />
               </button>
-              <button className="text-gray-600 hover:text-gray-800">
-                <BiLogoMicrosoft size={24} />
-              </button>
-              <button className="text-gray-600 hover:text-gray-800">
+              <button className="text-gray-600 hover:text-gray-800 cursor-pointer">
                 <Facebook size={24} />
               </button>
             </div>

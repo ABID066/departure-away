@@ -28,7 +28,7 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
         },
     ];
 
-    // Check if we're on mobile to determine sidebar behavior
+    // Check for mobile to determine sidebar behavior
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
