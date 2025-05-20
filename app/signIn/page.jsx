@@ -17,6 +17,7 @@ export default function SignIn() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -33,7 +34,7 @@ export default function SignIn() {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation
@@ -42,16 +43,54 @@ export default function SignIn() {
       return;
     }
 
-    console.log("Login attempt:", { email: formData.email, rememberMe: formData.rememberMe });
+    setError("");
+    setIsLoading(true);
 
-    // Here you would normally make an API call to authenticate
-    // For demo purposes, direct to dashboard or home page
-    router.push('/dashboard');
-  };
+    try {
+      const response = await fetch('http://localhost:5000/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Remove credentials: 'include' for now
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-  // Handle forgot password
-  const handleForgotPassword = () => {
-    router.push('/forgot-password');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        setError(errorData?.message || `Login failed: ${response.statusText}`);
+        return;
+      }
+
+      const result = await response.json();
+      console.log("Login successful:", result);
+      localStorage.clear();
+
+      // Store the tokens manually since we can't use cookies
+      if (result.data?.accessToken) {
+        localStorage.setItem("accessToken", result.data.accessToken);
+
+        // If the API also returns the refresh token in the response
+        // (not ideal but a temporary workaround)
+        if (result.data.refreshToken) {
+          localStorage.setItem("refreshToken", result.data.refreshToken);
+        }
+      }
+
+      if (result.data?.user) {
+        localStorage.setItem("userData", JSON.stringify(result.data.user));
+      }
+
+      router.push('/dashboard');
+    } catch (error) {
+      console.error("Error during login:", error);
+      setError("Login request failed. Please check your network connection.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -128,7 +167,7 @@ export default function SignIn() {
                 </div>
                 <button
                     type="button"
-                    onClick={handleForgotPassword}
+
                     className="text-sm text-red-500 hover:underline cursor-pointer"
                 >
                   Forgot password?
@@ -136,11 +175,25 @@ export default function SignIn() {
               </div>
 
               {/* Log In Button */}
+              {/* Log In Button */}
               <button
                   type="submit"
-                  className="w-full bg-red-500 text-white py-3 rounded-full font-medium hover:bg-red-600 transition duration-300 cursor-pointer mb-4"
+                  disabled={isLoading}
+                  className={`w-full bg-red-500 text-white py-3 rounded-full font-medium transition duration-300 ${
+                      isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-red-600 cursor-pointer'
+                  } mb-4`}
               >
-                Log In
+                {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Logging In...
+                    </div>
+                ) : (
+                    'Log In'
+                )}
               </button>
 
               {/* Sign Up Link */}
