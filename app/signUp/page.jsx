@@ -111,7 +111,7 @@ export default function Page() {
 
     try {
       // Make API call to create user
-      const response = await fetch('http://localhost:5000/api/v1/user/create-user', {
+      const response = await fetch('https://royolex.vercel.app/api/v1/user/create-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
