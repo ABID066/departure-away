@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import ExclusiveOfferCard from "./ExclusiveOfferCard";
+import { useRouter } from 'next/navigation';
 
 export default function ExclusiveOffer() {
   // States for data, loading and error handling
@@ -8,6 +9,8 @@ export default function ExclusiveOffer() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAll, setShowAll] = useState(false);
+
+  const router = useRouter();
 
   // Fetch data from API on component mount
   useEffect(() => {
@@ -112,17 +115,17 @@ export default function ExclusiveOffer() {
                 ))}
               </div>
 
-              {/* Show More/Less Button - Only show if there are more than 8 offers */}
-              {offers.length > 8 && (
+
+
                   <div className="flex justify-center mt-8">
                     <button
-                        className="bg-pink-700 mb-4 px-4 py-2 text-white rounded-lg hover:bg-pink-900 transition-colors duration-300"
-                        onClick={() => setShowAll(!showAll)}
+                        className="bg-pink-700 mb-4 px-4 py-2 text-white rounded-lg hover:bg-pink-900 cursor-pointer transition-colors duration-300"
+                        onClick={() => router.push('/exclusive-offers')}
                     >
-                      {showAll ? "Show Less" : "View All Offers"}
+                      View All Offers
                     </button>
                   </div>
-              )}
+
             </>
         )}
       </div>
