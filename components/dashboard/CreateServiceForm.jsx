@@ -97,7 +97,7 @@ export default function CreateServiceForm({ setCurrentPage }) {
             // Get token from localStorage
             const accessToken = localStorage.getItem('accessToken');
 
-            const response = await fetch('http://localhost:5000/api/v1/service/create-service', {
+            const response = await fetch('https://royolex.vercel.app/api/v1/service/create-service', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

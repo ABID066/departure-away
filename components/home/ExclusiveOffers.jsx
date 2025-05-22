@@ -38,7 +38,7 @@ export default function ExclusiveOffer() {
 
         // Make API request
         const response = await fetch(
-            `https://royolex.vercel.app/api/v1/service/-all-service?limit=8`
+            "https://royolex.vercel.app/api/v1/service/-all-service?limit=8"
         );
 
         if (!response.ok) {
