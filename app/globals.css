@@ -1,10 +1,4 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
-  themes: light --default;
- };
- @custom-variant hover (&:hover);
-
 
 :root {
   --background: #ffffff;
@@ -17,8 +11,6 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
-
-
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -37,7 +29,7 @@
   color: black;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
+
 .my-testimonial-box {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
-
