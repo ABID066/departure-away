@@ -16,25 +16,7 @@ export default function ExclusiveOffer() {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        // Get user ID from localStorage
-        const userData = localStorage.getItem('userData');
-        if (!userData) {
 
-          setLoading(false);
-          return;
-        }
-
-        const user = JSON.parse(userData);
-        const userId = user.id;
-
-        if (!userId) {
-          setError("User ID not found. Please log in again.");
-          setLoading(false);
-          return;
-        }
-
-        // Get token from localStorage
-        const accessToken = localStorage.getItem('accessToken');
 
         // Make API request
         const response = await fetch(
