@@ -19,7 +19,7 @@ export default function ExclusiveOffer() {
         // Get user ID from localStorage
         const userData = localStorage.getItem('userData');
         if (!userData) {
-          setError("User data not found. Please log in again.");
+
           setLoading(false);
           return;
         }
@@ -37,13 +37,9 @@ export default function ExclusiveOffer() {
         const accessToken = localStorage.getItem('accessToken');
 
         // Make API request
-        const response = await fetch("https://royolex.vercel.app/api/v1/service/-all-service?page=1&limit=8", {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
-          }
-        });
+        const response = await fetch(
+            "https://royolex.vercel.app/api/v1/service/-all-service?limit=8"
+        );
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -68,7 +64,7 @@ export default function ExclusiveOffer() {
         setOffers(formattedOffers);
       } catch (error) {
         console.error("Error fetching offers:", error);
-
+        setError(error.message || "Failed to load offers. Please try again.");
       } finally {
         setLoading(false);
       }

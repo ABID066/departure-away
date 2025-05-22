@@ -69,7 +69,7 @@ export default function ServicesContent({ setCurrentPage }) {
         try {
             const accessToken = localStorage.getItem('accessToken');
 
-            const response = await fetch(`http://localhost:5000/api/v1/service/user/service/${id}`, {
+            const response = await fetch(`https://royolex.vercel.app/api/v1/service/user/service/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export default function ServicesContent({ setCurrentPage }) {
 
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch(`http://localhost:5000/api/v1/service/ById/${serviceId}`, {
+            const response = await fetch(`https://royolex.vercel.app/api/v1/service/ById/${serviceId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export default function ServicesContent({ setCurrentPage }) {
 
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch(`http://localhost:5000/api/v1/service/update/${selectedService._id}`, {
+            const response = await fetch(`https://royolex.vercel.app/api/v1/service/update/${selectedService._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -251,7 +251,7 @@ export default function ServicesContent({ setCurrentPage }) {
 
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch(`http://localhost:5000/api/v1/service/delete/${deleteId}`, {
+            const response = await fetch(`https://royolex.vercel.app/api/v1/service/delete/${deleteId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
