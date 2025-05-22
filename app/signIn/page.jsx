@@ -102,7 +102,7 @@ export default function SignIn() {
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-gray-800">Hi!</h1>
               <h2 className="text-3xl font-bold text-gray-800 mt-2">Welcome Back!</h2>
-              <p className="text-gray-500 mt-2">Please log in to manage your account.</p>
+              <p className="text-gray-500 mt-2">Please log in to manage your account</p>
             </div>
 
             {/* Error message if exists */}

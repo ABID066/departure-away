@@ -72,7 +72,7 @@ export default function Navbar() {
             <div className="container mx-auto px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
                     <div className="flex-shrink-0">
-                        <Link href="/public" className="flex items-center">
+                        <Link href="/" className="flex items-center">
                             <Image src={logo} alt="DepartureAway" height={50} width={280} />
                         </Link>
                     </div>
@@ -123,7 +123,7 @@ export default function Navbar() {
                             onClick={() => {
                                 window.location.href = '/signUp';
                             }} 
-                            className={`${textColor} border ${buttonBorderColor} px-6 py-2 rounded-full ${buttonHoverClass} transition-colors`}
+                            className={`${textColor} border ${buttonBorderColor} px-6 py-2 rounded-full ${buttonHoverClass} cursor-pointer transition-colors`}
                         >
                             Get Started
                         </button>

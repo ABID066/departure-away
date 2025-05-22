@@ -15,7 +15,7 @@ export default function Page() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    countryCode: "+880",
+    countryCode: "+971",
     mobile: "",
     email: "",
     password: "",
@@ -201,6 +201,7 @@ export default function Page() {
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-full bg-red-100 text-gray-800 focus:outline-none"
                   >
+                    <option value="+971">+971</option>
                     <option value="+880">+880</option>
                     <option value="+1">+1</option>
                     <option value="+44">+44</option>
