@@ -34,7 +34,7 @@ export default function ExclusiveOffer() {
         const accessToken = localStorage.getItem('accessToken');
 
         // Make API request
-        const response = await fetch(`http://localhost:5000/api/v1/service/user/service/${userId}`, {
+        const response = await fetch("http://localhost:5000/api/v1/service/-all-service?limit=8", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

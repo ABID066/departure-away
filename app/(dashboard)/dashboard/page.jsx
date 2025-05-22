@@ -81,7 +81,9 @@ export default function App() {
                 <div className="flex-1 overflow-auto">
                     {currentPage === 'dashboard' && <DashboardContent />}
                     {currentPage === 'Services' && <ServicesContent setCurrentPage={setCurrentPage} />}
-                    {currentPage === 'Create Service' && <CreateServiceForm />}
+                    {currentPage === 'Create Service' && (
+                        <CreateServiceForm setCurrentPage={setCurrentPage} />
+                    )}
                 </div>
             </div>
         </div>
