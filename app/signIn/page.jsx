@@ -52,7 +52,7 @@ export default function SignIn() {
         headers: {
           'Content-Type': 'application/json',
         },
-        // Remove credentials: 'include' for now
+        //credentials: 'include' ,
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
