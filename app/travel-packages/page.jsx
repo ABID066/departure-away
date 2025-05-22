@@ -4,7 +4,7 @@ import { Filter } from 'lucide-react'
 import FilterSideber from '../../components/travel/FilterSideber'
 import { OfferCard } from '../../components/travel/OfferCard'
 import Pagination from '../../components/travel/Pagination'
-import offers from '../../components/exclusive/DataOffer'
+import offers from '../../components/travel/DataOffer'
 import { useState } from 'react'
 
 const TravelPackagePage = () => {
