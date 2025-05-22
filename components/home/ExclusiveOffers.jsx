@@ -37,13 +37,9 @@ export default function ExclusiveOffer() {
         const accessToken = localStorage.getItem('accessToken');
 
         // Make API request
-        const response = await fetch("https://royolex.vercel.app/api/v1/service/-all-service?limit=8", {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
-          }
-        });
+        const response = await fetch(
+            `https://royolex.vercel.app/api/v1/service/-all-service?limit=8`
+        );
 
         if (!response.ok) {
           const errorData = await response.json();
