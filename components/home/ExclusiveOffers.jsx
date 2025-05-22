@@ -37,7 +37,7 @@ export default function ExclusiveOffer() {
         const accessToken = localStorage.getItem('accessToken');
 
         // Make API request
-        const response = await fetch("http://localhost:5000/api/v1/service/-all-service?limit=8", {
+        const response = await fetch("https://royolex.vercel.app/api/v1/service/-all-service?page=1&limit=8", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export default function ExclusiveOffer() {
         setOffers(formattedOffers);
       } catch (error) {
         console.error("Error fetching offers:", error);
-        setError(error.message || "Failed to load offers. Please try again.");
+
       } finally {
         setLoading(false);
       }
