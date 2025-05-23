@@ -21,6 +21,7 @@ export default function Page() {
     password: "",
     confirmPassword: "",
     role: "user",
+
     acceptTerms: false
   });
 
@@ -103,7 +104,9 @@ export default function Page() {
       email: formData.email,
       password: formData.password,
       phone: `${formData.countryCode}${formData.mobile}`,
-      role: formData.role
+      role: formData.role,
+      image: "https://png.pngtree.com/png-vector/20191119/ourmid/pngtree-beautiful-profile-glyph-vector-icon-png-image_2002807.jpg",
+      // default image
     };
 
     // Set loading to true before API call
