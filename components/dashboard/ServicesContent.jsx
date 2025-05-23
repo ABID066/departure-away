@@ -490,7 +490,7 @@ export default function ServicesContent({ setCurrentPage }) {
                 {canCreateService && (
                     <button
                         onClick={handleCreateNew}
-                        className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-md"
+                        className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-md cursor-pointer"
                     >
                         <Plus size={16} className="mr-2" />
                         Create New Service
@@ -584,14 +584,14 @@ export default function ServicesContent({ setCurrentPage }) {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${service.price_premium}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <button
-                                            className="text-blue-500 hover:text-blue-700 mr-3 inline-flex items-center"
+                                            className="text-blue-500 hover:text-blue-700 mr-3 inline-flex items-center cursor-pointer"
                                             onClick={() => handleEditClick(service._id || service.id)}
                                         >
                                             <Edit size={14} className="mr-1" />
                                             Edit
                                         </button>
                                         <button
-                                            className="text-red-500 hover:text-red-700 inline-flex items-center"
+                                            className="text-red-500 hover:text-red-700 inline-flex items-center cursor-pointer"
                                             onClick={() => handleDeleteClick(service._id || service.id)}
                                         >
                                             <Trash2 size={14} className="mr-1" />
@@ -630,7 +630,7 @@ export default function ServicesContent({ setCurrentPage }) {
                                     </div>
                                 </div>
 
-                                <div className="flex justify-end space-x-2 mt-2 pt-2 border-t border-gray-100">
+                                <div className="flex justify-end space-x-2 mt-2 pt-2 border-t border-gray-100 ">
                                     <button
                                         className="px-3 py-1 text-sm text-blue-500 hover:text-blue-700 inline-flex items-center"
                                         onClick={() => handleEditClick(service._id || service.id)}

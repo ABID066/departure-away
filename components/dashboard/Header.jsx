@@ -1,13 +1,36 @@
-"use client"
-
-import { Bell, HelpCircle, Plus, MessageCircle, Menu } from 'lucide-react';
+import { Bell, HelpCircle, Plus, MessageCircle, Menu, User, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
 
 export default function Header({ toggleSidebar }) {
     const router = useRouter();
+    const [userName, setUserName] = useState('User');
+
+    useEffect(() => {
+        // Get user data from localStorage
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            try {
+                const parsedUserData = JSON.parse(userData);
+                setUserName(parsedUserData.name || 'User');
+            } catch (error) {
+                console.error('Error parsing userData from localStorage:', error);
+                setUserName('User');
+            }
+        }
+    }, []);
 
     const handleMessageClick = () => {
         router.push('/dashboard/chat');
+    };
+
+    const handleProfileClick = () => {
+        router.push('/profile');
+    };
+
+    const handleLogoutClick = () => {
+        localStorage.clear();
+        router.push('/signIn');
     };
 
     return (
@@ -36,8 +59,41 @@ export default function Header({ toggleSidebar }) {
                     <Plus size={16} className="mr-2" />
                     <span>View Shop</span>
                 </button>
-                <div className="w-8 h-8 rounded-full bg-gray-300 overflow-hidden">
-                    <img src="/api/placeholder/40/40" alt="User Avatar" className="w-full h-full object-cover" />
+
+                {/* User Avatar with Dropdown */}
+                <div className="relative group">
+                    <img
+                        className="w-8 h-8 rounded-full cursor-pointer object-cover"
+                        src="https://png.pngtree.com/png-vector/20191119/ourmid/pngtree-beautiful-profile-glyph-vector-icon-png-image_2002807.jpg"
+                        alt="User Avatar"
+                    />
+                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <div className="mt-4 text-center">
+                            <img
+                                className="w-12 h-12 rounded-full mx-auto object-cover"
+                                src="https://png.pngtree.com/png-vector/20191119/ourmid/pngtree-beautiful-profile-glyph-vector-icon-png-image_2002807.jpg"
+                                alt="User Avatar"
+                            />
+                            <h6 className="mt-2 font-medium text-gray-800">
+                                {userName}
+                            </h6>
+                            <hr className="border-gray-200 mx-4 mt-3 p-0"/>
+                        </div>
+                        <button
+                            onClick={handleProfileClick}
+                            className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150"
+                        >
+                            <User className="w-5 h-5 mr-3 text-gray-500" />
+                            <span className="text-sm font-medium">Profile</span>
+                        </button>
+                        <button
+                            onClick={handleLogoutClick}
+                            className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150"
+                        >
+                            <LogOut className="w-5 h-5 mr-3 text-gray-500" />
+                            <span className="text-sm font-medium">Logout</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
