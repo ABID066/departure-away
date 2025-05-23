@@ -67,7 +67,7 @@ export const ExclusiveOffersProvider = ({ children }) => {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/v1/service/-all-service?page=${page}&limit=${itemsPerPage}`
+                `https://royolex.vercel.app/api/v1/service/-all-service?page=${page}&limit=${itemsPerPage}`
             );
 
             if (!response.ok) {

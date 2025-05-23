@@ -97,7 +97,7 @@ export default function CreateServiceForm({ setCurrentPage }) {
             // Get token from localStorage
             const accessToken = localStorage.getItem('accessToken');
 
-            const response = await fetch('http://localhost:5000/api/v1/service/create-service', {
+            const response = await fetch('https://royolex.vercel.app/api/v1/service/create-service', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -303,7 +303,7 @@ export default function CreateServiceForm({ setCurrentPage }) {
                         <div className="mt-6 md:mt-8 flex flex-col sm:flex-row sm:justify-end gap-3">
                             <button
                                 type="button"
-                                className="w-full sm:w-auto order-2 sm:order-1 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                className="w-full sm:w-auto order-2 sm:order-1 px-4 cursor-pointer py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
                                 onClick={() => setCurrentPage('Services')} // Changed from router.back()
                                 disabled={isLoading}
                             >
@@ -311,7 +311,7 @@ export default function CreateServiceForm({ setCurrentPage }) {
                             </button>
                             <button
                                 type="submit"
-                                className={`w-full sm:w-auto order-1 sm:order-2 px-4 py-2 bg-orange-500 text-white rounded-md text-sm font-medium
+                                className={`w-full sm:w-auto order-1 sm:order-2 px-4 py-2 bg-orange-500 cursor-pointer text-white rounded-md text-sm font-medium
                                 ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-orange-600'}`}
                                 disabled={isLoading}
                             >

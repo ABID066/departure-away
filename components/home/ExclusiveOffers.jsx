@@ -16,34 +16,12 @@ export default function ExclusiveOffer() {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        // Get user ID from localStorage
-        const userData = localStorage.getItem('userData');
-        if (!userData) {
-          setError("User data not found. Please log in again.");
-          setLoading(false);
-          return;
-        }
 
-        const user = JSON.parse(userData);
-        const userId = user.id;
-
-        if (!userId) {
-          setError("User ID not found. Please log in again.");
-          setLoading(false);
-          return;
-        }
-
-        // Get token from localStorage
-        const accessToken = localStorage.getItem('accessToken');
 
         // Make API request
-        const response = await fetch("http://localhost:5000/api/v1/service/-all-service?limit=8", {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
-          }
-        });
+        const response = await fetch(
+            "https://royolex.vercel.app/api/v1/service/-all-service?limit=8"
+        );
 
         if (!response.ok) {
           const errorData = await response.json();
