@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function Header({ toggleSidebar }) {
     const router = useRouter();
     const [userName, setUserName] = useState('User');
+    const [showUserDropdown, setShowUserDropdown] = useState(false);
 
     useEffect(() => {
         // Get user data from localStorage
@@ -20,17 +21,37 @@ export default function Header({ toggleSidebar }) {
         }
     }, []);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (showUserDropdown && !event.target.closest('.user-dropdown-container')) {
+                setShowUserDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showUserDropdown]);
+
     const handleMessageClick = () => {
         router.push('/dashboard/chat');
     };
 
     const handleProfileClick = () => {
+        setShowUserDropdown(false);
         router.push('/profile');
     };
 
     const handleLogoutClick = () => {
+        setShowUserDropdown(false);
         localStorage.clear();
         router.push('/signIn');
+    };
+
+    const toggleUserDropdown = () => {
+        setShowUserDropdown(!showUserDropdown);
     };
 
     return (
@@ -60,40 +81,45 @@ export default function Header({ toggleSidebar }) {
                     <span>View Shop</span>
                 </button>
 
-                {/* User Avatar with Dropdown */}
-                <div className="relative group">
+                {/* User Avatar with Dropdown - Mobile & Desktop Friendly */}
+                <div className="relative user-dropdown-container">
                     <img
-                        className="w-8 h-8 rounded-full cursor-pointer object-cover"
+                        className="w-8 h-8 rounded-full cursor-pointer object-cover hover:ring-2 hover:ring-blue-500 transition-all duration-200"
                         src="https://png.pngtree.com/png-vector/20191119/ourmid/pngtree-beautiful-profile-glyph-vector-icon-png-image_2002807.jpg"
                         alt="User Avatar"
+                        onClick={toggleUserDropdown}
                     />
-                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <div className="mt-4 text-center">
-                            <img
-                                className="w-12 h-12 rounded-full mx-auto object-cover"
-                                src="https://png.pngtree.com/png-vector/20191119/ourmid/pngtree-beautiful-profile-glyph-vector-icon-png-image_2002807.jpg"
-                                alt="User Avatar"
-                            />
-                            <h6 className="mt-2 font-medium text-gray-800">
-                                {userName}
-                            </h6>
-                            <hr className="border-gray-200 mx-4 mt-3 p-0"/>
+
+                    {/* Dropdown Menu */}
+                    {showUserDropdown && (
+                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transform transition-all duration-200">
+                            <div className="mt-4 text-center">
+                                <img
+                                    className="w-12 h-12 rounded-full mx-auto object-cover"
+                                    src="https://png.pngtree.com/png-vector/20191119/ourmid/pngtree-beautiful-profile-glyph-vector-icon-png-image_2002807.jpg"
+                                    alt="User Avatar"
+                                />
+                                <h6 className="mt-2 font-medium text-gray-800">
+                                    {userName}
+                                </h6>
+                                <hr className="border-gray-200 mx-4 mt-3 p-0"/>
+                            </div>
+                            <button
+                                onClick={handleProfileClick}
+                                className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150"
+                            >
+                                <User className="w-5 h-5 mr-3 text-gray-500" />
+                                <span className="text-sm font-medium">Profile</span>
+                            </button>
+                            <button
+                                onClick={handleLogoutClick}
+                                className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150 rounded-b-lg"
+                            >
+                                <LogOut className="w-5 h-5 mr-3 text-gray-500" />
+                                <span className="text-sm font-medium">Logout</span>
+                            </button>
                         </div>
-                        <button
-                            onClick={handleProfileClick}
-                            className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150"
-                        >
-                            <User className="w-5 h-5 mr-3 text-gray-500" />
-                            <span className="text-sm font-medium">Profile</span>
-                        </button>
-                        <button
-                            onClick={handleLogoutClick}
-                            className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150"
-                        >
-                            <LogOut className="w-5 h-5 mr-3 text-gray-500" />
-                            <span className="text-sm font-medium">Logout</span>
-                        </button>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>
