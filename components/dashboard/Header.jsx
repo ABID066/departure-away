@@ -106,17 +106,17 @@ export default function Header({ toggleSidebar }) {
                             </div>
                             <button
                                 onClick={handleProfileClick}
-                                className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150"
+                                className="flex items-center w-full cursor-pointer px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150"
                             >
                                 <User className="w-5 h-5 mr-3 text-gray-500" />
                                 <span className="text-sm font-medium">Profile</span>
                             </button>
                             <button
                                 onClick={handleLogoutClick}
-                                className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150 rounded-b-lg"
+                                className="flex items-center w-full cursor-pointer px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-150 rounded-b-lg"
                             >
                                 <LogOut className="w-5 h-5 mr-3 text-gray-500" />
-                                <span className="text-sm font-medium">Logout</span>
+                                <span className="text-sm font-medium ">Logout</span>
                             </button>
                         </div>
                     )}
