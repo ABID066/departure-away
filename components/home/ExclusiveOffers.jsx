@@ -61,7 +61,7 @@ export default function ExclusiveOffer() {
   return (
       <div className="max-w-6xl mx-auto my-20 px-4">
         {/* Section Title */}
-        <h2 className="text-5xl font-bold text-center my-8">Save Big With Exclusive Offers</h2>
+        <h2 className="text-4xl font-bold text-center mb-12 mt-8">Save Big With Exclusive Offers</h2>
 
         {/* Loading State */}
         {loading && (
