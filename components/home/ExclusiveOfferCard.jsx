@@ -23,7 +23,7 @@ export default function ExclusiveOfferCard({ offer }) {
           <div className="card-body relative">
             {/* Badge Section */}
             {popular && (
-                <div className="absolute -top-2 left-8 badge badge-secondary">
+                <div className="absolute -top-4 left-4 badge bg-pink-500 text-white rounded-full px-3 text-sm py-1 badge-secondary">
                   Popular
                 </div>
             )}
