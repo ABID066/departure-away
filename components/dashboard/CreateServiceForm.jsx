@@ -10,6 +10,12 @@ export default function CreateServiceForm({ setCurrentPage }) {
     const [userId, setUserId] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [unauthorized, setUnauthorized] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadedImages, setUploadedImages] = useState([]);
+
+    // Cloudinary configuration - Replace with your actual values
+    const CLOUDINARY_CLOUD_NAME = "ddb4k8nrn";
+    const CLOUDINARY_UPLOAD_PRESET = "departAway";
 
     const [formData, setFormData] = useState({
         title: "",
@@ -54,12 +60,90 @@ export default function CreateServiceForm({ setCurrentPage }) {
         }
     }, []);
 
+    // Update media_urls when uploadedImages changes
+    useEffect(() => {
+        const urls = uploadedImages.join(',');
+        setFormData(prev => ({ ...prev, media_urls: urls }));
+    }, [uploadedImages]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value
         });
+    };
+
+    // Handle file upload to Cloudinary
+    const handleFileUpload = async (files) => {
+        if (!files || files.length === 0) return;
+
+        setIsUploading(true);
+        const uploadPromises = [];
+
+        for (let file of files) {
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                setError(`${file.name} is not a valid image file`);
+                continue;
+            }
+
+            // Validate file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                setError(`${file.name} is too large. Maximum size is 10MB`);
+                continue;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+            const uploadPromise = fetch(
+                `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+                {
+                    method: 'POST',
+                    body: formData
+                }
+            ).then(response => response.json());
+
+            uploadPromises.push(uploadPromise);
+        }
+
+        try {
+            const results = await Promise.all(uploadPromises);
+            const successfulUploads = results.filter(result => result.secure_url);
+            const newUrls = successfulUploads.map(result => result.secure_url);
+
+            setUploadedImages(prev => [...prev, ...newUrls]);
+            setError(""); // Clear any previous errors
+        } catch (error) {
+            console.error("Upload error:", error);
+            setError("Failed to upload images. Please try again.");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    // Handle file input change
+    const handleFileInputChange = (e) => {
+        const files = Array.from(e.target.files);
+        handleFileUpload(files);
+    };
+
+    // Handle drag and drop
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const files = Array.from(e.dataTransfer.files);
+        handleFileUpload(files);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    // Remove uploaded image
+    const removeImage = (indexToRemove) => {
+        setUploadedImages(prev => prev.filter((_, index) => index !== indexToRemove));
     };
 
     const handleSubmit = async (e) => {
@@ -87,8 +171,8 @@ export default function CreateServiceForm({ setCurrentPage }) {
             price_standard: Number(formData.price_standard),
             price_premium: Number(formData.price_premium),
             duration_days: formData.duration_days ? Number(formData.duration_days) : undefined,
-            // Keep media_urls as a string - don't convert to array
-            media_urls: formData.media_urls ? formData.media_urls.trim() : ""
+            // Use the uploaded image URLs
+            media_urls: formData.media_urls
         };
 
         setIsLoading(true);
@@ -154,7 +238,6 @@ export default function CreateServiceForm({ setCurrentPage }) {
                 ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                            {/* Form fields remain the same */}
                             <div className="col-span-1 md:col-span-2">
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                                 <input
@@ -270,33 +353,59 @@ export default function CreateServiceForm({ setCurrentPage }) {
                                 />
                             </div>
 
-                            <div className="col-span-1 md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Media URLs</label>
-                                <input
-                                    type="text"
-                                    name="media_urls"
-                                    value={formData.media_urls}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                    placeholder="Enter comma-separated media URLs"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Enter URLs separated by commas</p>
-                            </div>
-
+                            {/* Image Upload Section */}
                             <div className="col-span-1 md:col-span-2">
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Upload Images</label>
-                                <div className="mt-1 flex justify-center px-4 py-4 md:px-6 md:pt-5 md:pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                <div
+                                    className="mt-1 flex justify-center px-4 py-4 md:px-6 md:pt-5 md:pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-orange-400 transition-colors"
+                                    onDrop={handleDrop}
+                                    onDragOver={handleDragOver}
+                                >
                                     <div className="space-y-1 text-center">
                                         <div className="flex flex-col md:flex-row text-sm text-gray-600 items-center justify-center">
                                             <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-orange-500 hover:text-orange-400 mb-2 md:mb-0">
-                                                <span>Upload files</span>
-                                                <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple />
+                                                <span>{isUploading ? 'Uploading...' : 'Upload files'}</span>
+                                                <input
+                                                    id="file-upload"
+                                                    name="file-upload"
+                                                    type="file"
+                                                    className="sr-only"
+                                                    multiple
+                                                    accept="image/*"
+                                                    onChange={handleFileInputChange}
+                                                    disabled={isUploading}
+                                                />
                                             </label>
                                             <p className="md:pl-1">or drag and drop</p>
                                         </div>
                                         <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                     </div>
                                 </div>
+
+                                {/* Display uploaded images */}
+                                {uploadedImages.length > 0 && (
+                                    <div className="mt-4">
+                                        <h4 className="text-sm font-medium text-gray-700 mb-2">Uploaded Images:</h4>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                            {uploadedImages.map((url, index) => (
+                                                <div key={index} className="relative group">
+                                                    <img
+                                                        src={url}
+                                                        alt={`Upload ${index + 1}`}
+                                                        className="w-full h-24 object-cover rounded-md border"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeImage(index)}
+                                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -304,16 +413,16 @@ export default function CreateServiceForm({ setCurrentPage }) {
                             <button
                                 type="button"
                                 className="w-full sm:w-auto order-2 sm:order-1 px-4 cursor-pointer py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-                                onClick={() => setCurrentPage('Services')} // Changed from router.back()
-                                disabled={isLoading}
+                                onClick={() => setCurrentPage('Services')}
+                                disabled={isLoading || isUploading}
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
                                 className={`w-full sm:w-auto order-1 sm:order-2 px-4 py-2 bg-orange-500 cursor-pointer text-white rounded-md text-sm font-medium
-                                ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-orange-600'}`}
-                                disabled={isLoading}
+                                ${(isLoading || isUploading) ? 'opacity-70 cursor-not-allowed' : 'hover:bg-orange-600'}`}
+                                disabled={isLoading || isUploading}
                             >
                                 {isLoading ? (
                                     <div className="flex items-center justify-center">
@@ -326,7 +435,7 @@ export default function CreateServiceForm({ setCurrentPage }) {
                                         </svg>
                                         Creating...
                                     </div>
-                                ) : 'Create Service'}
+                                ) : isUploading ? 'Uploading Images...' : 'Create Service'}
                             </button>
                         </div>
                     </form>
