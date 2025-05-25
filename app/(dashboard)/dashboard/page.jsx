@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 
 import DashboardContent from "@/components/dashboard/deshboardContent";
-import ServicesContent from "@/components/dashboard/ServicesContent";
-import CreateServiceForm from "@/components/dashboard/CreateServiceForm";
+import ServicesContent from "@/components/dashboard/service/ServicesContent";
+import CreateServiceForm from "@/components/dashboard/service/CreateServiceForm";
 
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
