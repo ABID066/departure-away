@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 
 import DashboardContent from "@/components/dashboard/deshboardContent";
-import ServicesContent from "@/components/dashboard/ServicesContent";
-import CreateServiceForm from "@/components/dashboard/CreateServiceForm";
+import ServicesContent from "@/components/dashboard/service/ServicesContent";
+import CreateServiceForm from "@/components/dashboard/service/CreateServiceForm";
 
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
+import TravelServicesContent from "@/components/dashboard/travel-service/TravelServicesContent";
+import CreateTravelServiceForm from "@/components/dashboard/travel-service/CreateTravelServiceForm";
 
 
 export default function App() {
@@ -80,10 +82,14 @@ export default function App() {
                 <Header toggleSidebar={toggleSidebar} />
                 <div className="flex-1 overflow-auto">
                     {currentPage === 'dashboard' && <DashboardContent />}
+
+                    {/* Regular Services */}
                     {currentPage === 'Services' && <ServicesContent setCurrentPage={setCurrentPage} />}
-                    {currentPage === 'Create Service' && (
-                        <CreateServiceForm setCurrentPage={setCurrentPage} />
-                    )}
+                    {currentPage === 'Create Service' && (<CreateServiceForm setCurrentPage={setCurrentPage} />)}
+
+                    {/* Travel Services */}
+                    {currentPage === 'Travel Services' && <TravelServicesContent setCurrentPage={setCurrentPage} />}
+                    {currentPage === 'Create Travel Service' && (<CreateTravelServiceForm setCurrentPage={setCurrentPage} />)}
                 </div>
             </div>
         </div>

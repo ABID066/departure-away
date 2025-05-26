@@ -1,12 +1,12 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useExclusiveOffers } from "./ExclusiveOffersContext";
-import FilterSection from "../shared/FilterSection";
-import FilterCheckbox from "../shared/FilterCheckbox";
-import ActiveFilters from "./ActiveFilters";
+import { useTravelOffers } from "./TravelOffersContext";
+import FilterSection from "@/components/shared/FilterSection";
+import FilterCheckbox from "@/components/shared/FilterCheckbox";
+import TravelActiveFilters from "./TravelActiveFilters";
 
-export default function ExclusiveOffersSidebar() {
+export default function TravelOffersSidebar() {
     const {
         sidebarOpen,
         toggleSidebar,
@@ -16,7 +16,7 @@ export default function ExclusiveOffersSidebar() {
         handleCheckboxChange,
         handleCustomBudgetChange,
         handleDateChange,
-    } = useExclusiveOffers();
+    } = useTravelOffers();
 
     return (
         <aside
@@ -33,7 +33,7 @@ export default function ExclusiveOffersSidebar() {
                         </button>
                     </div>
 
-                    <ActiveFilters />
+                    <TravelActiveFilters />
                 </div>
 
                 {/* Filter sections */}
@@ -44,14 +44,14 @@ export default function ExclusiveOffersSidebar() {
                         onToggle={() => toggleSection("location")}
                     >
                         <FilterCheckbox
-                            label="Japan"
-                            checked={filters.location.japan}
-                            onChange={() => handleCheckboxChange("location", "japan")}
+                            label="Domestic"
+                            checked={filters.location.domestic}
+                            onChange={() => handleCheckboxChange("location", "domestic")}
                         />
                         <FilterCheckbox
-                            label="Kenya"
-                            checked={filters.location.kenya}
-                            onChange={() => handleCheckboxChange("location", "kenya")}
+                            label="International"
+                            checked={filters.location.international}
+                            onChange={() => handleCheckboxChange("location", "international")}
                         />
                         <FilterCheckbox
                             label="Other Locations"
@@ -66,17 +66,17 @@ export default function ExclusiveOffersSidebar() {
                         onToggle={() => toggleSection("budget")}
                     >
                         <FilterCheckbox
-                            label="Value (Under $1,500)"
+                            label="Value (Under $100)"
                             checked={filters.budget.value}
                             onChange={() => handleCheckboxChange("budget", "value")}
                         />
                         <FilterCheckbox
-                            label="Mid-range ($1,500 - $3,000)"
+                            label="Mid-range ($100 - $500)"
                             checked={filters.budget.midRange}
                             onChange={() => handleCheckboxChange("budget", "midRange")}
                         />
                         <FilterCheckbox
-                            label="High-end ($3,000+)"
+                            label="High-end ($500+)"
                             checked={filters.budget.highEnd}
                             onChange={() => handleCheckboxChange("budget", "highEnd")}
                         />
@@ -129,9 +129,9 @@ export default function ExclusiveOffersSidebar() {
                         onToggle={() => toggleSection("category")}
                     >
                         <FilterCheckbox
-                            label="Tour"
-                            checked={filters.category.tour}
-                            onChange={() => handleCheckboxChange("category", "tour")}
+                            label="Family"
+                            checked={filters.category.family}
+                            onChange={() => handleCheckboxChange("category", "family")}
                         />
                         <FilterCheckbox
                             label="Adventure"
@@ -142,6 +142,11 @@ export default function ExclusiveOffersSidebar() {
                             label="Cultural"
                             checked={filters.category.cultural}
                             onChange={() => handleCheckboxChange("category", "cultural")}
+                        />
+                        <FilterCheckbox
+                            label="Romantic"
+                            checked={filters.category.romantic}
+                            onChange={() => handleCheckboxChange("category", "romantic")}
                         />
                     </FilterSection>
 

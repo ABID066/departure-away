@@ -1,9 +1,9 @@
 "use client";
 
-import { useExclusiveOffers } from "./ExclusiveOffersContext";
-import PaginationButton from "../shared/PaginationButton";
+import { useTravelOffers } from "./TravelOffersContext";
+import PaginationButton from "@/components/shared/PaginationButton";
 
-export default function ExclusiveOffersPagination() {
+export default function TravelOffersPagination() {
     const {
         totalOffers,
         currentPage,
@@ -12,7 +12,7 @@ export default function ExclusiveOffersPagination() {
         loading,
         filteredOffers,
         offers
-    } = useExclusiveOffers();
+    } = useTravelOffers();
 
     // Don't show pagination if loading or no data
     if (loading || totalOffers === 0) {
