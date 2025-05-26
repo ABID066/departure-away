@@ -1,17 +1,18 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home } from 'lucide-react';
+import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home, MapPin } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/images/Logo.png";
 
 export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, toggleSidebar }) {
     const [expandedItems, setExpandedItems] = useState({
-        'Services': false
+        'Services': false,
+        'Travel Services': false
     });
 
-    // Updated menuItems to include Dashboard
+    // Updated menuItems to include Travel Services
     const menuItems = [
         {
             name: 'dashboard',
@@ -25,6 +26,13 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             hasDropdown: true,
             displayName: 'Services',
             dropdownItems: ['All Services', 'Create Service']
+        },
+        {
+            name: 'Travel Services',
+            icon: 'travel',
+            hasDropdown: true,
+            displayName: 'Travel Services',
+            dropdownItems: ['All Travel Services', 'Create Travel Service']
         },
     ];
 
@@ -55,6 +63,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                 return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Home size={18} /></div>;
             case 'services':
                 return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Settings size={18} /></div>;
+            case 'travel':
+                return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><MapPin size={18} /></div>;
             default:
                 return <div className="w-5 h-5 flex items-center justify-center text-gray-500">📄</div>;
         }
@@ -69,10 +79,18 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
     };
 
     const handleDropdownItemClick = (parentItem, item) => {
-        if (item === 'All Services') {
-            setCurrentPage('Services');
-        } else {
-            setCurrentPage(item);
+        if (parentItem === 'Services') {
+            if (item === 'All Services') {
+                setCurrentPage('Services');
+            } else {
+                setCurrentPage(item);
+            }
+        } else if (parentItem === 'Travel Services') {
+            if (item === 'All Travel Services') {
+                setCurrentPage('Travel Services');
+            } else {
+                setCurrentPage(item);
+            }
         }
     };
 
@@ -96,7 +114,17 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                                 className={`flex justify-center py-3 px-2 rounded-lg cursor-pointer mb-1 hover:bg-gray-50 ${
                                     currentPage === item.name ? 'bg-orange-50' : ''
                                 }`}
-                                onClick={() => item.hasDropdown ? setCurrentPage('Services') : setCurrentPage(item.name)}
+                                onClick={() => {
+                                    if (item.hasDropdown) {
+                                        if (item.name === 'Services') {
+                                            setCurrentPage('Services');
+                                        } else if (item.name === 'Travel Services') {
+                                            setCurrentPage('Travel Services');
+                                        }
+                                    } else {
+                                        setCurrentPage(item.name);
+                                    }
+                                }}
                             >
                                 {renderIcon(item.icon)}
                             </div>
