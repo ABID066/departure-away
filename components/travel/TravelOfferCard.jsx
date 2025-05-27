@@ -16,16 +16,7 @@ const TravelOfferCard = ({ offer }) => {
                             e.target.src = "/api/placeholder/400/320";
                         }}
                     />
-                    {/* Popular badge */}
-                    {offer.popular && (
-                        <div className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded-full">
-                            Popular
-                        </div>
-                    )}
-                    {/* Category badge */}
-                    <div className="absolute top-2 right-2 bg-white/90 text-gray-700 text-xs px-2 py-1 rounded-full capitalize">
-                        {offer.category}
-                    </div>
+
                 </div>
 
                 <div className="p-4">
