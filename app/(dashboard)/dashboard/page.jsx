@@ -10,6 +10,8 @@ import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
 import TravelServicesContent from "@/components/dashboard/travel-service/TravelServicesContent";
 import CreateTravelServiceForm from "@/components/dashboard/travel-service/CreateTravelServiceForm";
+import GuideServicesContent from "@/components/dashboard/guide-service/GuideServicesContent";
+import CreateGuideServiceForm from "@/components/dashboard/guide-service/CreateGuideServiceForm";
 
 
 export default function App() {
@@ -90,6 +92,10 @@ export default function App() {
                     {/* Travel Services */}
                     {currentPage === 'Travel Services' && <TravelServicesContent setCurrentPage={setCurrentPage} />}
                     {currentPage === 'Create Travel Service' && (<CreateTravelServiceForm setCurrentPage={setCurrentPage} />)}
+
+                    {/* Guide Services */}
+                    {currentPage === 'Guide Services' && <GuideServicesContent setCurrentPage={setCurrentPage} />}
+                    {currentPage === 'Create Guide Service' && (<CreateGuideServiceForm setCurrentPage={setCurrentPage} />)}
                 </div>
             </div>
         </div>

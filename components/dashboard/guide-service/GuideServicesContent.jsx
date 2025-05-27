@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import TravelServiceEditForm from './TravelServiceEditForm';
-import TravelServiceDeleteModal from './TravelServiceDeleteModal';
+import GuideServiceEditForm from './GuideServiceEditForm';
+import GuideServiceDeleteModal from './GuideServiceDeleteModal';
 
-export default function TravelServicesContent({ setCurrentPage }) {
-    const [travelServices, setTravelServices] = useState([]);
+export default function GuideServicesContent({ setCurrentPage }) {
+    const [guideServices, setGuideServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [userRole, setUserRole] = useState(null);
@@ -25,7 +25,7 @@ export default function TravelServicesContent({ setCurrentPage }) {
                 setUserId(user._id || user.id);
 
                 if (user.role === 'freelancer' || user.role === 'agency') {
-                    fetchTravelServices(user._id || user.id);
+                    fetchGuideServices(user._id || user.id);
                 } else {
                     setLoading(false);
                 }
@@ -40,7 +40,7 @@ export default function TravelServicesContent({ setCurrentPage }) {
         }
     }, []);
 
-    const fetchTravelServices = async (id) => {
+    const fetchGuideServices = async (id) => {
         if (!id) {
             setLoading(false);
             setError("User ID not found. Please log in again.");
@@ -49,7 +49,7 @@ export default function TravelServicesContent({ setCurrentPage }) {
 
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch(`https://royolex.vercel.app/api/v1/Tour/user/Tour/${id}`, {
+            const response = await fetch(`https://royolex.vercel.app/api/v1/guider/user/guider/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,26 +60,26 @@ export default function TravelServicesContent({ setCurrentPage }) {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Failed to fetch travel services');
+                throw new Error(result.message || 'Failed to fetch guide services');
             }
 
-            setTravelServices(result.data || []);
+            setGuideServices(result.data || []);
         } catch (error) {
-            console.error("Error fetching travel services:", error);
-            setError(error.message || "Failed to load travel services. Please try again.");
+            console.error("Error fetching guide services:", error);
+            setError(error.message || "Failed to load guide services. Please try again.");
         } finally {
             setLoading(false);
         }
     };
 
     const handleCreateNew = () => {
-        setCurrentPage('Create Travel Service');
+        setCurrentPage('Create Guide Service');
     };
 
     const handleEditClick = async (serviceId) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch(`https://royolex.vercel.app/api/v1/Tour/ById/${serviceId}`, {
+            const response = await fetch(`https://royolex.vercel.app/api/v1/guider/ById/${serviceId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,14 +90,14 @@ export default function TravelServicesContent({ setCurrentPage }) {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Failed to fetch travel service details');
+                throw new Error(result.message || 'Failed to fetch guide service details');
             }
 
             setSelectedService(result.data);
             setIsEditing(true);
         } catch (error) {
-            console.error("Error fetching travel service details:", error);
-            setError(error.message || "Failed to load travel service details. Please try again.");
+            console.error("Error fetching guide service details:", error);
+            setError(error.message || "Failed to load guide service details. Please try again.");
         }
     };
 
@@ -107,14 +107,14 @@ export default function TravelServicesContent({ setCurrentPage }) {
     };
 
     const handleServiceUpdated = (updatedService) => {
-        setTravelServices(travelServices.map(service =>
+        setGuideServices(guideServices.map(service =>
             service._id === updatedService._id ? updatedService : service
         ));
         setIsEditing(false);
     };
 
     const handleServiceDeleted = (deletedId) => {
-        setTravelServices(travelServices.filter(service => service._id !== deletedId));
+        setGuideServices(guideServices.filter(service => service._id !== deletedId));
         setIsDeleting(false);
     };
 
@@ -122,7 +122,7 @@ export default function TravelServicesContent({ setCurrentPage }) {
 
     if (isEditing && selectedService) {
         return (
-            <TravelServiceEditForm
+            <GuideServiceEditForm
                 service={selectedService}
                 userId={userId}
                 onCancel={() => setIsEditing(false)}
@@ -134,14 +134,14 @@ export default function TravelServicesContent({ setCurrentPage }) {
     return (
         <div className="p-4 md:p-6">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
-                <h2 className="text-xl font-semibold">My Travel Services</h2>
+                <h2 className="text-xl font-semibold">My Guide Services</h2>
                 {canCreateService && (
                     <button
                         onClick={handleCreateNew}
                         className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-md cursor-pointer"
                     >
                         <Plus size={16} className="mr-2" />
-                        Create New Travel Service
+                        Create New Guide Service
                     </button>
                 )}
             </div>
@@ -153,7 +153,7 @@ export default function TravelServicesContent({ setCurrentPage }) {
             )}
 
             {isDeleting && (
-                <TravelServiceDeleteModal
+                <GuideServiceDeleteModal
                     serviceId={deleteId}
                     onCancel={() => setIsDeleting(false)}
                     onConfirm={handleServiceDeleted}
@@ -164,15 +164,15 @@ export default function TravelServicesContent({ setCurrentPage }) {
                 <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
                 </div>
-            ) : travelServices.length === 0 ? (
+            ) : guideServices.length === 0 ? (
                 <div className="bg-white rounded-lg shadow p-8 text-center">
                     <h3 className="text-lg font-medium text-gray-700 mb-2">
-                        {canCreateService ? "No Travel Services Found" : "Travel Service Creation Restricted"}
+                        {canCreateService ? "No Guide Services Found" : "Guide Service Creation Restricted"}
                     </h3>
                     <p className="text-gray-500 mb-6">
                         {canCreateService
-                            ? "You haven't created any travel services yet."
-                            : "Only freelancers and agencies can create and manage travel services."}
+                            ? "You haven't created any guide services yet."
+                            : "Only freelancers and agencies can create and manage guide services."}
                     </p>
                     {canCreateService && (
                         <button
@@ -180,7 +180,7 @@ export default function TravelServicesContent({ setCurrentPage }) {
                             className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-md"
                         >
                             <Plus size={16} className="mr-2" />
-                            Create Your First Travel Service
+                            Create Your First Guide Service
                         </button>
                     )}
                 </div>
@@ -190,31 +190,40 @@ export default function TravelServicesContent({ setCurrentPage }) {
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Basic Price</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Popular</th>
+
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
+
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specialty</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                            {travelServices.map((service) => (
+                            {guideServices.map((service) => (
                                 <tr key={service._id || service.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{service.title}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{service.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.location}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.duration}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${service.price1}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.category}</td>
+
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.experience} years</td>
+
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.specialty}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                            service.isPopular
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-gray-100 text-gray-800'
-                                        }`}>
-                                            {service.isPopular ? 'Popular' : 'Regular'}
-                                        </span>
+                                        <div className="flex flex-col space-y-1">
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                                service.available
+                                                    ? 'bg-green-100 text-green-800'
+                                                    : 'bg-red-100 text-red-800'
+                                            }`}>
+                                                {service.available ? 'Available' : 'Unavailable'}
+                                            </span>
+                                            {service.isVerified && (
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Verified
+                                                </span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <button
@@ -237,17 +246,24 @@ export default function TravelServicesContent({ setCurrentPage }) {
                     </div>
 
                     <div className="md:hidden space-y-4">
-                        {travelServices.map((service) => (
+                        {guideServices.map((service) => (
                             <div key={service._id || service.id} className="bg-white rounded-lg shadow p-4">
                                 <div className="flex justify-between items-start mb-2">
-                                    <h3 className="text-lg font-medium text-gray-900">{service.title}</h3>
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                        service.isPopular
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'bg-gray-100 text-gray-800'
-                                    }`}>
-                                        {service.isPopular ? 'Popular' : 'Regular'}
-                                    </span>
+                                    <h3 className="text-lg font-medium text-gray-900">{service.name}</h3>
+                                    <div className="flex flex-col space-y-1">
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                            service.available
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'bg-red-100 text-red-800'
+                                        }`}>
+                                            {service.available ? 'Available' : 'Unavailable'}
+                                        </span>
+                                        {service.isVerified && (
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                Verified
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-2 mb-3 text-sm text-gray-600">
@@ -255,21 +271,24 @@ export default function TravelServicesContent({ setCurrentPage }) {
                                         <span className="font-medium">Location:</span> {service.location}
                                     </div>
                                     <div>
-                                        <span className="font-medium">Duration:</span> {service.duration}
+                                        <span className="font-medium">Experience:</span> {service.experience} years
                                     </div>
                                     <div>
-                                        <span className="font-medium">Category:</span> {service.category}
+                                        <span className="font-medium">Specialty:</span> {service.specialty}
+                                    </div>
+                                    <div className="col-span-2">
+                                        <span className="font-medium">Languages:</span> {Array.isArray(service.languages) ? service.languages.join(', ') : service.languages}
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-2 mb-3">
                                     <div className="text-center">
-                                        <div className="text-xs text-gray-500">Basic Price</div>
-                                        <div className="font-semibold">${service.price1}</div>
+                                        <div className="text-xs text-gray-500">Hourly Rate</div>
+                                        <div className="font-semibold">${service.hourlyRate}</div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-xs text-gray-500">Premium Price</div>
-                                        <div className="font-semibold">${service.price2}</div>
+                                        <div className="text-xs text-gray-500">Daily Rate</div>
+                                        <div className="font-semibold">${service.dailyRate}</div>
                                     </div>
                                 </div>
 

@@ -16,16 +16,7 @@ const TravelOfferCard = ({ offer }) => {
                             e.target.src = "/api/placeholder/400/320";
                         }}
                     />
-                    {/* Popular badge */}
-                    {offer.popular && (
-                        <div className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded-full">
-                            Popular
-                        </div>
-                    )}
-                    {/* Category badge */}
-                    <div className="absolute top-2 right-2 bg-white/90 text-gray-700 text-xs px-2 py-1 rounded-full capitalize">
-                        {offer.category}
-                    </div>
+
                 </div>
 
                 <div className="p-4">
@@ -49,11 +40,7 @@ const TravelOfferCard = ({ offer }) => {
                     <div className="flex items-center justify-between">
                         <div className="text-base font-semibold text-gray-900">
                             From <span className="text-pink-600">{offer.price}</span>
-                            {offer.price2 && offer.price2 !== offer.price1 && (
-                                <div className="text-sm text-gray-500">
-                                    Up to <span className="text-pink-500">${offer.price2}</span>
-                                </div>
-                            )}
+
                         </div>
                         <button className="p-2 hover:bg-gray-50 rounded-full transition-colors">
                             <Heart size={20} className="text-gray-400 hover:text-pink-500" />

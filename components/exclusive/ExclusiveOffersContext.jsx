@@ -19,7 +19,7 @@ export const ExclusiveOffersProvider = ({ children }) => {
     const [offers, setOffers] = useState([]);
     const [totalOffers, setTotalOffers] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const itemsPerPage = 6;
+    const itemsPerPage = 9;
 
     // Filter states
     const [filters, setFilters] = useState({

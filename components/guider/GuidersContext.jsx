@@ -3,256 +3,292 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 // Create the context
-const GuidersContext = createContext();
+const GuiderOffersContext = createContext();
 
 // Provider component
-export const GuidersProvider = ({ children }) => {
+export const GuiderOffersProvider = ({ children }) => {
   // Main state variables
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState("recommended");
   const [showSortOptions, setShowSortOptions] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // API data
+  const [offers, setOffers] = useState([]);
+  const [totalOffers, setTotalOffers] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 6;
 
   // Filter states
   const [filters, setFilters] = useState({
-    destination: { bangladeshOnly: false, singaPoreOnly: false },
-    budget: {
-      value: false,
-      midRange: false,
-      highEnd: false,
-      custom: true,
-      customValue: "20",
+    location: {
+      dhaka: false,
+      chittagong: false,
+      sylhet: false,
+      other: false
     },
-    level: {
-      topRated: true,
-      level1: false,
-      level2: false,
-      new: false,
+    experience: {
+      beginner: false,    // 1-2 years
+      intermediate: false, // 3-5 years
+      expert: false,      // 6+ years
     },
-    duration: "10 Days",
-    dateRange: "",
+    specialty: {
+      architecture: false,
+      history: false,
+      culture: false,
+      food: false,
+      nature: false,
+    },
+    hourlyRate: {
+      budget: false,      // Under $15
+      standard: false,    // $15-$30
+      premium: false,     // $30+
+      custom: false,
+      customValue: "25",
+    },
+    languages: {
+      english: false,
+      bengali: false,
+      arabic: false,
+      chinese: false,
+      other: false,
+    },
+    availability: {
+      available: false,
+      verified: false,
+    },
   });
 
   // Section open/close states
   const [openSections, setOpenSections] = useState({
-    destination: true,
-    budget: true,
-    level: true,
-    duration: true,
-    dateRange: true,
+    location: true,
+    experience: true,
+    specialty: true,
+    hourlyRate: true,
+    languages: true,
+    availability: true,
   });
 
-  // Sample data
-  const allGuides = [
-    {
-      id: 1,
-      name: "Derick T. Mendez",
-      rating: 4.7,
-      reviews: 200,
-      topRated: true,
-      level: 1,
-      destination: "Bangladesh",
-    },
-    {
-      id: 2,
-      name: "Glenn V. Powell",
-      rating: 4.7,
-      reviews: 300,
-      topRated: true,
-      level: 2,
-      destination: "Thailand",
-    },
-    {
-      id: 3,
-      name: "James S. Woods",
-      rating: 4.7,
-      reviews: 200,
-      topRated: true,
-      level: 1,
-      destination: "India",
-    },
-    {
-      id: 4,
-      name: "Javier B. Murphy",
-      rating: 4.7,
-      reviews: 200,
-      topRated: true,
-      level: 1,
-      destination: "Bangladesh",
-    },
-    {
-      id: 5,
-      name: "Walter D. Dixon",
-      rating: 4.7,
-      reviews: 300,
-      topRated: false,
-      level: 2,
-      destination: "Vietnam",
-    },
-    {
-      id: 6,
-      name: "Harold I. Hendon",
-      rating: 4.7,
-      reviews: 200,
-      topRated: true,
-      level: 3,
-      destination: "Bangladesh",
-    },
-    {
-      id: 7,
-      name: "Javier B. Murphy",
-      rating: 4.7,
-      reviews: 200,
-      topRated: false,
-      level: 1,
-      destination: "Nepal",
-    },
-    {
-      id: 8,
-      name: "Walter D. Dixon",
-      rating: 4.7,
-      reviews: 300,
-      topRated: true,
-      level: 1,
-      destination: "Bangladesh",
-    },
-    {
-      id: 9,
-      name: "Harold I. Hendon",
-      rating: 4.7,
-      reviews: 200,
-      topRated: true,
-      level: 2,
-      destination: "Thailand",
-    },
-    {
-      id: 10,
-      name: "Javier B. Murphy",
-      rating: 4.7,
-      reviews: 200,
-      topRated: false,
-      level: 3,
-      destination: "Bangladesh",
-    },
-    {
-      id: 11,
-      name: "Walter D. Dixon",
-      rating: 4.7,
-      reviews: 300,
-      topRated: true,
-      level: 1,
-      destination: "Nepal",
-    },
-    {
-      id: 12,
-      name: "Harold I. Hendon",
-      rating: 4.7,
-      reviews: 200,
-      topRated: true,
-      level: 2,
-      destination: "Bangladesh",
-    },
-    {
-      id: 13,
-      name: "Sarah Johnson",
-      rating: 4.8,
-      reviews: 250,
-      topRated: true,
-      level: 1,
-      destination: "Thailand",
-    },
-    {
-      id: 14,
-      name: "Michael Chen",
-      rating: 4.6,
-      reviews: 180,
-      topRated: false,
-      level: 1,
-      destination: "Bangladesh",
-    },
-    {
-      id: 15,
-      name: "Lisa Rodriguez",
-      rating: 4.9,
-      reviews: 320,
-      topRated: true,
-      level: 2,
-      destination: "India",
-    },
-    {
-      id: 16,
-      name: "David Kim",
-      rating: 4.5,
-      reviews: 150,
-      topRated: false,
-      level: 1,
-      destination: "Nepal",
-    },
-    {
-      id: 17,
-      name: "Emily Wilson",
-      rating: 4.8,
-      reviews: 270,
-      topRated: true,
-      level: 3,
-      destination: "Bangladesh",
-    },
-    {
-      id: 18,
-      name: "Omar Hassan",
-      rating: 4.7,
-      reviews: 220,
-      topRated: true,
-      level: 2,
-      destination: "Vietnam",
-    },
-  ];
+  // Filtered offers (client-side filtering)
+  const [filteredOffers, setFilteredOffers] = useState([]);
 
-  // Filtered guides
-  const [filteredGuides, setFilteredGuides] = useState(allGuides);
-  const guidesPerPage = 9;
+  // Fetch data from API
+  const fetchOffers = async (page = 1) => {
+    setLoading(true);
+    setError(null);
 
-  // Apply filters
+    try {
+      const response = await fetch(
+          `https://royolex.vercel.app/api/v1/guider/all-guider?limit=${itemsPerPage}&page=${page}`
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch guiders');
+      }
+
+      const result = await response.json();
+
+      if (result.success && Array.isArray(result.data)) {
+        // Transform API data to match component's expected format
+        const formattedOffers = result.data.map(guider => ({
+          id: guider._id,
+          name: guider.name,
+          bio: guider.bio || "",
+          location: guider.location || "Unknown",
+          experience: guider.experience || "1 year",
+          specialty: guider.specialty || "general",
+          hourlyRate: guider.hourlyRate || 0,
+          dailyRate: guider.dailyRate || 0,
+          rating: guider.rating || parseFloat((Math.random() * (5 - 4) + 4).toFixed(1)),
+          reviews: guider.totalReviews || Math.floor(Math.random() * 200),
+          imageUrl: (guider.imageUrl && guider.imageUrl[0]) || "/api/placeholder/400/320",
+          languages: guider.languages || [],
+          isVerified: guider.isVerified || false,
+          available: guider.available || false,
+          contactInfo: guider.contactInfo || "",
+          creatorType: guider.creatorType,
+          createdAt: guider.createdAt,
+          // Additional computed fields
+          experienceYears: parseInt(guider.experience) || 1,
+          languageList: Array.isArray(guider.languages) ? guider.languages.join(", ") : "",
+        }));
+
+        setOffers(formattedOffers);
+
+        // Use actual total from API response
+        const actualTotal = result.meta?.total || formattedOffers.length;
+        setTotalOffers(actualTotal);
+        setTotalPages(Math.ceil(actualTotal / itemsPerPage));
+      } else {
+        throw new Error(result.message || 'Failed to fetch guiders');
+      }
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching guiders:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Initial fetch
   useEffect(() => {
-    let result = [...allGuides];
+    fetchOffers(currentPage);
+  }, [currentPage]);
 
-    // Apply destination filter
-    if (filters.destination.bangladeshOnly) {
-      result = result.filter((guide) => guide.destination === "Bangladesh");
+  // Apply client-side filters
+  useEffect(() => {
+    let result = [...offers];
+
+    // Apply location filter
+    const locationFilters = Object.entries(filters.location).filter(([key, value]) => value);
+    if (locationFilters.length > 0) {
+      result = result.filter(offer => {
+        const location = offer.location.toLowerCase();
+        return locationFilters.some(([filterKey]) => {
+          switch (filterKey) {
+            case 'dhaka':
+              return location.includes('dhaka');
+            case 'chittagong':
+              return location.includes('chittagong') || location.includes('chattogram');
+            case 'sylhet':
+              return location.includes('sylhet');
+            case 'other':
+              return !location.includes('dhaka') && !location.includes('chittagong') && !location.includes('chattogram') && !location.includes('sylhet');
+            default:
+              return false;
+          }
+        });
+      });
     }
 
-    // Apply level filter
-    if (
-      filters.level.topRated ||
-      filters.level.level1 ||
-      filters.level.level2 ||
-      filters.level.new
-    ) {
-      result = result.filter(
-        (guide) =>
-          (filters.level.topRated && guide.topRated) ||
-          (filters.level.level1 && guide.level === 1) ||
-          (filters.level.level2 && guide.level === 2) ||
-          (filters.level.new && guide.level === 0)
-      );
+    // Apply experience filter
+    const experienceFilters = Object.entries(filters.experience).filter(([key, value]) => value);
+    if (experienceFilters.length > 0) {
+      result = result.filter(offer => {
+        const years = offer.experienceYears;
+        return experienceFilters.some(([filterKey]) => {
+          switch (filterKey) {
+            case 'beginner':
+              return years >= 1 && years <= 2;
+            case 'intermediate':
+              return years >= 3 && years <= 5;
+            case 'expert':
+              return years >= 6;
+            default:
+              return false;
+          }
+        });
+      });
+    }
+
+    // Apply specialty filter
+    const specialtyFilters = Object.entries(filters.specialty).filter(([key, value]) => value);
+    if (specialtyFilters.length > 0) {
+      result = result.filter(offer => {
+        return specialtyFilters.some(([filterKey]) => {
+          switch (filterKey) {
+            case 'architecture':
+              return offer.specialty === 'architecture' || offer.bio.toLowerCase().includes('architecture');
+            case 'history':
+              return offer.specialty === 'history' || offer.bio.toLowerCase().includes('history');
+            case 'culture':
+              return offer.specialty === 'culture' || offer.bio.toLowerCase().includes('culture');
+            case 'food':
+              return offer.specialty === 'food' || offer.bio.toLowerCase().includes('food');
+            case 'nature':
+              return offer.specialty === 'nature' || offer.bio.toLowerCase().includes('nature');
+            default:
+              return false;
+          }
+        });
+      });
+    }
+
+    // Apply hourly rate filter
+    const rateFilters = Object.entries(filters.hourlyRate).filter(([key, value]) => value && key !== 'customValue');
+    if (rateFilters.length > 0) {
+      result = result.filter(offer => {
+        const rate = offer.hourlyRate;
+        return rateFilters.some(([filterKey]) => {
+          switch (filterKey) {
+            case 'budget':
+              return rate < 15;
+            case 'standard':
+              return rate >= 15 && rate <= 30;
+            case 'premium':
+              return rate > 30;
+            case 'custom':
+              return rate <= parseInt(filters.hourlyRate.customValue);
+            default:
+              return false;
+          }
+        });
+      });
+    }
+
+    // Apply languages filter
+    const languageFilters = Object.entries(filters.languages).filter(([key, value]) => value);
+    if (languageFilters.length > 0) {
+      result = result.filter(offer => {
+        const languages = offer.languages.map(lang => lang.toLowerCase());
+        return languageFilters.some(([filterKey]) => {
+          switch (filterKey) {
+            case 'english':
+              return languages.includes('english');
+            case 'bengali':
+              return languages.includes('bengali');
+            case 'arabic':
+              return languages.includes('arabic');
+            case 'chinese':
+              return languages.includes('chinese');
+            case 'other':
+              return languages.some(lang =>
+                  !['english', 'bengali', 'arabic', 'chinese'].includes(lang)
+              );
+            default:
+              return false;
+          }
+        });
+      });
+    }
+
+    // Apply availability filter
+    const availabilityFilters = Object.entries(filters.availability).filter(([key, value]) => value);
+    if (availabilityFilters.length > 0) {
+      result = result.filter(offer => {
+        return availabilityFilters.some(([filterKey]) => {
+          switch (filterKey) {
+            case 'available':
+              return offer.available === true;
+            case 'verified':
+              return offer.isVerified === true;
+            default:
+              return false;
+          }
+        });
+      });
     }
 
     // Apply sorting
     if (sortOption === "recommended") {
-      // Recommended sorting (default)
-      result = result.sort(
-        (a, b) => b.rating * b.reviews - a.rating * a.reviews
-      );
+      result = result.sort((a, b) => {
+        // Sort by verification first, then rating * reviews
+        if (a.isVerified && !b.isVerified) return -1;
+        if (!a.isVerified && b.isVerified) return 1;
+        return b.rating * b.reviews - a.rating * a.reviews;
+      });
+    } else if (sortOption === "price") {
+      result = result.sort((a, b) => a.hourlyRate - b.hourlyRate);
     } else if (sortOption === "rating") {
-      // Sort by rating
       result = result.sort((a, b) => b.rating - a.rating);
-    } else if (sortOption === "reviews") {
-      // Sort by number of reviews
-      result = result.sort((a, b) => b.reviews - a.reviews);
+    } else if (sortOption === "experience") {
+      result = result.sort((a, b) => b.experienceYears - a.experienceYears);
     }
 
-    setFilteredGuides(result);
-  }, [filters, sortOption]);
+    setFilteredOffers(result);
+  }, [offers, filters, sortOption]);
 
   // Event handlers
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -274,32 +310,17 @@ export const GuidersProvider = ({ children }) => {
     });
   };
 
-  const handleCustomBudgetChange = (value) => {
+  const handleCustomRateChange = (value) => {
     setFilters({
       ...filters,
-      budget: {
-        ...filters.budget,
+      hourlyRate: {
+        ...filters.hourlyRate,
         customValue: value,
       },
     });
   };
 
-  const handleDurationChange = (duration) => {
-    setFilters({
-      ...filters,
-      duration: duration,
-    });
-  };
-
-  const handleDateChange = (date) => {
-    setFilters({
-      ...filters,
-      dateRange: date,
-    });
-  };
-
   const handlePageChange = (page) => {
-    const totalPages = Math.ceil(filteredGuides.length / guidesPerPage);
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
       // Scroll to top when changing pages
@@ -307,32 +328,45 @@ export const GuidersProvider = ({ children }) => {
     }
   };
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredGuides.length / guidesPerPage);
-  const currentGuides = filteredGuides.slice(
-    (currentPage - 1) * guidesPerPage,
-    currentPage * guidesPerPage
-  );
-
   // Reset filters
   const resetFilters = () => {
     setFilters({
-      destination: { bangladeshOnly: false, singaPoreOnly: false },
-      budget: {
-        value: false,
-        midRange: false,
-        highEnd: false,
-        custom: true,
-        customValue: "20",
+      location: {
+        dhaka: false,
+        chittagong: false,
+        sylhet: false,
+        other: false
       },
-      level: {
-        topRated: true,
-        level1: false,
-        level2: false,
-        new: false,
+      experience: {
+        beginner: false,
+        intermediate: false,
+        expert: false,
       },
-      duration: "10 Days",
-      dateRange: "",
+      specialty: {
+        architecture: false,
+        history: false,
+        culture: false,
+        food: false,
+        nature: false,
+      },
+      hourlyRate: {
+        budget: false,
+        standard: false,
+        premium: false,
+        custom: false,
+        customValue: "25",
+      },
+      languages: {
+        english: false,
+        bengali: false,
+        arabic: false,
+        chinese: false,
+        other: false,
+      },
+      availability: {
+        available: false,
+        verified: false,
+      },
     });
   };
 
@@ -352,29 +386,31 @@ export const GuidersProvider = ({ children }) => {
     setOpenSections,
     toggleSection,
     handleCheckboxChange,
-    handleCustomBudgetChange,
-    handleDurationChange,
-    handleDateChange,
+    handleCustomRateChange,
     handlePageChange,
-    filteredGuides,
-    currentGuides,
+    offers,
+    filteredOffers,
+    totalOffers,
     totalPages,
-    guidesPerPage,
+    itemsPerPage,
+    loading,
+    error,
     resetFilters,
+    fetchOffers,
   };
 
   return (
-    <GuidersContext.Provider value={value}>
-      {children}
-    </GuidersContext.Provider>
+      <GuiderOffersContext.Provider value={value}>
+        {children}
+      </GuiderOffersContext.Provider>
   );
 };
 
 // Custom hook for using the context
-export const useGuiders = () => {
-  const context = useContext(GuidersContext);
+export const useGuiderOffers = () => {
+  const context = useContext(GuiderOffersContext);
   if (context === undefined) {
-    throw new Error("useGuiders must be used within a GuidersProvider");
+    throw new Error("useGuiderOffers must be used within a GuiderOffersProvider");
   }
   return context;
 };

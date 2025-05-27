@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home, MapPin } from 'lucide-react';
+import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home, MapPin, Users } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/images/Logo.png";
@@ -9,10 +9,11 @@ import logo from "@/public/images/Logo.png";
 export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, toggleSidebar }) {
     const [expandedItems, setExpandedItems] = useState({
         'Services': false,
-        'Travel Services': false
+        'Travel Services': false,
+        'Guide Services': false
     });
 
-    // Updated menuItems to include Travel Services
+    // Updated menuItems to include Guide Services
     const menuItems = [
         {
             name: 'dashboard',
@@ -33,6 +34,13 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             hasDropdown: true,
             displayName: 'Travel Services',
             dropdownItems: ['All Travel Services', 'Create Travel Service']
+        },
+        {
+            name: 'Guide Services',
+            icon: 'guide',
+            hasDropdown: true,
+            displayName: 'Guide Services',
+            dropdownItems: ['All Guide Services', 'Create Guide Service']
         },
     ];
 
@@ -65,6 +73,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                 return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Settings size={18} /></div>;
             case 'travel':
                 return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><MapPin size={18} /></div>;
+            case 'guide':
+                return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Users size={18} /></div>;
             default:
                 return <div className="w-5 h-5 flex items-center justify-center text-gray-500">📄</div>;
         }
@@ -88,6 +98,12 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
         } else if (parentItem === 'Travel Services') {
             if (item === 'All Travel Services') {
                 setCurrentPage('Travel Services');
+            } else {
+                setCurrentPage(item);
+            }
+        } else if (parentItem === 'Guide Services') {
+            if (item === 'All Guide Services') {
+                setCurrentPage('Guide Services');
             } else {
                 setCurrentPage(item);
             }
@@ -120,6 +136,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                                             setCurrentPage('Services');
                                         } else if (item.name === 'Travel Services') {
                                             setCurrentPage('Travel Services');
+                                        } else if (item.name === 'Guide Services') {
+                                            setCurrentPage('Guide Services');
                                         }
                                     } else {
                                         setCurrentPage(item.name);

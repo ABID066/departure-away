@@ -86,7 +86,7 @@ export const TravelOffersProvider = ({ children }) => {
                     rating: tour.rating || parseFloat((Math.random() * (5 - 4) + 4).toFixed(1)),
                     reviews: tour.totalReviews || Math.floor(Math.random() * 100),
                     duration: `${tour.duration} Days`,
-                    price: `${tour.price1}`,
+                    price: `$${tour.price1}`,
                     popular: tour.isPopular || false,
                     imageUrl: (tour.imageUrl && tour.imageUrl[0]) || "/images/home/exclusive.jpg",
                     category: tour.category || "family",

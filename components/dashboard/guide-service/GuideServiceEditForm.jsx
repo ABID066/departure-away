@@ -1,29 +1,41 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { ArrowLeft, AlertCircle, X } from 'lucide-react';
 
-export default function TravelServiceEditForm({ service, userId, onCancel, onUpdate }) {
+export default function GuideServiceEditForm({ service, userId, onCancel, onUpdate }) {
     const [formData, setFormData] = useState({
-        title: "",
-        description: "",
+        name: "",
+        bio: "",
+        languages: [],
         location: "",
-        duration: "",
-        price1: "",
-        price2: "",
-        category: "",
-        creatorType: "",
-        createdBy: "",
+        experience: "",
+        dailyRate: "",
+        hourlyRate: "",
+        specialty: "",
+        isVerified: false,
         imageUrl: [],
-        isPopular: false
+        available: true,
+        contactInfo: "",
+        creatorType: "",
+        createdBy: ""
     });
     const [formLoading, setFormLoading] = useState(false);
     const [formError, setFormError] = useState("");
     const [isUploading, setIsUploading] = useState(false);
     const [uploadedImages, setUploadedImages] = useState([]);
+    const [selectedLanguages, setSelectedLanguages] = useState([]);
 
     const CLOUDINARY_CLOUD_NAME = "ddb4k8nrn";
     const CLOUDINARY_UPLOAD_PRESET = "departAway";
+
+    // Language options
+    const languageOptions = [
+        'English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese',
+        'Arabic', 'Chinese', 'Japanese', 'Korean', 'Russian', 'Hindi',
+        'Dutch', 'Swedish', 'Norwegian', 'Danish', 'Finnish', 'Polish',
+        'Turkish', 'Greek', 'Hebrew', 'Thai', 'Vietnamese', 'Indonesian'
+    ];
 
     useEffect(() => {
         if (service) {
@@ -31,20 +43,28 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
                 ? service.imageUrl.filter(url => url && url.trim() !== '')
                 : [];
 
+            const initialLanguages = service.languages && Array.isArray(service.languages)
+                ? service.languages
+                : (service.languages ? service.languages.split(',').map(lang => lang.trim()) : []);
+
             setUploadedImages(initialImages);
+            setSelectedLanguages(initialLanguages);
 
             setFormData({
-                title: service.title || "",
-                description: service.description || "",
+                name: service.name || "",
+                bio: service.bio || "",
+                languages: initialLanguages,
                 location: service.location || "",
-                duration: service.duration || "",
-                price1: service.price1 || "",
-                price2: service.price2 || "",
-                category: service.category || "",
+                experience: service.experience || "",
+                specialty: service.specialty || "",
+                hourlyRate: service.hourlyRate || "",
+                dailyRate: service.dailyRate || "",
+                contactInfo: service.contactInfo || "",
                 creatorType: service.creatorType || "",
                 createdBy: service.createdBy || userId,
                 imageUrl: initialImages,
-                isPopular: service.isPopular || false
+                isVerified: service.isVerified !== undefined ? service.isVerified : false,
+                available: service.available !== undefined ? service.available : true
             });
         }
     }, [service, userId]);
@@ -55,6 +75,20 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
             ...formData,
             [name]: type === 'checkbox' ? checked : value
         });
+    };
+
+    const handleLanguageToggle = (language) => {
+        setSelectedLanguages(prev => {
+            if (prev.includes(language)) {
+                return prev.filter(lang => lang !== language);
+            } else {
+                return [...prev, language];
+            }
+        });
+    };
+
+    const removeLanguage = (language) => {
+        setSelectedLanguages(prev => prev.filter(lang => lang !== language));
     };
 
     const handleFileUpload = async (files) => {
@@ -128,41 +162,49 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
         setFormError("");
 
         if (!service?._id) {
-            setFormError("Travel service ID is missing. Cannot update.");
+            setFormError("Guide service ID is missing. Cannot update.");
             return;
         }
 
-        const travelServiceData = {
+        // Validate required fields
+        if (selectedLanguages.length === 0) {
+            setFormError("Please select at least one language.");
+            return;
+        }
+
+        const guideServiceData = {
             ...formData,
             createdBy: userId,
-            price1: Number(formData.price1),
-            price2: Number(formData.price2),
-            imageUrl: uploadedImages
+            experience: formData.experience,
+            hourlyRate: Number(formData.hourlyRate),
+            dailyRate: Number(formData.dailyRate),
+            imageUrl: uploadedImages,
+            languages: selectedLanguages
         };
 
         setFormLoading(true);
 
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch(`https://royolex.vercel.app/api/v1/Tour/update/${service._id}`, {
+            const response = await fetch(`https://royolex.vercel.app/api/v1/guider/update/${service._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
                 },
-                body: JSON.stringify(travelServiceData)
+                body: JSON.stringify(guideServiceData)
             });
 
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Failed to update travel service');
+                throw new Error(result.message || 'Failed to update guide service');
             }
 
-            onUpdate({ ...travelServiceData, _id: service._id });
+            onUpdate({ ...guideServiceData, _id: service._id });
         } catch (error) {
-            console.error("Error updating travel service:", error);
-            setFormError(error.message || "Failed to update travel service. Please try again.");
+            console.error("Error updating guide service:", error);
+            setFormError(error.message || "Failed to update guide service. Please try again.");
         } finally {
             setFormLoading(false);
         }
@@ -176,9 +218,9 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
                     className="mr-3 flex items-center text-gray-600 hover:text-gray-800"
                 >
                     <ArrowLeft size={18} className="mr-1" />
-                    <span>Back to Travel Services</span>
+                    <span>Back to Guide Services</span>
                 </button>
-                <h2 className="text-xl font-semibold">Edit Travel Service</h2>
+                <h2 className="text-xl font-semibold">Edit Guide Service</h2>
             </div>
 
             {formError && (
@@ -192,29 +234,16 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div className="col-span-1 md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Guide Name</label>
                             <input
                                 type="text"
-                                name="title"
-                                value={formData.title}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Enter travel service title"
+                                placeholder="Enter guide name or service title"
                                 required
                             />
-                        </div>
-
-                        <div className="col-span-1 md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                            <textarea
-                                name="description"
-                                value={formData.description}
-                                onChange={handleChange}
-                                rows="4"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Describe the travel service, what's included, highlights, and what makes it special"
-                                required
-                            ></textarea>
                         </div>
 
                         <div>
@@ -225,103 +254,180 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
                                 value={formData.location}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Enter destination location"
+                                placeholder="Enter service location"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Experience (Years)</label>
                             <input
                                 type="text"
-                                name="duration"
-                                value={formData.duration}
+                                name="experience"
+                                value={formData.experience}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="e.g., 3 days 2 nights, 1 week"
+                                placeholder="Enter years of experience"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Specialty</label>
                             <select
-                                name="category"
-                                value={formData.category}
+                                name="specialty"
+                                value={formData.specialty}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                                 required
                             >
-                                <option value="">Select a category</option>
+                                <option value="">Select specialty</option>
+                                <option value="city">City Tours</option>
+                                <option value="historical">Historical Tours</option>
                                 <option value="adventure">Adventure Tours</option>
                                 <option value="cultural">Cultural Tours</option>
-                                <option value="beach">Beach & Resort</option>
-                                <option value="city">City Tours</option>
                                 <option value="nature">Nature & Wildlife</option>
-                                <option value="luxury">Luxury Travel</option>
-                                <option value="budget">Budget Travel</option>
-                                <option value="family">Family Tours</option>
-                                <option value="honeymoon">Honeymoon Packages</option>
-                                <option value="pilgrimage">Pilgrimage Tours</option>
-                                <option value="hajj">Hajj</option>
-                                <option value="alpine">Alpine wanders</option>
-                                <option value="resort">Resort Stay</option>
-                                <option value="boat-trip">Boat Trip</option>
-                                <option value="mountain">Mountains</option>
-                                <option value="desert">Desert</option>
+                                <option value="food">Food Tours</option>
+                                <option value="photography">Photography Tours</option>
+                                <option value="hiking">Hiking & Trekking</option>
+                                <option value="museum">Museum Tours</option>
+                                <option value="religious">Religious Sites</option>
+                                <option value="architecture">Architecture Tours</option>
+                                <option value="shopping">Shopping Tours</option>
                             </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Contact Information</label>
+                            <input
+                                type="text"
+                                name="contactInfo"
+                                value={formData.contactInfo}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                placeholder="Enter contact information"
+                                required
+                            />
+                        </div>
+
+                        {/* Languages Selection */}
+                        <div className="col-span-1 md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Languages Spoken</label>
+                            <div className="border border-gray-300 rounded-md p-3 max-h-40 overflow-y-auto">
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    {languageOptions.map((language) => (
+                                        <label key={language} className="flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedLanguages.includes(language)}
+                                                onChange={() => handleLanguageToggle(language)}
+                                                className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded mr-2"
+                                            />
+                                            <span className="text-sm text-gray-700">{language}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                            {selectedLanguages.length > 0 && (
+                                <div className="mt-2">
+                                    <div className="flex flex-wrap gap-2">
+                                        {selectedLanguages.map((language) => (
+                                            <span
+                                                key={language}
+                                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800"
+                                            >
+                                                {language}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeLanguage(language)}
+                                                    className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full text-orange-600 hover:bg-orange-200"
+                                                >
+                                                    <X size={12} />
+                                                </button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="col-span-1 md:col-span-2">
                             <h3 className="text-sm font-medium text-gray-700 mb-2 mt-2">Pricing</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Basic Price ($)</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Hourly Rate ($)</label>
                                     <input
                                         type="number"
-                                        name="price1"
-                                        value={formData.price1}
+                                        name="hourlyRate"
+                                        value={formData.hourlyRate}
                                         onChange={handleChange}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                        placeholder="Enter basic price"
+                                        placeholder="Enter hourly rate"
                                         required
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Premium Price ($)</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Daily Rate ($)</label>
                                     <input
                                         type="number"
-                                        name="price2"
-                                        value={formData.price2}
+                                        name="dailyRate"
+                                        value={formData.dailyRate}
                                         onChange={handleChange}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                        placeholder="Enter premium price"
+                                        placeholder="Enter daily rate"
                                         required
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        {/* Popular checkbox */}
                         <div className="col-span-1 md:col-span-2">
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    name="isPopular"
-                                    checked={formData.isPopular}
-                                    onChange={handleChange}
-                                    className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
-                                />
-                                <label className="ml-2 block text-sm text-gray-700">
-                                    Mark as Popular Tour
-                                </label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                            <textarea
+                                name="bio"
+                                value={formData.bio}
+                                onChange={handleChange}
+                                rows="4"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                placeholder="Describe your guide experience, background, and what makes you unique"
+                                required
+                            ></textarea>
+                        </div>
+
+                        {/* Status checkboxes */}
+                        <div className="col-span-1 md:col-span-2">
+                            <div className="space-y-3">
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        name="available"
+                                        checked={formData.available}
+                                        onChange={handleChange}
+                                        className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                                    />
+                                    <label className="ml-2 block text-sm text-gray-700">
+                                        Currently Available for Bookings
+                                    </label>
+                                </div>
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        name="isVerified"
+                                        checked={formData.isVerified}
+                                        onChange={handleChange}
+                                        className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                                    />
+                                    <label className="ml-2 block text-sm text-gray-700">
+                                        Verified Guide
+                                    </label>
+                                </div>
                             </div>
-                            <p className="text-xs text-gray-500 mt-1">Popular tours will be featured prominently</p>
+                            <p className="text-xs text-gray-500 mt-1">Set your availability and verification status</p>
                         </div>
 
                         <div className="col-span-1 md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Upload Images</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Upload Photos</label>
                             <div
                                 className="mt-1 flex justify-center px-4 py-4 md:px-6 md:pt-5 md:pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-orange-400 transition-colors"
                                 onDrop={handleDrop}
@@ -350,13 +456,13 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
 
                             {uploadedImages.length > 0 && (
                                 <div className="mt-4">
-                                    <h4 className="text-sm font-medium text-gray-700 mb-2">Travel Service Images:</h4>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-2">Guide Service Images:</h4>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         {uploadedImages.map((url, index) => (
                                             <div key={index} className="relative group">
                                                 <img
                                                     src={url}
-                                                    alt={`Travel Service ${index + 1}`}
+                                                    alt={`Guide Service ${index + 1}`}
                                                     className="w-full h-24 object-cover rounded-md border"
                                                 />
                                                 <button
@@ -397,7 +503,7 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
                                     </svg>
                                     Updating...
                                 </div>
-                            ) : isUploading ? 'Uploading Images...' : 'Update Travel Service'}
+                            ) : isUploading ? 'Uploading Images...' : 'Update Guide Service'}
                         </button>
                     </div>
                 </form>
