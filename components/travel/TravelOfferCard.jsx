@@ -40,11 +40,7 @@ const TravelOfferCard = ({ offer }) => {
                     <div className="flex items-center justify-between">
                         <div className="text-base font-semibold text-gray-900">
                             From <span className="text-pink-600">{offer.price}</span>
-                            {offer.price2 && offer.price2 !== offer.price1 && (
-                                <div className="text-sm text-gray-500">
-                                    Up to <span className="text-pink-500">${offer.price2}</span>
-                                </div>
-                            )}
+
                         </div>
                         <button className="p-2 hover:bg-gray-50 rounded-full transition-colors">
                             <Heart size={20} className="text-gray-400 hover:text-pink-500" />

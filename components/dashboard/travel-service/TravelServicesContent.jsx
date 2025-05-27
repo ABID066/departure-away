@@ -194,7 +194,6 @@ export default function TravelServicesContent({ setCurrentPage }) {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Basic Price</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Premium Price</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Popular</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -207,7 +206,6 @@ export default function TravelServicesContent({ setCurrentPage }) {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.location}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.duration}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${service.price1}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${service.price2}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{service.category}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

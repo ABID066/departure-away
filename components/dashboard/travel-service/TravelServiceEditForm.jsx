@@ -263,6 +263,12 @@ export default function TravelServiceEditForm({ service, userId, onCancel, onUpd
                                 <option value="family">Family Tours</option>
                                 <option value="honeymoon">Honeymoon Packages</option>
                                 <option value="pilgrimage">Pilgrimage Tours</option>
+                                <option value="hajj">Hajj</option>
+                                <option value="alpine">Alpine wanders</option>
+                                <option value="resort">Resort Stay</option>
+                                <option value="boat-trip">Boat Trip</option>
+                                <option value="mountain">Mountains</option>
+                                <option value="desert">Desert</option>
                             </select>
                         </div>
 

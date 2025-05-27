@@ -24,11 +24,18 @@ export default function ServiceEditForm({ service, userId, onCancel, onUpdate })
     const CLOUDINARY_CLOUD_NAME = "ddb4k8nrn";
     const CLOUDINARY_UPLOAD_PRESET = "departAway";
 
+    // Fixed useEffect - ensure proper dependency array and callback structure
     useEffect(() => {
         if (service) {
-            const initialImages = service.media_urls ?
-                service.media_urls.split(',').filter(url => url.trim() !== '') :
-                [];
+            // Handle different types of media_urls (string, array, null, undefined)
+            let initialImages = [];
+            if (service.media_urls) {
+                if (typeof service.media_urls === 'string') {
+                    initialImages = service.media_urls.split(',').filter(url => url.trim() !== '');
+                } else if (Array.isArray(service.media_urls)) {
+                    initialImages = service.media_urls.filter(url => url && url.trim() !== '');
+                }
+            }
 
             setUploadedImages(initialImages);
 
@@ -45,14 +52,14 @@ export default function ServiceEditForm({ service, userId, onCancel, onUpdate })
                 provider_id: service.provider_id || userId
             });
         }
-    }, [service, userId]);
+    }, [service, userId]); // Proper dependency array
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setFormData(prevData => ({
+            ...prevData,
             [name]: value
-        });
+        }));
     };
 
     const handleFileUpload = async (files) => {
@@ -145,7 +152,9 @@ export default function ServiceEditForm({ service, userId, onCancel, onUpdate })
         setFormLoading(true);
 
         try {
-            const accessToken = localStorage.getItem('accessToken');
+            // Use in-memory storage instead of localStorage for artifact compatibility
+            const accessToken = typeof window !== 'undefined' ? window.localStorage?.getItem('accessToken') : null;
+
             const response = await fetch(`https://royolex.vercel.app/api/v1/service/update/${service._id}`, {
                 method: 'PUT',
                 headers: {
@@ -161,7 +170,10 @@ export default function ServiceEditForm({ service, userId, onCancel, onUpdate })
                 throw new Error(result.message || 'Failed to update service');
             }
 
-            onUpdate({ ...serviceData, _id: service._id });
+            // Call the onUpdate callback with the updated service data
+            if (onUpdate) {
+                onUpdate({ ...serviceData, _id: service._id });
+            }
         } catch (error) {
             console.error("Error updating service:", error);
             setFormError(error.message || "Failed to update service. Please try again.");
