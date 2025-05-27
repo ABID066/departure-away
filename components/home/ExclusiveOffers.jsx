@@ -16,8 +16,6 @@ export default function ExclusiveOffer() {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-
-
         // Make API request
         const response = await fetch(
             "https://royolex.vercel.app/api/v1/service/-all-service?limit=8"
@@ -63,17 +61,36 @@ export default function ExclusiveOffer() {
         {/* Section Title */}
         <h2 className="text-4xl font-bold text-center mb-12 mt-8">Save Big With Exclusive Offers</h2>
 
-        {/* Loading State */}
+        {/* Loading State with Skeleton Cards */}
         {loading && (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-700"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, index) => (
+                  <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden animate-pulse">
+                    <div className="w-full h-48 bg-gray-200"></div>
+                    <div className="p-4">
+                      <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-3 bg-gray-200 rounded mb-2 w-3/4"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/2 mb-3"></div>
+                      <div className="flex justify-between items-center">
+                        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                        <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+              ))}
             </div>
         )}
 
         {/* Error State */}
         {error && !loading && (
-            <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
-              {error}
+            <div className="text-center py-10">
+              <p className="text-red-500 mb-4">Error: {error}</p>
+              <button
+                  className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition-colors"
+                  onClick={() => window.location.reload()}
+              >
+                Retry
+              </button>
             </div>
         )}
 
@@ -93,17 +110,14 @@ export default function ExclusiveOffer() {
                 ))}
               </div>
 
-
-
-                  <div className="flex justify-center mt-8">
-                    <button
-                        className="bg-pink-700 mb-4 px-4 py-2 text-white rounded-lg hover:bg-pink-900 cursor-pointer transition-colors duration-300"
-                        onClick={() => router.push('/exclusive-offers')}
-                    >
-                      View All Offers
-                    </button>
-                  </div>
-
+              <div className="flex justify-center mt-8">
+                <button
+                    className="bg-pink-700 mb-4 px-4 py-2 text-white rounded-lg hover:bg-pink-900 cursor-pointer transition-colors duration-300"
+                    onClick={() => router.push('/exclusive-offers')}
+                >
+                  View All Offers
+                </button>
+              </div>
             </>
         )}
       </div>
