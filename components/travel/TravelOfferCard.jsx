@@ -25,7 +25,7 @@ const TravelOfferCard = ({ offer }) => {
                         <span>{offer.location}</span>
                     </div>
 
-                    <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2">{offer.title}</h3>
+                    <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2  text-left">{offer.title}</h3>
 
                     <div className="flex items-center mb-4">
                         <Star size={14} className="text-yellow-400 fill-current mr-1" />
