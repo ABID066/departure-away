@@ -40,7 +40,7 @@ export default function CreateGuideServiceForm({ setCurrentPage }) {
     const languageOptions = [
         'English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese',
         'Arabic', 'Chinese', 'Japanese', 'Korean', 'Russian', 'Hindi',
-        'Dutch', 'Swedish', 'Norwegian', 'Danish', 'Finnish', 'Polish',
+        'Bangla', 'Swedish', 'Norwegian', 'Danish', 'Finnish', 'Polish',
         'Turkish', 'Greek', 'Hebrew', 'Thai', 'Vietnamese', 'Indonesian'
     ];
 
