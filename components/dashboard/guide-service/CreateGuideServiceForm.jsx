@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
 
-export default function CreateGuideServiceForm({ setCurrentPage }) {
+export default function CreateGuideServiceForm() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -241,7 +241,7 @@ export default function CreateGuideServiceForm({ setCurrentPage }) {
 
             console.log("Guide service created successfully:", result);
             // Redirect to guide service listing
-            setCurrentPage('Guide Services');
+            router.push('/dashboard/guide-service');
 
         } catch (error) {
             console.error("Error creating guide service:", error);
@@ -534,7 +534,7 @@ export default function CreateGuideServiceForm({ setCurrentPage }) {
                             <button
                                 type="button"
                                 className="w-full sm:w-auto order-2 sm:order-1 px-4 cursor-pointer py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-                                onClick={() => setCurrentPage('Guide Services')}
+                                onClick={() => router.push('/dashboard/guide-service')}
                                 disabled={isLoading || isUploading}
                             >
                                 Cancel

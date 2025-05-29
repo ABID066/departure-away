@@ -21,12 +21,12 @@ export default function Navbar() {
     const hideNavbar = pathname === '/signUp'||pathname === '/signIn'|| pathname === '/dashboard' ||
     pathname=== "/dashboard/chat" || pathname=== "/signUp/verify";
     
-    // If hideNavbar is true, don't render the navbar at all
-    if (hideNavbar) {
-        return null;
-    }
-
     useEffect(() => {
+        // If we're on a page where navbar is hidden, don't add scroll listener
+        if (hideNavbar) {
+            return;
+        }
+
         const handleScroll = () => {
             // Check if page has been scrolled more than 20% of the viewport height
             const isScrolled = window.scrollY > window.innerHeight * 0.20;
@@ -53,6 +53,11 @@ export default function Navbar() {
         { name: 'Contact', href: '/contact' },
 
     ];
+
+    // If hideNavbar is true, don't render the navbar at all
+    if (hideNavbar) {
+        return null;
+    }
 
     const languages = [
         { name: 'বাংলা', flag: '🇧🇩' },

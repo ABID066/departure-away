@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function CreateTravelServiceForm({ setCurrentPage }) {
+export default function CreateTravelServiceForm() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -202,7 +202,7 @@ export default function CreateTravelServiceForm({ setCurrentPage }) {
 
             console.log("Travel service created successfully:", result);
             // Redirect to travel service listing
-            setCurrentPage('Travel Services');
+            router.push('/dashboard/travel-service');
 
         } catch (error) {
             console.error("Error creating travel service:", error);

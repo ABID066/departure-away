@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import ServiceEditForm from './ServiceEditForm';
 import ServiceDeleteModal from './ServiceDeleteModal';
+import { useRouter } from 'next/navigation';
 
 export default function ServicesView({ setCurrentPage }) {
     const [services, setServices] = useState([]);
@@ -72,8 +73,9 @@ export default function ServicesView({ setCurrentPage }) {
         }
     };
 
+    const router = useRouter();
     const handleCreateNew = () => {
-        setCurrentPage('Create Service');
+    router.push('/dashboard/services/create');
     };
 
     const handleEditClick = async (serviceId) => {

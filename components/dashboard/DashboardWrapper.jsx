@@ -15,10 +15,24 @@ import CreateGuideServiceForm from './guide-service/CreateGuideServiceForm';
 export default function DashboardWrapper({ children }) {
     const pathname = usePathname();
     const isChatPage = pathname === '/dashboard/chat';
-    const [currentPage, setCurrentPage] = useState('dashboard');
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    
+    const currentPage = pathname === '/dashboard' ? 'dashboard'
+        : pathname === '/dashboard/services' ? 'Services'
+        : pathname === '/dashboard/services/create' ? 'Create Service'
+        : pathname === '/dashboard/travel-service' ? 'Travel Services'
+        : pathname === '/dashboard/travel-service/create' ? 'Create Travel Service'
+        : pathname === '/dashboard/guide-service' ? 'Guide Services'
+        : pathname === '/dashboard/guide-service/create' ? 'Create Guide Service'
+        : pathname === '/dashboard/chat' ? 'chat'
+        : 'dashboard';
+
+    // If it's the chat page, render without dashboard layout
+    if (isChatPage) {
+        return children;
+    }
 
     useEffect(() => {
         const checkIfMobile = () => {
@@ -75,7 +89,6 @@ export default function DashboardWrapper({ children }) {
                         <Sidebar
                             currentPage={currentPage}
                             setCurrentPage={(page) => {
-                                setCurrentPage(page);
                                 if (isMobile) setIsSidebarOpen(false);
                             }}
                             isCollapsed={isSidebarCollapsed}
@@ -92,16 +105,16 @@ export default function DashboardWrapper({ children }) {
                     {currentPage === 'dashboard' && <DashboardContent />}
 
                     {/* Regular Services */}
-                    {currentPage === 'Services' && <ServicesContent setCurrentPage={setCurrentPage} />}
-                    {currentPage === 'Create Service' && (<CreateServiceForm setCurrentPage={setCurrentPage} />)}
+                    {currentPage === 'Services' && <ServicesContent />}
+                    {currentPage === 'Create Service' && <CreateServiceForm />}
 
                     {/* Travel Services */}
-                    {currentPage === 'Travel Services' && <TravelServicesContent setCurrentPage={setCurrentPage} />}
-                    {currentPage === 'Create Travel Service' && (<CreateTravelServiceForm setCurrentPage={setCurrentPage} />)}
+                    {currentPage === 'Travel Services' && <TravelServicesContent />}
+                    {currentPage === 'Create Travel Service' && <CreateTravelServiceForm />}
 
                     {/* Guide Services */}
-                    {currentPage === 'Guide Services' && <GuideServicesContent setCurrentPage={setCurrentPage} />}
-                    {currentPage === 'Create Guide Service' && (<CreateGuideServiceForm setCurrentPage={setCurrentPage} />)}
+                    {currentPage === 'Guide Services' && <GuideServicesContent />}
+                    {currentPage === 'Create Guide Service' && <CreateGuideServiceForm />}
                 </div>
             </div>
         </div>

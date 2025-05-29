@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import TravelServiceEditForm from './TravelServiceEditForm';
 import TravelServiceDeleteModal from './TravelServiceDeleteModal';
+import { useRouter } from 'next/navigation';
 
 export default function TravelServicesContent({ setCurrentPage }) {
     const [travelServices, setTravelServices] = useState([]);
@@ -72,8 +73,9 @@ export default function TravelServicesContent({ setCurrentPage }) {
         }
     };
 
+    const router = useRouter();
     const handleCreateNew = () => {
-        setCurrentPage('Create Travel Service');
+        router.push('/dashboard/travel-service/create');
     };
 
     const handleEditClick = async (serviceId) => {
