@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function CreateServiceForm({ setCurrentPage }) {
+export default function CreateServiceForm() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -199,7 +199,7 @@ export default function CreateServiceForm({ setCurrentPage }) {
 
             console.log("Service created successfully:", result);
             // Redirect to service listing or detail page
-            setCurrentPage('Services');
+            router.push('/dashboard/services');
 
         } catch (error) {
             console.error("Error creating service:", error);

@@ -1,5 +1,5 @@
 'use client';
 
-export default function DashboardPage() {
+export default function ServicesPage() {
     return null; // Content is handled by DashboardWrapper
 }
