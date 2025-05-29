@@ -169,7 +169,7 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             <div className="p-4 md:p-6 flex justify-between items-center border-b border-gray-100">
                 <div className="flex items-center">
                     <Link href="/dashboard" className="flex items-center">
-                        <Image src={logo} alt="DepartureAway" className="max-w-[200px] h-auto" />
+                        <Image src={logo} alt="DepartureAway" className="max-w-[250px] h-auto" />
                     </Link>
                 </div>
                 <button
