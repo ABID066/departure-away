@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import GuideServiceEditForm from './GuideServiceEditForm';
 import GuideServiceDeleteModal from './GuideServiceDeleteModal';
+import { useRouter } from 'next/navigation';
 
 export default function GuideServicesContent({ setCurrentPage }) {
     const [guideServices, setGuideServices] = useState([]);
@@ -72,9 +73,11 @@ export default function GuideServicesContent({ setCurrentPage }) {
         }
     };
 
+    const router = useRouter();
+    
     const handleCreateNew = () => {
-        setCurrentPage('Create Guide Service');
-    };
+        router.push('/dashboard/guide-service/create');
+        };
 
     const handleEditClick = async (serviceId) => {
         try {

@@ -7,6 +7,25 @@ import Link from "next/link";
 import logo from "@/public/images/Logo.png";
 
 export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, toggleSidebar }) {
+    const getItemHref = (parentItem, item) => {
+        if (!item) { // Main menu item
+            return parentItem.name === 'dashboard' ? '/dashboard' : `/dashboard/${parentItem.name.toLowerCase().replace(' ', '-')}`;
+        }
+        
+        // Dropdown items
+        const base = `/dashboard/${parentItem.toLowerCase().replace(' ', '-')}`;
+        if (item.startsWith('All')) {
+            return base;
+        } else if (item === 'Create Service') {
+            return `${base}/create`;
+        } else if (item === 'Create Travel Service') {
+            return `${base}/create`;
+        } else if (item === 'Create Guide Service') {
+            return `${base}/create`;
+        }
+        return base;
+    };
+    
     const [expandedItems, setExpandedItems] = useState({
         'Services': false,
         'Travel Services': false,
@@ -29,14 +48,14 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             dropdownItems: ['All Services', 'Create Service']
         },
         {
-            name: 'Travel Services',
+            name: 'Travel Service',
             icon: 'travel',
             hasDropdown: true,
             displayName: 'Travel Services',
             dropdownItems: ['All Travel Services', 'Create Travel Service']
         },
         {
-            name: 'Guide Services',
+            name: 'Guide Service',
             icon: 'guide',
             hasDropdown: true,
             displayName: 'Guide Services',
@@ -66,17 +85,18 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
     };
 
     const renderIcon = (iconName) => {
+        const iconClass = "w-5 h-5 text-gray-600";
         switch (iconName) {
             case 'dashboard':
-                return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Home size={18} /></div>;
+                return <Home className={iconClass} />;
             case 'services':
-                return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Settings size={18} /></div>;
+                return <Settings className={iconClass} />;
             case 'travel':
-                return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><MapPin size={18} /></div>;
+                return <MapPin className={iconClass} />;
             case 'guide':
-                return <div className="w-5 h-5 flex items-center justify-center text-gray-500"><Users size={18} /></div>;
+                return <Users className={iconClass} />;
             default:
-                return <div className="w-5 h-5 flex items-center justify-center text-gray-500">📄</div>;
+                return <div className="w-5 h-5 flex items-center justify-center text-gray-600">📄</div>;
         }
     };
 
@@ -125,27 +145,16 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                 <div className="flex-1 overflow-y-auto">
                     <div className="px-2 py-2">
                         {menuItems.map((item) => (
-                            <div
+                            <Link
                                 key={item.name}
+                                href={getItemHref(item)}
                                 className={`flex justify-center py-3 px-2 rounded-lg cursor-pointer mb-1 hover:bg-gray-50 ${
                                     currentPage === item.name ? 'bg-orange-50' : ''
                                 }`}
-                                onClick={() => {
-                                    if (item.hasDropdown) {
-                                        if (item.name === 'Services') {
-                                            setCurrentPage('Services');
-                                        } else if (item.name === 'Travel Services') {
-                                            setCurrentPage('Travel Services');
-                                        } else if (item.name === 'Guide Services') {
-                                            setCurrentPage('Guide Services');
-                                        }
-                                    } else {
-                                        setCurrentPage(item.name);
-                                    }
-                                }}
+                                onClick={() => !item.hasDropdown && setCurrentPage(item.name)}
                             >
                                 {renderIcon(item.icon)}
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
@@ -156,10 +165,11 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
     // Full sidebar for desktop or mobile drawer
     return (
         <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full z-50">
-            <div className="p-4 md:p-6 flex justify-between items-center">
+            {/* Header */}
+            <div className="p-4 md:p-6 flex justify-between items-center border-b border-gray-100">
                 <div className="flex items-center">
                     <Link href="/dashboard" className="flex items-center">
-                        <Image src={logo} alt="DepartureAway" className="max-w-[250px]" />
+                        <Image src={logo} alt="DepartureAway" className="max-w-[250px] h-auto" />
                     </Link>
                 </div>
                 <button
@@ -170,20 +180,27 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                 </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto">
-                <div className="px-4 py-2">
-                    <div className="text-xs font-semibold text-gray-400 mb-2">MENU</div>
+            {/* Menu */}
+            <div className="flex-1 overflow-y-auto py-4">
+                <div className="px-4">
+                    <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">MENU</div>
                     {menuItems.map((item) => (
-                        <div key={item.name}>
+                        <div key={item.name} className="mb-1">
                             <div
-                                className={`flex items-center justify-between py-3 px-2 rounded-lg cursor-pointer mb-1 ${
-                                    currentPage === item.name ? 'bg-orange-50' : 'hover:bg-gray-50'
+                                className={`flex items-center justify-between py-3 px-3 rounded-lg cursor-pointer transition-colors ${
+                                    currentPage === item.name 
+                                        ? 'bg-orange-50 text-orange-700' 
+                                        : 'text-gray-700 hover:bg-gray-50'
                                 }`}
                                 onClick={() => item.hasDropdown ? toggleExpand(item.name) : handleMenuItemClick(item)}
                             >
                                 <div className="flex items-center">
-                                    {renderIcon(item.icon)}
-                                    <span className={`ml-3 text-sm ${currentPage === item.name ? 'font-medium' : ''}`}>
+                                    <div className={currentPage === item.name ? 'text-orange-700' : 'text-gray-600'}>
+                                        {renderIcon(item.icon)}
+                                    </div>
+                                    <span className={`ml-3 text-sm font-medium ${
+                                        currentPage === item.name ? 'text-orange-700' : 'text-gray-700'
+                                    }`}>
                                         {item.displayName || item.name}
                                     </span>
                                 </div>
@@ -194,22 +211,29 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                                         </div>
                                     )}
                                     {item.hasDropdown && (
-                                        expandedItems[item.name] ? <ChevronDown size={16} /> : <ChevronRight size={16} />
+                                        <div className={currentPage === item.name ? 'text-orange-700' : 'text-gray-400'}>
+                                            {expandedItems[item.name] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                                        </div>
                                     )}
                                 </div>
                             </div>
+                            
+                            {/* Dropdown Items */}
                             {item.hasDropdown && expandedItems[item.name] && (
-                                <div className="ml-7 mb-2">
+                                <div className="ml-8 mt-1 mb-2 space-y-1">
                                     {item.dropdownItems.map((dropdownItem) => (
-                                        <div
+                                        <Link
                                             key={dropdownItem}
-                                            className={`py-2 px-3 text-sm rounded-md cursor-pointer mb-1 ${
-                                                currentPage === dropdownItem ? 'bg-orange-50 font-medium' : 'hover:bg-gray-50'
+                                            href={getItemHref(item.name, dropdownItem)}
+                                            className={`block py-2 px-3 text-sm rounded-md cursor-pointer transition-colors ${
+                                                currentPage === dropdownItem 
+                                                    ? 'bg-orange-50 text-orange-700 font-medium' 
+                                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-700'
                                             }`}
-                                            onClick={() => handleDropdownItemClick(item.name, dropdownItem)}
+                                            onClick={() => handleDropdownItemClick(item.displayName, dropdownItem)}
                                         >
                                             {dropdownItem}
-                                        </div>
+                                        </Link>
                                     ))}
                                 </div>
                             )}
