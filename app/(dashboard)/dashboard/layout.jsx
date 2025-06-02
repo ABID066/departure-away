@@ -19,12 +19,8 @@ export const metadata = {
 
 export default function AdminLayout({ children }) {
     return (
-        <html lang="en">
-        <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+        <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <DashboardWrapper>{children}</DashboardWrapper>
-        </body>
-        </html>
+        </div>
     );
 }
