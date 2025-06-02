@@ -154,7 +154,7 @@ export default function TravelPackages() {
                             className="bg-pink-700 mb-4 px-4 py-2 text-white rounded-lg hover:bg-pink-900 cursor-pointer transition-colors duration-300"
                             onClick={() => router.push('/travel-packages')}
                         >
-                            View All Guider
+                            View All Package
                         </button>
                     </div>
 
