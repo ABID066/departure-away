@@ -49,7 +49,7 @@ export default function ChatPage() {
     // Sample users data - THIS NEEDS TO BE REPLACED WITH REAL USER DATA FROM API
     const [users, setUsers] = useState([
         {
-            id: "682c96a986c154b10b515580",
+            id: "683d5b6057cebd2fc305be24",
             name: "John Smith",
             email: "john@example.com",
             avatar: "/api/placeholder/40/40",
