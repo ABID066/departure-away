@@ -2,15 +2,16 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { useRouter} from "next/navigation";
-import { Mail, CheckCircle, XCircle} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Mail, CheckCircle, XCircle } from "lucide-react";
 
 export default function VerifyPage() {
     const router = useRouter();
     const [email, setEmail] = useState("");
-    const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
+    const [otpValues, setOtpValues] = useState(["", "", "", ""]);
     const [isVerified, setIsVerified] = useState(false);
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const inputRefs = useRef([]);
 
     // Get email from localStorage on component mount
@@ -33,7 +34,7 @@ export default function VerifyPage() {
         setError("");
 
         // Move to next input if current one is filled
-        if (value && index < 5) {
+        if (value && index < 3) {
             inputRefs.current[index + 1].focus();
         }
     };
@@ -47,43 +48,82 @@ export default function VerifyPage() {
     };
 
     // Handle OTP verification submission
-    const handleVerify = (e) => {
+    const handleVerify = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         // Check if all OTP fields are filled
         if (otpValues.some(val => val === "")) {
-            setError("Please enter the complete 6-digit verification code");
+            setError("Please enter the complete 4-digit verification code");
+            setIsLoading(false);
             return;
         }
 
         const otpCode = otpValues.join("");
 
-        // For demo purposes: 123456 is the correct code
-        if (otpCode === "123456") {
-            setIsVerified(true);
-            setError("");
+        try {
+            const response = await fetch("https://royolex.vercel.app/api/v1/user/verifyEmail", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    code: otpCode
+                }),
+            });
 
-            // API call here to verify the OTP
-            // If successful, redirect after showing success message
-            setTimeout(() => {
-                router.push("/dashboard"); // Redirect to dashboard or home page
-            }, 2000);
-        } else {
-            setError("Invalid verification code. Please try again.");
+            const data = await response.json();
+
+            if (response.ok) {
+                setIsVerified(true);
+                setError("");
+                
+                // Redirect after showing success message
+                setTimeout(() => {
+                    router.push("/"); // Redirect to dashboard or home page
+                }, 2000);
+            } else {
+                setError(data.message || "Invalid verification code. Please try again.");
+            }
+        } catch (err) {
+            setError("An error occurred. Please try again.");
+            console.error("Verification error:", err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     // Handle resending the code
-    const handleResend = () => {
+    const handleResend = async () => {
         // Reset the OTP fields
-        setOtpValues(["", "", "", "", "", ""]);
+        setOtpValues(["", "", "", ""]);
         setError("");
 
         // Focus on the first input
         inputRefs.current[0].focus();
 
-        // API call to resend verification code
-        alert("New verification code sent to your email");
+        try {
+            const response = await fetch("https://royolex.vercel.app/api/v1/user/resendVerificationCode", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                // Include email if needed by the API
+                body: JSON.stringify({
+                    email: localStorage.getItem("userEmail")
+                }),
+            });
+
+            if (response.ok) {
+                alert("New verification code sent to your email");
+            } else {
+                const data = await response.json();
+                setError(data.message || "Failed to resend code. Please try again.");
+            }
+        } catch (err) {
+            setError("Failed to resend code. Please try again.");
+            console.error("Resend error:", err);
+        }
     };
 
     return (
@@ -104,8 +144,6 @@ export default function VerifyPage() {
             {/* Right side - Verification Form */}
             <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8">
                 <div className="w-full max-w-md">
-
-
                     {/* Header */}
                     <div className="text-center mb-8">
                         <div className="mx-auto bg-red-100 w-16 h-16 flex items-center justify-center rounded-full mb-4">
@@ -131,7 +169,7 @@ export default function VerifyPage() {
                     {!isVerified && (
                         <form onSubmit={handleVerify} className="w-full">
                             {/* OTP Input Fields */}
-                            <div className="flex justify-between gap-2 mb-6">
+                            <div className="flex justify-center mb-6">
                                 {otpValues.map((value, index) => (
                                     <input
                                         key={index}
@@ -141,7 +179,7 @@ export default function VerifyPage() {
                                         value={value}
                                         onChange={(e) => handleOtpChange(index, e.target.value)}
                                         onKeyDown={(e) => handleKeyDown(index, e)}
-                                        className="w-12 h-12 text-center text-xl font-bold text-gray-800 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                                        className="mx-1 w-12 h-12 text-center text-xl font-bold text-gray-800 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
                                         required
                                     />
                                 ))}
@@ -158,9 +196,10 @@ export default function VerifyPage() {
                             {/* Verify Button */}
                             <button
                                 type="submit"
-                                className="w-full bg-red-500 text-white py-3 rounded-full font-medium hover:bg-red-600 transition duration-300 cursor-pointer mb-4"
+                                disabled={isLoading}
+                                className="w-full bg-red-500 text-white py-3 rounded-full font-medium hover:bg-red-600 transition duration-300 cursor-pointer mb-4 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
-                                Verify Email
+                                {isLoading ? "Verifying..." : "Verify Email"}
                             </button>
 
                             {/* Resend Code */}
