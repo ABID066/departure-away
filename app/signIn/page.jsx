@@ -84,7 +84,7 @@ export default function SignIn() {
         localStorage.setItem("userData", JSON.stringify(result.data.user));
       }
 
-      router.push('/dashboard');
+      router.push('/');
     } catch (error) {
       console.error("Error during login:", error);
       setError("Login request failed. Please check your network connection.");
