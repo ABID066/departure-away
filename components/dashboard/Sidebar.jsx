@@ -44,7 +44,7 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             name: 'Services',
             icon: 'services',
             hasDropdown: true,
-            displayName: 'Services',
+            displayName: 'Exclusive Services',
             dropdownItems: ['All Services', 'Create Service']
         },
         {

@@ -80,7 +80,7 @@ export default function VerifyPage() {
                 
                 // Redirect after showing success message
                 setTimeout(() => {
-                    router.push("/"); // Redirect to dashboard or home page
+                    router.push("/signIn"); // Redirect to dashboard or home page
                 }, 2000);
             } else {
                 setError(data.message || "Invalid verification code. Please try again.");

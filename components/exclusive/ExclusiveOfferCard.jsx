@@ -2,11 +2,12 @@
 
 import {Star, MapPin, Heart, CalendarDays} from "lucide-react";
 import React from "react";
+import Link from "next/link";
 
 const ExclusiveOfferCard = ({ offer }) => {
     return (
         <div className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300 max-w-sm">
-            <a href="#" className="block">
+            <Link href={`/exclusive-offers/${offer.id}`}>
                 <div className="relative">
                     <img
                         src={offer.imageUrl || "/api/placeholder/400/320"}
@@ -44,7 +45,7 @@ const ExclusiveOfferCard = ({ offer }) => {
                         </button>
                     </div>
                 </div>
-            </a>
+            </Link>
         </div>
     );
 };
