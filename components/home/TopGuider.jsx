@@ -3,6 +3,7 @@ import GuiderOfferCard from "../guider/GuiderCard";
 import NewsletterSection from "./NewsletterSection";
 import React, { useState, useEffect } from "react";
 import {useRouter} from "next/navigation";
+import { fetchTopGuides } from "../../apiRequest/home/homeApi";
 
 export default function TopGuider() {
   const [guides, setGuides] = useState([]);
@@ -12,51 +13,13 @@ export default function TopGuider() {
   const router = useRouter();
   // Fetch guides from API
   useEffect(() => {
-    const fetchGuides = async () => {
+    const fetchData = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const response = await fetch(
-            'https://royolex.vercel.app/api/v1/guider/all-guider?limit=8&page=1'
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch guides');
-        }
-
-        const result = await response.json();
-
-        if (result.success && Array.isArray(result.data)) {
-          // Transform API data to match component's expected format
-          const formattedGuides = result.data.map(guider => ({
-            id: guider._id,
-            name: guider.name,
-            bio: guider.bio || "",
-            location: guider.location || "Unknown",
-            experience: guider.experience || "1 year",
-            specialty: guider.specialty || "general",
-            hourlyRate: guider.hourlyRate || 0,
-            dailyRate: guider.dailyRate || 0,
-            // Generate random ratings and reviews as requested
-            rating: guider.rating > 0 ? guider.rating : parseFloat((Math.random() * (5 - 4.5) + 4.5).toFixed(1)),
-            reviews: guider.totalReviews > 0 ? guider.totalReviews : Math.floor(Math.random() * 150) + 50,
-            imageUrl: (guider.imageUrl && guider.imageUrl[0]) || "/api/placeholder/400/320",
-            languages: guider.languages || [],
-            isVerified: guider.isVerified || false,
-            available: guider.available || false,
-            contactInfo: guider.contactInfo || "",
-            creatorType: guider.creatorType,
-            createdAt: guider.createdAt,
-            // Additional computed fields
-            experienceYears: parseInt(guider.experience) || 1,
-            languageList: Array.isArray(guider.languages) ? guider.languages.join(", ") : "",
-          }));
-
-          setGuides(formattedGuides);
-        } else {
-          throw new Error(result.message || 'Failed to fetch guides');
-        }
+        const formattedGuides = await fetchTopGuides(8, 1);
+        setGuides(formattedGuides);
       } catch (err) {
         setError(err.message);
         console.error('Error fetching guides:', err);
@@ -65,7 +28,7 @@ export default function TopGuider() {
       }
     };
 
-    fetchGuides();
+    fetchData();
   }, []);
 
   const displayedGuides = showAll ? guides : guides.slice(0, 8);

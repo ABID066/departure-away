@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
+import { fetchGuides } from '@/apiRequest/guide/guideApi';
 
 // Create the context
 const GuiderOffersContext = createContext();
@@ -80,50 +81,10 @@ export const GuiderOffersProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await fetch(
-          `https://royolex.vercel.app/api/v1/guider/all-guider?limit=${itemsPerPage}&page=${page}`
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch guiders');
-      }
-
-      const result = await response.json();
-
-      if (result.success && Array.isArray(result.data)) {
-        // Transform API data to match component's expected format
-        const formattedOffers = result.data.map(guider => ({
-          id: guider._id,
-          name: guider.name,
-          bio: guider.bio || "",
-          location: guider.location || "Unknown",
-          experience: guider.experience || "1 year",
-          specialty: guider.specialty || "general",
-          hourlyRate: guider.hourlyRate || 0,
-          dailyRate: guider.dailyRate || 0,
-          rating: guider.rating || parseFloat((Math.random() * (5 - 4) + 4).toFixed(1)),
-          reviews: guider.totalReviews || Math.floor(Math.random() * 200),
-          imageUrl: (guider.imageUrl && guider.imageUrl[0]) || "/api/placeholder/400/320",
-          languages: guider.languages || [],
-          isVerified: guider.isVerified || false,
-          available: guider.available || false,
-          contactInfo: guider.contactInfo || "",
-          creatorType: guider.creatorType,
-          createdAt: guider.createdAt,
-          // Additional computed fields
-          experienceYears: parseInt(guider.experience) || 1,
-          languageList: Array.isArray(guider.languages) ? guider.languages.join(", ") : "",
-        }));
-
-        setOffers(formattedOffers);
-
-        // Use actual total from API response
-        const actualTotal = result.meta?.total || formattedOffers.length;
-        setTotalOffers(actualTotal);
-        setTotalPages(Math.ceil(actualTotal / itemsPerPage));
-      } else {
-        throw new Error(result.message || 'Failed to fetch guiders');
-      }
+      const result = await fetchGuides(page, itemsPerPage);
+      setOffers(result.guides);
+      setTotalOffers(result.total);
+      setTotalPages(result.totalPages);
     } catch (err) {
       setError(err.message);
       console.error('Error fetching guiders:', err);

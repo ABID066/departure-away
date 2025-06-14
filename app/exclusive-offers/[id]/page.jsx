@@ -4,6 +4,8 @@ import { useParams } from 'next/navigation'
 import { Star, StarHalf, MapPin, Calendar, Users } from 'lucide-react'
 import Image from 'next/image' 
 
+import { fetchExclusiveOfferById } from '@/apiRequest/exclusive/exclusiveApi';
+
 // Skeleton Components
 const HeroImageSkeleton = () => (
   <div className="w-full h-64 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:200%_100%] animate-[shimmer_1.5s_ease-in-out_infinite]"></div>
@@ -134,62 +136,24 @@ export default function Page() {
   const [error, setError] = useState(null)
   const [selectedPackage, setSelectedPackage] = useState('standard')
 
+
   useEffect(() => {
     if (!id) return // If there's no id yet, skip the API call
 
     // Fetch data from API
     const fetchPackageData = async () => {
       try {
-        const response = await fetch(`https://royolex.vercel.app/api/v1/service/ById/${id}`)
-        const data = await response.json()
-        
-        if (data.success) {
-          // Add random rating and totalReviews to the data
-          const updatedData = {
-            ...data.data,
-            rating: (Math.random() * 5).toFixed(1), // Random rating between 0 and 5
-            totalReviews: Math.floor(Math.random() * 1000), // Random total reviews
-            // Add package features based on pricing tiers
-            packages: {
-              basic: {
-                features: [
-                  "Accommodation in comfortable hostels",
-                  "Guided tours of major cultural sites",
-                  "Daily breakfast"
-                ]
-              },
-              standard: {
-                features: [
-                  "Accommodation in boutique hotels",
-                  "Enhanced guided tours with cultural expert",
-                  "Daily breakfast and select meals",
-                  "Transportation within location"
-                ]
-              },
-              premium: {
-                features: [
-                  "Accommodation in luxury hotels",
-                  "Private guided tours with renowned experts",
-                  "All meals included",
-                  "Private transportation throughout the tour",
-                  "Exclusive cultural experiences"
-                ]
-              }
-            }
-          }
-          setPackageData(updatedData)
-        console.log(updatedData.media_urls[0])
-        } else {
-          setError('Failed to load package data.')
-        }
+        const updatedData = await fetchExclusiveOfferById(id);
+        setPackageData(updatedData);
+        console.log(updatedData.media_urls[0]);
       } catch (err) {
-        setError('Error fetching data.')
+        setError('Error fetching data.');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchPackageData()
+    fetchPackageData();
   }, [id])
 
   // Render star rating
