@@ -9,7 +9,7 @@ export default function ExclusiveOfferCard({ offer }) {
   return (
       <div className="card bg-base-100 rounded-lg shadow-lg mx-auto">
         {/* Link wrapping the card */}
-        <Link href={`/travel-packages/${id}`}>
+        <Link href={`/exclusive-offers/${id}`}>
           {/* Image Section - Using regular img tag for external URLs */}
           <figure className="relative h-48 w-full overflow-hidden">
             <img

@@ -2,6 +2,9 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 
+    // Import fetchTravelOffers from travelApi
+import { fetchTravelOffers } from "../../apiRequest/travel/travelApi";
+
 // Create the context
 const TravelOffersContext = createContext();
 
@@ -61,52 +64,17 @@ export const TravelOffersProvider = ({ children }) => {
     // Filtered offers (client-side filtering)
     const [filteredOffers, setFilteredOffers] = useState([]);
 
+
     // Fetch data from API
     const fetchOffers = async (page = 1) => {
         setLoading(true);
         setError(null);
 
         try {
-            const response = await fetch(
-                `https://royolex.vercel.app/api/v1/Tour/all-tour?limit=${itemsPerPage}&page=${page}`
-            );
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch travel offers');
-            }
-
-            const result = await response.json();
-
-            if (result && Array.isArray(result.data)) {
-                // Transform API data to match component's expected format
-                const formattedOffers = result.data.map(tour => ({
-                    id: tour._id,
-                    title: tour.title,
-                    location: tour.location || "Unknown",
-                    rating: tour.rating || parseFloat((Math.random() * (5 - 4) + 4).toFixed(1)),
-                    reviews: tour.totalReviews || Math.floor(Math.random() * 100),
-                    duration: `${tour.duration} Days`,
-                    price: `$${tour.price1}`,
-                    popular: tour.isPopular || false,
-                    imageUrl: (tour.imageUrl && tour.imageUrl[0]) || "/images/home/exclusive.jpg",
-                    category: tour.category || "family",
-                    price1: parseInt(tour.price1) || 0,
-                    price2: parseInt(tour.price2) || 0,
-                    duration_days: parseInt(tour.duration) || 1,
-                    description: tour.description || "",
-                    creatorType: tour.creatorType,
-                    createdAt: tour.createdAt
-                }));
-
-                setOffers(formattedOffers);
-
-                // Use actual total from API response
-                const actualTotal = result.meta?.total || formattedOffers.length;
-                setTotalOffers(actualTotal);
-                setTotalPages(Math.ceil(actualTotal / itemsPerPage));
-            } else {
-                throw new Error('Invalid response format');
-            }
+            const result = await fetchTravelOffers(page, itemsPerPage);
+            setOffers(result.offers);
+            setTotalOffers(result.total);
+            setTotalPages(result.totalPages);
         } catch (err) {
             setError(err.message);
             console.error('Error fetching travel offers:', err);

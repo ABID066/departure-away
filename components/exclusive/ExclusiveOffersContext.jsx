@@ -1,6 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
+// Import the fetchExclusiveOffers function
+import { fetchExclusiveOffers } from '@/apiRequest/exclusive/exclusiveApi';
 
 // Create the context
 const ExclusiveOffersContext = createContext();
@@ -60,48 +62,17 @@ export const ExclusiveOffersProvider = ({ children }) => {
     // Filtered offers (client-side filtering)
     const [filteredOffers, setFilteredOffers] = useState([]);
 
+    
     // Fetch data from API
     const fetchOffers = async (page = 1) => {
         setLoading(true);
         setError(null);
 
         try {
-            const response = await fetch(
-                `https://royolex.vercel.app/api/v1/service/-all-service?page=${page}&limit=${itemsPerPage}`
-            );
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch offers');
-            }
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Transform API data to match your component's expected format
-                const formattedOffers = result.data.map(service => ({
-                    id: service._id || service.id,
-                    title: service.title,
-                    location: service.location || "Unknown",
-                    rating: parseFloat((Math.random() * (5 - 4) + 4).toFixed(1)), // Generate random rating if not available
-                    reviews: Math.floor(Math.random() * 100), // Generate random reviews if not available
-                    duration: service.duration_days ? `${service.duration_days} Days` : "Flexible",
-                    price: `$${service.price_basic}`,
-                    popular: Math.random() > 0.5, // Randomly set popular flag if not available
-                    imageUrl: service.media_urls || "/images/home/exclusive.jpg", // Use the media_urls or fallback to default
-                    category: service.category || "tour",
-                    price_basic: service.price_basic,
-                    price_standard: service.price_standard,
-                    price_premium: service.price_premium,
-                    duration_days: service.duration_days,
-                    description: service.description
-                }));
-
-                setOffers(formattedOffers);
-                setTotalOffers(result.meta.total);
-                setTotalPages(Math.ceil(result.meta.total / itemsPerPage));
-            } else {
-                throw new Error(result.message || 'Failed to fetch offers');
-            }
+            const result = await fetchExclusiveOffers(page, itemsPerPage);
+            setOffers(result.offers);
+            setTotalOffers(result.total);
+            setTotalPages(result.totalPages);
         } catch (err) {
             setError(err.message);
             console.error('Error fetching offers:', err);

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Mail, CheckCircle, XCircle } from "lucide-react";
+import { verifyEmail, resendVerificationCode } from "../../../apiRequest/auth/authapi";
 
 export default function VerifyPage() {
     const router = useRouter();
@@ -14,45 +15,34 @@ export default function VerifyPage() {
     const [isLoading, setIsLoading] = useState(false);
     const inputRefs = useRef([]);
 
-    // Get email from localStorage on component mount
     useEffect(() => {
         const savedEmail = localStorage.getItem("userEmail") || "user@example.com";
         setEmail(savedEmail);
     }, []);
 
-    // Handle OTP input change
     const handleOtpChange = (index, value) => {
-        // Only allow digits
         if (value && !/^\d+$/.test(value)) return;
 
         const newOtpValues = [...otpValues];
-        // Take only the last character if multiple are pasted
         newOtpValues[index] = value.slice(-1);
         setOtpValues(newOtpValues);
-
-        // Clear any previous errors
         setError("");
 
-        // Move to next input if current one is filled
         if (value && index < 3) {
             inputRefs.current[index + 1].focus();
         }
     };
 
-    // Handle keydown events for backspace navigation
     const handleKeyDown = (index, e) => {
         if (e.key === "Backspace" && !otpValues[index] && index > 0) {
-            // Move to previous input when backspace is pressed on an empty input
             inputRefs.current[index - 1].focus();
         }
     };
 
-    // Handle OTP verification submission
     const handleVerify = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Check if all OTP fields are filled
         if (otpValues.some(val => val === "")) {
             setError("Please enter the complete 4-digit verification code");
             setIsLoading(false);
@@ -62,67 +52,34 @@ export default function VerifyPage() {
         const otpCode = otpValues.join("");
 
         try {
-            const response = await fetch("https://royolex.vercel.app/api/v1/user/verifyEmail", {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    code: otpCode
-                }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setIsVerified(true);
-                setError("");
-                
-                // Redirect after showing success message
-                setTimeout(() => {
-                    router.push("/"); // Redirect to dashboard or home page
-                }, 2000);
-            } else {
-                setError(data.message || "Invalid verification code. Please try again.");
-            }
+            await verifyEmail(otpCode);
+            setIsVerified(true);
+            setError("");
+            
+            setTimeout(() => {
+                router.push("/signIn");
+            }, 2000);
         } catch (err) {
-            setError("An error occurred. Please try again.");
+            setError(err.message || "Invalid verification code. Please try again.");
             console.error("Verification error:", err);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Handle resending the code
     const handleResend = async () => {
-        // Reset the OTP fields
         setOtpValues(["", "", "", ""]);
         setError("");
-
-        // Focus on the first input
-        inputRefs.current[0].focus();
+        setIsLoading(true);
 
         try {
-            const response = await fetch("https://royolex.vercel.app/api/v1/user/resendVerificationCode", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                // Include email if needed by the API
-                body: JSON.stringify({
-                    email: localStorage.getItem("userEmail")
-                }),
-            });
-
-            if (response.ok) {
-                alert("New verification code sent to your email");
-            } else {
-                const data = await response.json();
-                setError(data.message || "Failed to resend code. Please try again.");
-            }
+            await resendVerificationCode(email);
+            setError("Verification code has been resent to your email.");
         } catch (err) {
-            setError("Failed to resend code. Please try again.");
+            setError(err.message || "Failed to resend verification code.");
             console.error("Resend error:", err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
