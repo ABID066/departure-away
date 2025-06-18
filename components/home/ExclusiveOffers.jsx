@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ExclusiveOfferCard from "./ExclusiveOfferCard";
 import { useRouter } from 'next/navigation';
+import { fetchExclusiveOffers } from "../../apiRequest/home/homeApi";
 
 export default function ExclusiveOffer() {
   // States for data, loading and error handling
@@ -14,33 +15,9 @@ export default function ExclusiveOffer() {
 
   // Fetch data from API on component mount
   useEffect(() => {
-    const fetchOffers = async () => {
+    const fetchData = async () => {
       try {
-        // Make API request
-        const response = await fetch(
-            "https://royolex.vercel.app/api/v1/service/-all-service?limit=8"
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Failed to fetch offers");
-        }
-
-        const result = await response.json();
-
-        // Transform API data to match your component's expected format
-        const formattedOffers = result.data.map(service => ({
-          id: service._id || service.id,
-          title: service.title,
-          location: service.location || "Unknown",
-          rating: parseFloat((Math.random() * (5 - 4) + 4).toFixed(1)), // Generate random rating if not available
-          reviews: Math.floor(Math.random() * 100), // Generate random reviews if not available
-          duration: service.duration_days ? `${service.duration_days} Days` : "Flexible",
-          price: `$${service.price_basic}`,
-          popular: Math.random() > 0.5, // Randomly set popular flag if not available
-          imageUrl: service.media_urls || "@/public/images/home/exclusive.jpg" // Use the media_urls or fallback to default
-        }));
-
+        const formattedOffers = await fetchExclusiveOffers(8);
         setOffers(formattedOffers);
       } catch (error) {
         console.error("Error fetching offers:", error);
@@ -50,7 +27,7 @@ export default function ExclusiveOffer() {
       }
     };
 
-    fetchOffers();
+    fetchData();
   }, []);
 
   // Determine which offers to display based on showAll state

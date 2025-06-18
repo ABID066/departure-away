@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import TravelOfferCard from "../travel/TravelOfferCard";
 import {useRouter} from "next/navigation";
+import { fetchTravelPackages } from "../../apiRequest/home/homeApi";
 
 export default function TravelPackages() {
     const [packages, setPackages] = useState([]);
@@ -11,19 +12,16 @@ export default function TravelPackages() {
     const [activeFilter, setActiveFilter] = useState("forYou");
     const router = useRouter();
 
-    // Filter options with their corresponding API endpoints
+    // Filter options with their labels
     const filterOptions = {
         forYou: {
-            label: "For You",
-            apiUrl: "https://royolex.vercel.app/api/v1/Tour/all-tour?limit=8&page=1"
+            label: "For You"
         },
         hajj: {
-            label: "Hajj",
-            apiUrl: "https://royolex.vercel.app/api/v1/Tour/all-tour?limit=8&page=1&searchTerm=hajj"
+            label: "Hajj"
         },
         alpine: {
-            label: "Alpine Wonders",
-            apiUrl: "https://royolex.vercel.app/api/v1/Tour/all-tour?limit=8&page=1&searchTerm=alpine"
+            label: "Alpine Wonders"
         }
     };
 
@@ -33,39 +31,8 @@ export default function TravelPackages() {
         setError(null);
 
         try {
-            const response = await fetch(filterOptions[filterKey].apiUrl);
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch travel packages');
-            }
-
-            const result = await response.json();
-
-            if (result && Array.isArray(result.data)) {
-                // Transform API data to match TravelOfferCard component format
-                const formattedPackages = result.data.map(tour => ({
-                    id: tour._id,
-                    title: tour.title,
-                    location: tour.location || "Unknown",
-                    rating: tour.rating || parseFloat((Math.random() * (5 - 4.5) + 4.5).toFixed(1)),
-                    reviews: tour.totalReviews || Math.floor(Math.random() * 150) + 50,
-                    duration: `${tour.duration} Days`,
-                    price: `$${tour.price1}`,
-                    popular: tour.isPopular || Math.random() > 0.7, // 30% chance of being popular
-                    imageUrl: (tour.imageUrl && tour.imageUrl[0]) || "/api/placeholder/400/320",
-                    category: tour.category || "tour",
-                    price1: parseInt(tour.price1) || 0,
-                    price2: parseInt(tour.price2) || 0,
-                    duration_days: parseInt(tour.duration) || 1,
-                    description: tour.description || "",
-                    creatorType: tour.creatorType,
-                    createdAt: tour.createdAt
-                }));
-
-                setPackages(formattedPackages);
-            } else {
-                throw new Error('Invalid response format');
-            }
+            const formattedPackages = await fetchTravelPackages(filterKey, 8, 1);
+            setPackages(formattedPackages);
         } catch (err) {
             setError(err.message);
             console.error('Error fetching travel packages:', err);

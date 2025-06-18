@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useParams } from 'next/navigation'
 import { Star, StarHalf, MapPin, Calendar, Users } from 'lucide-react'
+// Import fetchTravelPackageById from travelApi
+import { fetchTravelPackageById } from "../../../apiRequest/travel/travelApi";
 
 // Skeleton Loading Component
 const SkeletonLoader = () => {
@@ -111,61 +113,23 @@ const TravelPackageDetails = () => {
   const [error, setError] = useState(null)
   const [selectedPackage, setSelectedPackage] = useState('standard')
 
+  
   useEffect(() => {
     if (!id) return // If there's no id yet, skip the API call
 
     // Fetch data from API
     const fetchPackageData = async () => {
       try {
-        const response = await fetch(`https://royolex.vercel.app/api/v1/Tour/ById/${id}`)
-        const data = await response.json()
-
-        if (data.success) {
-          // Add random rating and totalReviews to the data
-          const updatedData = {
-            ...data.data,
-            rating: data.data.rating || (Math.random() * 5).toFixed(1), // Use existing rating or random
-            totalReviews: data.data.totalReviews || Math.floor(Math.random() * 1000), // Use existing or random
-            // Add package features based on pricing tiers
-            packages: {
-              basic: {
-                features: [
-                  "Accommodation in comfortable hostels",
-                  "Guided tours of major cultural sites",
-                  "Daily breakfast"
-                ]
-              },
-              standard: {
-                features: [
-                  "Accommodation in boutique hotels",
-                  "Enhanced guided tours with cultural expert",
-                  "Daily breakfast and select meals",
-                  "Transportation within location"
-                ]
-              },
-              premium: {
-                features: [
-                  "Accommodation in luxury hotels",
-                  "Private guided tours with renowned experts",
-                  "All meals included",
-                  "Private transportation throughout the tour",
-                  "Exclusive cultural experiences"
-                ]
-              }
-            }
-          }
-          setPackageData(updatedData)
-        } else {
-          setError('Failed to load package data.')
-        }
+        const data = await fetchTravelPackageById(id);
+        setPackageData(data);
       } catch (err) {
-        setError('Error fetching data.')
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchPackageData()
+    fetchPackageData();
   }, [id])
 
   // Show skeleton loading while data is being fetched

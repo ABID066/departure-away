@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Facebook } from "lucide-react";
 import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { signIn } from "../../apiRequest/auth/authapi";
 
 export default function SignIn() {
   const router = useRouter();
@@ -47,47 +48,13 @@ export default function SignIn() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://royolex.vercel.app/api/v1/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        //credentials: 'include' ,
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        setError(errorData?.message || `Login failed: ${response.statusText}`);
-        return;
-      }
-
-      const result = await response.json();
+      const result = await signIn(formData.email, formData.password);
       console.log("Login successful:", result);
-      localStorage.clear();
-
-      // Store the tokens manually since we can't use cookies
-      if (result.data?.accessToken) {
-        localStorage.setItem("accessToken", result.data.accessToken);
-
-        // If the API also returns the refresh token in the response
-        // (not ideal but a temporary workaround)
-        if (result.data.refreshToken) {
-          localStorage.setItem("refreshToken", result.data.refreshToken);
-        }
-      }
-
-      if (result.data?.user) {
-        localStorage.setItem("userData", JSON.stringify(result.data.user));
-      }
-
+      
       router.push('/');
     } catch (error) {
       console.error("Error during login:", error);
-      setError("Login request failed. Please check your network connection.");
+      setError(error.message || "Login request failed. Please check your network connection.");
     } finally {
       setIsLoading(false);
     }
@@ -174,7 +141,6 @@ export default function SignIn() {
                 </button>
               </div>
 
-              {/* Log In Button */}
               {/* Log In Button */}
               <button
                   type="submit"
