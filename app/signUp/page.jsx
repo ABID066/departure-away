@@ -6,8 +6,8 @@ import Link from "next/link";
 import { Eye, EyeOff, Facebook } from "lucide-react";
 import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import {useRouter} from "next/navigation";
-
+import { useRouter } from "next/navigation";
+import { signUp } from "../../apiRequest/auth/authapi";
 
 export default function Page() {
   const router = useRouter();
@@ -88,59 +88,24 @@ export default function Page() {
         formData.acceptTerms;
 
     if (!requiredFieldsFilled) {
-      // If the form isn't fully filled, set validation state
       setFormIsValid(false);
       return;
     }
 
     if (!passwordsMatch) {
-      // If passwords don't match, don't submit the form
       return;
     }
 
-    // Format data according to API requirements
-    const apiData = {
-      name: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
-      password: formData.password,
-      phone: `${formData.countryCode}${formData.mobile}`,
-      role: formData.role,
-      image: "https://png.pngtree.com/png-vector/20191119/ourmid/pngtree-beautiful-profile-glyph-vector-icon-png-image_2002807.jpg",
-      // default image
-    };
-
-    // Set loading to true before API call
     setIsLoading(true);
 
     try {
-      // Make API call to create user
-      const response = await fetch('https://royolex.vercel.app/api/v1/user/create-user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(apiData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Handle API error response
-        console.error("Registration failed:", data);
-        alert(data.message || "Registration failed. Please try again.");
-        return;
-      }
-
-      // If successful, log the response, store email and redirect
-      console.log("User created successfully:", data);
-      localStorage.setItem("userEmail", formData.email);
+      const result = await signUp(formData);
+      console.log("Registration successful:", result);
       router.push('/signUp/verify');
     } catch (error) {
-      // Handle network or other errors
-      console.error("Error during registration:", error);
-      alert("An error occurred during registration. Please try again.");
+      console.error("Registration error:", error);
+      setError(error.message || "Registration failed. Please try again.");
     } finally {
-      // Set loading to false after API call completes (success or error)
       setIsLoading(false);
     }
   };
