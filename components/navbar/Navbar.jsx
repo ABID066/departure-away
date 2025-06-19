@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 import logo from '../../public/images/Logo.png';
 
 export default function Navbar() {
@@ -46,9 +46,10 @@ export default function Navbar() {
 
     const navigation = [
         { name: 'Home', href: '/' },
-        { name: 'Guiders', href: '/guiders' },
         { name: 'Exclusive', href: '/exclusive-offers' },
+        { name: 'Guiders', href: '/guiders' },
         { name: 'Travel', href: '/travel-packages' },
+        { name: 'Hotel', href: '/hotel' },
         { name: 'About', href: '/about' },
         { name: 'Contact', href: '/contact' },
 

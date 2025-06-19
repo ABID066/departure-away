@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home, MapPin, Users } from 'lucide-react';
+import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home, MapPin, Users, Hotel } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/images/Logo.png";
@@ -22,6 +22,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             return `${base}/create`;
         } else if (item === 'Create Guide Service') {
             return `${base}/create`;
+        } else if (item === 'Create Hotel Service') {
+            return `${base}/create`;
         }
         return base;
     };
@@ -29,10 +31,11 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
     const [expandedItems, setExpandedItems] = useState({
         'Services': false,
         'Travel Services': false,
-        'Guide Services': false
+        'Guide Services': false,
+        'Hotel Services': false
     });
 
-    // Updated menuItems to include Guide Services
+    // Updated menuItems to include Guide Services and Hotel Services
     const menuItems = [
         {
             name: 'dashboard',
@@ -60,6 +63,13 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             hasDropdown: true,
             displayName: 'Guide Services',
             dropdownItems: ['All Guide Services', 'Create Guide Service']
+        },
+        {
+            name: 'Hotel Service',
+            icon: 'hotel',
+            hasDropdown: true,
+            displayName: 'Hotel Services',
+            dropdownItems: ['All Hotel Services', 'Create Hotel Service']
         },
     ];
 
@@ -95,6 +105,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
                 return <MapPin className={iconClass} />;
             case 'guide':
                 return <Users className={iconClass} />;
+            case 'hotel':
+                return <Hotel className={iconClass} />;
             default:
                 return <div className="w-5 h-5 flex items-center justify-center text-gray-600">📄</div>;
         }
@@ -124,6 +136,12 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
         } else if (parentItem === 'Guide Services') {
             if (item === 'All Guide Services') {
                 setCurrentPage('Guide Services');
+            } else {
+                setCurrentPage(item);
+            }
+        } else if (parentItem === 'Hotel Services') {
+            if (item === 'All Hotel Services') {
+                setCurrentPage('Hotel Services');
             } else {
                 setCurrentPage(item);
             }
