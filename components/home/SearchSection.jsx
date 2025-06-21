@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   TicketsPlane,
   Hotel,
@@ -15,6 +16,7 @@ import {
 
 
 export default function SearchSection() {
+  const router = useRouter();
   // State to track active tab
   const [activeTab, setActiveTab] = useState("flight");
 
@@ -183,7 +185,22 @@ export default function SearchSection() {
                 </div>
 
                 {/* Explore Now Button */}
-                <button className="bg-white hover:bg-gray-50 text-gray-800 w-full md:w-auto px-6 py-3 md:px-8 md:py-2 rounded-full border border-gray-300 text-sm font-medium cursor-pointer transition-colors duration-200 hover:border-rose-300 flex-shrink-0">
+                <button 
+                  onClick={() => {
+                    switch(activeTab) {
+                      case "hotel":
+                        router.push("/hotel");
+                        break;
+                      case "tour":
+                        router.push("/travel-packages");
+                        break;
+                      case "guider":
+                        router.push("/guiders");
+                        break;
+                    }
+                  }}
+                  className="bg-white hover:bg-gray-50 text-gray-800 w-full md:w-auto px-6 py-3 md:px-8 md:py-2 rounded-full border border-gray-300 text-sm font-medium cursor-pointer transition-colors duration-200 hover:border-rose-300 flex-shrink-0"
+                >
                   Explore Now
                 </button>
               </div>

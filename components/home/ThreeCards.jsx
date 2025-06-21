@@ -15,7 +15,7 @@ export default function ThreeCards() {
           <div className="text-left">
             <h3 className="font-bold text-gray-800 text-2xl">Weekly<br />Flash Deals</h3>
             <p className="text-md text-gray-600 mt-1">Up to 30% Off</p>
-            <a href="#" className="text-xs text-gray-600 block mt-4 hover:underline">View Details</a>
+            <a href="/exclusive-offers" className="text-xs text-gray-600 block mt-4 hover:underline">View Details</a>
           </div>
           <div className="relative">
             <Image 
@@ -33,7 +33,7 @@ export default function ThreeCards() {
           <div className="text-left">
             <h3 className="font-bold text-gray-950 text-2xl">Holy Day<br />Exclusive Offers</h3>
             <p className="text-md text-gray-600 mt-1">Plan your next trip</p>
-            <a href="#" className="text-xs text-gray-600 block mt-4 hover:underline">View Details</a>
+            <a href="/exclusive-offers" className="text-xs text-gray-600 block mt-4 hover:underline">View Details</a>
           </div>
           <div className="relative">
             <Image 
@@ -63,7 +63,7 @@ export default function ThreeCards() {
             <div className="text-left">
               <h3 className="font-bold text-white text-2xl">Exclusive<br />Deals</h3>
               <p className="text-md text-gray-200 mt-1">Want to save up<br/>to 50% off</p>
-              <a href="#" className="text-xs text-gray-100 block mt-4 hover:underline">View Details</a>
+              <a href="/exclusive-offers" className="text-xs text-gray-100 block mt-4 hover:underline">View Details</a>
             </div>
           </div>
         </div>

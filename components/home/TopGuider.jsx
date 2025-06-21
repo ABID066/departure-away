@@ -38,7 +38,7 @@ export default function TopGuider() {
         {/* Top Rated Guides Section */}
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-8">Top Rated Guider</h2>
+            <h2 className="text-4xl font-bold text-center mb-18">Top Rated Guider</h2>
 
             {/* Loading State */}
             {loading && (
