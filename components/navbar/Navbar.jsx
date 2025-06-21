@@ -50,6 +50,7 @@ export default function Navbar() {
         { name: 'Guiders', href: '/guiders' },
         { name: 'Travel', href: '/travel-packages' },
         { name: 'Hotel', href: '/hotel' },
+        { name: 'Flight', href: '/flight' },
         { name: 'About', href: '/about' },
         { name: 'Contact', href: '/contact' },
 

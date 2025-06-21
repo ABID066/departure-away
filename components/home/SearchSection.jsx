@@ -188,9 +188,12 @@ export default function SearchSection() {
                 <button 
                   onClick={() => {
                     switch(activeTab) {
-                      case "hotel":
-                        router.push("/hotel");
+                      case "flight":
+                        router.push("/flight");
                         break;
+                        case "hotel":
+                          router.push("/hotel");
+                          break;  
                       case "tour":
                         router.push("/travel-packages");
                         break;
@@ -199,7 +202,7 @@ export default function SearchSection() {
                         break;
                     }
                   }}
-                  className="bg-white hover:bg-gray-50 text-gray-800 w-full md:w-auto px-6 py-3 md:px-8 md:py-2 rounded-full border border-gray-300 text-sm font-medium cursor-pointer transition-colors duration-200 hover:border-rose-300 flex-shrink-0"
+                  className="bg-white active:bg-rose-600 active:text-amber-50 hover:bg-gray-50 text-gray-800 w-full md:w-auto px-6 py-3 md:px-8 md:py-2 rounded-full border border-gray-300 text-sm font-medium cursor-pointer transition-colors duration-200 hover:border-rose-300 flex-shrink-0"
                 >
                   Explore Now
                 </button>
