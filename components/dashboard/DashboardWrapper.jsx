@@ -13,6 +13,8 @@ import GuideServicesContent from './guide-service/GuideServicesContent';
 import CreateGuideServiceForm from './guide-service/CreateGuideServiceForm';
 import HotelServicesContent from './hotel-service/HotelServicesContent';
 import CreateHotelServiceForm from './hotel-service/CreateHotelServiceForm';
+import FlightServicesContent from './flight-service/FlightServicesContent';
+import CreateFlightServiceForm from './flight-service/CreateFlightServiceForm';
 
 export default function DashboardWrapper({ children }) {
     const pathname = usePathname();
@@ -30,6 +32,8 @@ export default function DashboardWrapper({ children }) {
         : pathname === '/dashboard/guide-service/create' ? 'Create Guide Service'
         : pathname === '/dashboard/hotel-service' ? 'Hotel Services'
         : pathname === '/dashboard/hotel-service/create' ? 'Create Hotel Service'
+        : pathname === '/dashboard/flight-service' ? 'Flight Services'
+        : pathname === '/dashboard/flight-service/create' ? 'Create Flight Service'
         : pathname === '/dashboard/chat' ? 'chat'
         : 'dashboard';
 
@@ -123,6 +127,11 @@ export default function DashboardWrapper({ children }) {
                     {/* Hotel Services */}
                     {currentPage === 'Hotel Services' && <HotelServicesContent />}
                     {currentPage === 'Create Hotel Service' && <CreateHotelServiceForm />}
+                
+                    {/* Flight Services */}
+                    {currentPage === 'Flight Services' && <FlightServicesContent />}
+                    {currentPage === 'Create Flight Service' && <CreateFlightServiceForm />}
+
                 </div>
             </div>
         </div>
