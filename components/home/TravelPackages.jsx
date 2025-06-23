@@ -57,7 +57,7 @@ export default function TravelPackages() {
     const displayedPackages = showAll ? packages : packages.slice(0, 8);
 
     return (
-        <div className="max-w-6xl mx-auto mb-20 px-4 lg:px-8">
+        <div className="max-w-6xl mx-auto mb-5 px-4 lg:px-8">
             {/* Section Title */}
             <h2 className="text-4xl font-bold text-center mb-8">Travel Package</h2>
 

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f0f0f0"/>
+  <path d="M400 150l200 300H200z" fill="#e0e0e0"/>
+  <path d="M350 250l-50-50h300l-50 50H350z" fill="#d0d0d0"/>
+  <text x="400" y="350" font-family="Arial" font-size="24" text-anchor="middle" fill="#666">Flight Image</text>
+</svg>

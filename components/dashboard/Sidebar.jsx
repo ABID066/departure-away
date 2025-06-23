@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home, MapPin, Users, Hotel } from 'lucide-react';
+import { ChevronDown, ChevronRight, Settings, ChevronLeft, Menu, X, Home, MapPin, Users, Hotel, Plane } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/images/Logo.png";
@@ -24,6 +24,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             return `${base}/create`;
         } else if (item === 'Create Hotel Service') {
             return `${base}/create`;
+        } else if (item === 'Create Flight Service') {
+            return `${base}/create`;
         }
         return base;
     };
@@ -32,7 +34,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
         'Services': false,
         'Travel Services': false,
         'Guide Services': false,
-        'Hotel Services': false
+        'Hotel Services': false,
+        'Flight Services': false
     });
 
     // Updated menuItems to include Guide Services and Hotel Services
@@ -71,6 +74,13 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
             displayName: 'Hotel Services',
             dropdownItems: ['All Hotel Services', 'Create Hotel Service']
         },
+        {
+            name: 'Flight Service',
+            icon: 'flight',
+            hasDropdown: true,
+            displayName: 'Flight Services',
+            dropdownItems: ['All Flight Services', 'Create Flight Service']
+        },
     ];
 
     // Check for mobile to determine sidebar behavior
@@ -97,6 +107,8 @@ export default function Sidebar({ currentPage, setCurrentPage, isCollapsed, togg
     const renderIcon = (iconName) => {
         const iconClass = "w-5 h-5 text-gray-600";
         switch (iconName) {
+            case 'flight':
+                return <Plane className={iconClass} />;
             case 'dashboard':
                 return <Home className={iconClass} />;
             case 'services':
